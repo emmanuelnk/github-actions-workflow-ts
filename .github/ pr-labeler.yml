@@ -1,0 +1,9 @@
+chore: ["chore/*"]
+ci: ["ci/*"]
+docs: ["docs/*"]
+feature: ["feature/*", "feat/*"]
+bug: ["fix/*"]
+refactor: ["refactor/*"]
+test: ["test/*"]
+
+

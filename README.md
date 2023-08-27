@@ -38,7 +38,7 @@ npm install --save-dev github-actions-workflow-ts
 
 The `github-actions-workflow-ts` package enables you to create GitHub Actions workflows using TypeScript and gain the benefits of type safety. This allows you to easily re-use, modularize share workflow code.
 
-To get started, simply create a new `.wac.ts` anywhere in your project and start writing your GitHub Actions workflow.
+To get started, simply create a new `*.wac.ts` e.g. `deploy.wac.ts` anywhere in your project and start writing your GitHub Actions workflow.
 
 ## Example
 Check the [examples folder](./examples/) and the [workflows folder](./workflows/) for more advanced examples.
@@ -80,7 +80,7 @@ Below is a simple example:
 ## Generating Workflow YAML
 ### Using the CLI
 - When you have written your `*.wac.ts` file, you use the `github-actions-workflow-ts` CLI to generate the yaml files. 
-- **DON'T FORGET** to **export** the Workflows you want to generate in the `.wac.ts` i.e. 
+- **DON'T FORGET** to **export** the Workflows you want to generate in your `.wac.ts` files i.e. 
   ```ts
     // generates example-filename.yml
     export const exampleWorkflow = new Workflow('example-filename', {  

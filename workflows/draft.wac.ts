@@ -23,4 +23,7 @@ export const draftWorkflow = new Workflow('draft', {
 			types: ['opened', 'reopened', 'synchronize'],
 		},
 	},
+	permissions: {
+		contents: 'read',
+	},
 }).addJob(draftJob)

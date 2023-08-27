@@ -11,6 +11,9 @@ const draftStep = new Step({
 const draftJob = new NormalJob('UpdateReleaseDraft', {
 	'runs-on': 'ubuntu-latest',
 	'timeout-minutes': 20,
+	permissions: {
+		contents: 'write',
+	},
 }).addStep(draftStep)
 
 export const draftWorkflow = new Workflow('draft', {

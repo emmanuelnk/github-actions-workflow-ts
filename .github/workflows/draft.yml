@@ -20,6 +20,8 @@ jobs:
   UpdateReleaseDraft:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: write
     steps:
       - name: Draft next release
         uses: release-drafter/release-drafter@v5

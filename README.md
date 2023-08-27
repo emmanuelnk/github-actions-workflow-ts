@@ -3,6 +3,12 @@ Stop writing workflows in YAML and use Typescript instead!
 
 <p align="center"><img src="https://github.com/emmanuelnk/github-actions-workflow-ts/assets/19330930/9121bb33-cd51-41f3-830f-9b4bd1117320" alt="github-actions-workflow-ts-logo" width="400"/></p>
 
+
+[![](https://img.shields.io/npm/v/github-actions-workflow-ts.svg)](https://www.npmjs.com/package/github-actions-workflow-ts)
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/webiny/webiny-js/blob/master/LICENSE)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
 ## Table of Contents
 - [github-actions-workflow-ts](#github-actions-workflow-ts)
   - [Table of Contents](#table-of-contents)

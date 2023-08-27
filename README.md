@@ -62,7 +62,8 @@ Below is a simple example:
   // the filename of the workflow to be generated is the 
   // first argument of the Workflow class constructor
   // i.e. example-filename.yml
-  const exampleWorkflow = new Workflow('example-filename', {
+  // IMPORTANT: the instance of Workflow MUST be exported with `export`
+  export const exampleWorkflow = new Workflow('example-filename', {
     name: Example,
     on: {
       workflow_dispatch: {}
@@ -74,10 +75,6 @@ Below is a simple example:
 
   // add the defined job to the defined workflow
   exampleWorkflow.addJob(testJob)
-
-  // Finally -- in order to generate the yml file, 
-  // the workflow instance MUST be exported with `export`
-  export exampleWorkflow
   ```
 
 ## Generating Workflow YAML

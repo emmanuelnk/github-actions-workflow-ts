@@ -31,7 +31,7 @@
 ## Installation
 
 ```
-npm install --save-dev github-actions-workflows-ts
+npm install --save-dev github-actions-workflow-ts
 ```
 
 ## Overview
@@ -47,7 +47,7 @@ Below is a simple example:
   ```ts
   // example.wac.ts
 
-  import { Workflow, NormalJob, Step } from 'github-actions-workflows-ts'
+  import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
 
   const checkoutStep = new Step({
     name: 'Checkout',
@@ -79,7 +79,7 @@ Below is a simple example:
 
 ## Generating Workflow YAML
 ### Using the CLI
-- When you have written your `*.wac.ts` file, you use the `github-actions-workflows-ts` CLI to generate the yaml files. 
+- When you have written your `*.wac.ts` file, you use the `github-actions-workflow-ts` CLI to generate the yaml files. 
 - **DON'T FORGET** to **export** the Workflows you want to generate in the `.wac.ts` i.e. 
   ```ts
     // generates example-filename.yml
@@ -126,7 +126,7 @@ This is a useful function that aids in writing multiline yaml like this:
   ```
 Example:
   ```ts
-  import { multilineYaml } from 'github-actions-workflows-ts'
+  import { multilineYaml } from 'github-actions-workflow-ts'
 
   // multilineYaml(...strings) joins all strings with a newline character '\n' which is interpreted as separate lines in YAML
   console.log(multilineYaml('This is sentence 1', 'This is sentence 2'))
@@ -147,7 +147,7 @@ Example:
 #### `.expn()`
 Returns the expression string `${{ <expression> }}`
   ```ts
-  import { expressions } from 'github-actions-workflows-ts'
+  import { expressions } from 'github-actions-workflow-ts'
 
   console.log(expressions.expn('hashFiles("**/pnpm-lock.yaml")'))
   // '${{ hashFiles("**/pnpm-lock.yaml") }}'
@@ -155,7 +155,7 @@ Returns the expression string `${{ <expression> }}`
 #### `.env()`
 Returns the expression string `${{ env.SOMETHING }}`
   ```ts
-  import { expressions } from 'github-actions-workflows-ts'
+  import { expressions } from 'github-actions-workflow-ts'
 
   console.log(expressions.env('GITHUB_SHA'))
   // '${{ env.GITHUB_SHA }}'
@@ -163,7 +163,7 @@ Returns the expression string `${{ env.SOMETHING }}`
 #### `.secret()`
 Returns the expression string `${{ secrets.SOMETHING }}`
   ```ts
-  import { expressions } from 'github-actions-workflows-ts'
+  import { expressions } from 'github-actions-workflow-ts'
 
   console.log(expressions.secret('GITHUB_TOKEN'))
   // '${{ secrets.GITHUB_TOKEN }}'
@@ -172,7 +172,7 @@ Returns the expression string `${{ secrets.SOMETHING }}`
 #### `.var()`
 Returns the expression string `${{ vars.SOMETHING }}`
   ```ts
-  import { expressions } from 'github-actions-workflows-ts'
+  import { expressions } from 'github-actions-workflow-ts'
 
   console.log(expressions.var('SENTRY_APP_ID'))
   // '${{ vars.SENTRY_APP_ID }}'
@@ -182,7 +182,7 @@ Returns the expression string `${{ vars.SOMETHING }}`
 #### `.to()`
 Returns the string `echo "key=value" >> <SOMETHING>`
   ```ts
-  import { echoKeyValue } from 'github-actions-workflows-ts'
+  import { echoKeyValue } from 'github-actions-workflow-ts'
 
   // echoKeyValue.to(key, value, to) returns 'echo "key=value" >> <SOMETHING>'
   echoKeyValue.to('@your-org:registry', 'https://npm.pkg.github.com', '.npmrc')
@@ -192,7 +192,7 @@ Returns the string `echo "key=value" >> <SOMETHING>`
 #### `.toGithubEnv()`
 Returns the string `echo "key=value" >> $GITHUB_ENV`
   ```ts
-  import { echoKeyValue } from 'github-actions-workflows-ts'
+  import { echoKeyValue } from 'github-actions-workflow-ts'
 
   // echoKeyValue.toGithubEnv(key, value, to) returns 'echo "key=value" >> $GITHUB_ENV'
   echoKeyValue.toGithubEnv('NODE_VERSION', '18')
@@ -202,7 +202,7 @@ Returns the string `echo "key=value" >> $GITHUB_ENV`
 #### `.toGithubOutput()`
 Returns the string `echo "key=value" >> $GITHUB_OUTPUT`
   ```ts
-  import { echoKeyValue } from 'github-actions-workflows-ts'
+  import { echoKeyValue } from 'github-actions-workflow-ts'
 
   // echoKeyValue.toGithubOutput(key, value, to) returns 'echo "key=value" >> $GITHUB_OUTPUT'
   echoKeyValue.toGithubOutput('NODE_VERSION', '18')
@@ -212,7 +212,7 @@ Returns the string `echo "key=value" >> $GITHUB_OUTPUT`
 ### `workflowOps`
 #### `.ternary()`
   ```ts
-  import { workflowOps } from 'github-actions-workflows-ts'
+  import { workflowOps } from 'github-actions-workflow-ts'
 
   // ternary(condition, ifTrue, ifFalse)
   console.log(workflowOps.ternary("github.event_name == 'release'", 'prod', 'dev'))

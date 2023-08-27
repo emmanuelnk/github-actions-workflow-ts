@@ -137,7 +137,7 @@ describe('build', () => {
 								},
 								{
 									name: 'Install Dependencies',
-									run: 'pnpm install',
+									run: 'pnpm install --no-frozen-lockfile',
 								},
 								{
 									name: 'Run Tests',

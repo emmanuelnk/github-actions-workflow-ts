@@ -28,7 +28,7 @@ const installPnpm = new Step({
 
 const installDependencies = new Step({
 	name: 'Install Dependencies',
-	run: 'pnpm install',
+	run: 'pnpm install --no-frozen-lockfile',
 })
 
 const bumpVersion = new Step({

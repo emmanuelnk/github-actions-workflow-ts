@@ -29,7 +29,7 @@ jobs:
         with:
           version: 8
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Bump Version
         run: |-
           echo version: ${{ github.event.release.tag_name }}

@@ -1,5 +1,7 @@
 # github-actions-workflow-ts
 
+<p style='text-align:center'><img src="https://github.com/emmanuelnk/github-actions-workflow-ts/assets/19330930/9121bb33-cd51-41f3-830f-9b4bd1117320" alt="github-actions-workflow-ts-logo" width="400"/></p>
+
 ## Table of Contents
 - [github-actions-workflow-ts](#github-actions-workflow-ts)
   - [Table of Contents](#table-of-contents)
@@ -57,7 +59,8 @@ Below is a simple example:
     'timeout-minutes': 2
   })
 
-  // the filename of the workflow to be generated is the first argument of the Workflow class constructor
+  // the filename of the workflow to be generated is the 
+  // first argument of the Workflow class constructor
   // i.e. example-filename.yml
   const exampleWorkflow = new Workflow('example-filename', {
     name: Example,
@@ -72,7 +75,8 @@ Below is a simple example:
   // add the defined job to the defined workflow
   exampleWorkflow.addJob(testJob)
 
-  // Finally -- in order to generate the yml file, the workflow instance MUST be exported with `export`
+  // Finally -- in order to generate the yml file, 
+  // the workflow instance MUST be exported with `export`
   export exampleWorkflow
   ```
 
@@ -126,9 +130,9 @@ Example:
   // it also has the ability to escape special characters
   console.log(
     multilineYaml(
-				`content="\${content//$'\n'/'%0A'}"`,
-				`content="\${content//$'\r'/'%0D'}"`
-			)
+      `content="\${content//$'\n'/'%0A'}"`,
+      `content="\${content//$'\r'/'%0D'}"`
+    )
   )
   // `content="${content//$'\n'/'%0A'}"`
   // `content="${content//$'\r'/'%0D'}"``

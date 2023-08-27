@@ -82,7 +82,15 @@ Below is a simple example:
 
 ## Generating Workflow YAML
 ### Using the CLI
-- When you have written your `*.wac.ts` file, you use the `github-actions-workflows-ts` CLI to generate the yaml files
+- When you have written your `*.wac.ts` file, you use the `github-actions-workflows-ts` CLI to generate the yaml files. 
+- **DON'T FORGET** to **export** the Workflows you want to generate in the `.wac.ts` i.e. 
+  ```ts
+    // generates example-filename.yml
+    export const exampleWorkflow = new Workflow('example-filename', {  
+      // ...
+    })
+  ```
+- To generate:
   ```bash
   npx generate-workflow-files build
   ```
@@ -222,6 +230,7 @@ Inspired by [webiny/github-actions-wac](https://github.com/webiny/github-actions
 
 ### Why then not just use `webiny/github-actions-wac` package?
 You definitely can! It's a great project. There are some significant differences between my package and that one. This package:
+- Allows for more flexibility in naming the generated yaml workflow files e.g. use of hyphens -- `example-filename.yml`
 - Allows for a more flexible project structure since it will read all `*.wac.ts` files in a project instead of just those under `.github/workflows`. This means you can create a dedicated `./workflows` folder in your `src` folder and still be sure that the generated yaml will be placed correctly in `.github/workflows/`
 - Adds helper classes to abstract away the types if needed e.g. `new Step()`, `new NormalJob()` etc
 - Extends certain types e.g. `Step`

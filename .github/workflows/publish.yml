@@ -32,6 +32,8 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       - name: Bump Version
         run: |-
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           echo version: ${{ github.event.release.tag_name }}
           npm version ${{ github.event.release.tag_name }}
       - name: Run Build
@@ -43,8 +45,6 @@ jobs:
       - name: Push updates to GitHub
         shell: bash
         run: |-
-          git config user.name github-actions
-          git config user.email github-actions@github.com
           git add .
           git commit -m "Release ${{ github.event.release.tag_name }}"
           git push origin HEAD:${{ github.event.release.target_commitish }}

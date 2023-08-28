@@ -19,7 +19,7 @@ Stop writing workflows in YAML and use Typescript instead!
     - [Using the CLI](#using-the-cli)
     - [Usage With Husky (Recommended)](#usage-with-husky-recommended)
   - [Helpers](#helpers)
-    - [`multilineYaml()`](#multilineyaml)
+    - [`multilineString()`](#multilineString)
     - [`expressions`](#expressions)
       - [`.expn()`](#expn)
       - [`.env()`](#env)
@@ -123,7 +123,7 @@ In order to automate all of the above and not think about forgetting to build th
 - Now every time you make a change to `*.wac.ts`, Husky will run the `npx gwf build` command and add the generated `.github/workflows/*.yml` to your commit
 
 ## Helpers
-### `multilineYaml()`
+### `multilineString()`
 This is a useful function that aids in writing multiline yaml like this:
   ```yaml
     name: Run something
@@ -133,15 +133,15 @@ This is a useful function that aids in writing multiline yaml like this:
   ```
 Example:
   ```ts
-  import { multilineYaml } from 'github-actions-workflow-ts'
+  import { multilineString } from 'github-actions-workflow-ts'
 
-  // multilineYaml(...strings) joins all strings with a newline character '\n' which is interpreted as separate lines in YAML
-  console.log(multilineYaml('This is sentence 1', 'This is sentence 2'))
+  // multilineString(...strings) joins all strings with a newline character '\n' which is interpreted as separate lines in YAML
+  console.log(multilineString('This is sentence 1', 'This is sentence 2'))
   // 'This is sentence 1\nThis is sentence 2'
 
   // it also has the ability to escape special characters
   console.log(
-    multilineYaml(
+    multilineString(
       `content="\${content//$'\n'/'%0A'}"`,
       `content="\${content//$'\r'/'%0D'}"`
     )

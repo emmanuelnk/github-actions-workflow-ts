@@ -110,7 +110,7 @@ export const echoKeyValue = {
  *   This is the second line.
  * ```
  */
-export const multilineYaml = (...strings: string[]): string => {
+export const multilineString = (...strings: string[]): string => {
 	return strings
 		.map((str) => {
 			let escapedStr = str.replace(

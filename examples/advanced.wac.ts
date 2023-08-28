@@ -6,7 +6,7 @@
  *
  * This example shows the usage of:
  * - expressions helper
- * - multilineYaml helper
+ * - multilineString helper
  * - echoKeyValue helper
  * - workflowOps helper
  *
@@ -20,7 +20,7 @@ import {
 	expressions as ex,
 	echoKeyValue as echo,
 	workflowOps as ops,
-	multilineYaml,
+	multilineString,
 	ReusableWorkflowCallJob,
 } from '../src'
 
@@ -61,7 +61,7 @@ const setupPnpmCache = new Step({
 
 const setupNpmrc = new Step({
 	name: 'Setup npmrc for Private Packages',
-	run: multilineYaml(
+	run: multilineString(
 		echo.to('@your-org:registry', 'https://npm.pkg.github.com', '.npmrc'),
 		echo.to(
 			'//npm.pkg.github.com/:_authToken',
@@ -141,7 +141,7 @@ const deployJob = new NormalJob('Deploy', {
 	.addStep(
 		new Step({
 			name: 'Multi line yaml with special characters',
-			run: multilineYaml(
+			run: multilineString(
 				`content="\${content//$'\n'/'%0A'}"`,
 				`content="\${content//$'\r'/'%0D'}"`,
 			),

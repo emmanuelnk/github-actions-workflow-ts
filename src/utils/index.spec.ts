@@ -1,4 +1,4 @@
-import { expressions, echoKeyValue, multilineYaml, workflowOps } from '..'
+import { expressions, echoKeyValue, multilineString, workflowOps } from '..'
 
 describe('expressions', () => {
 	describe('expression', () => {
@@ -52,79 +52,81 @@ describe('echoKeyValue', () => {
 	})
 })
 
-describe('multilineYaml', () => {
+describe('multilineString', () => {
 	it('should join the given strings with newline characters', () => {
-		expect(multilineYaml('line1', 'line2', 'line3')).toBe('line1\nline2\nline3')
+		expect(multilineString('line1', 'line2', 'line3')).toBe(
+			'line1\nline2\nline3',
+		)
 	})
 
 	it('escapes backspace characters', () => {
 		const input = '\b'
 		const expected = '\\b'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes form feed characters', () => {
 		const input = '\f'
 		const expected = '\\f'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes newline characters', () => {
 		const input = '\n'
 		const expected = '\\n'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes carriage return characters', () => {
 		const input = '\r'
 		const expected = '\\r'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes tab characters', () => {
 		const input = '\t'
 		const expected = '\\t'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes vertical tab characters', () => {
 		const input = '\v'
 		const expected = '\\v'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes null characters', () => {
 		const input = '\0'
 		const expected = '\\0'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes backslash characters', () => {
 		const input = '\\'
 		const expected = '\\\\'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('escapes multiple escape sequences', () => {
 		const input = '\b\f\n\r\t\v\0\\'
 		const expected = '\\b\\f\\n\\r\\t\\v\\0\\\\'
-		expect(multilineYaml(input)).toBe(expected)
+		expect(multilineString(input)).toBe(expected)
 	})
 
 	it('returns the original string if there are no characters to escape', () => {
 		const input = 'Hello World!'
-		expect(multilineYaml(input)).toBe(input)
+		expect(multilineString(input)).toBe(input)
 	})
 
 	it('handles multiple strings', () => {
 		const inputs = ['Hello', 'World\n', '\\Hello\\']
 		const expected = 'Hello\nWorld\\n\n\\\\Hello\\\\'
-		expect(multilineYaml(...inputs)).toBe(expected)
+		expect(multilineString(...inputs)).toBe(expected)
 	})
 
 	it('handles empty strings', () => {
 		const input = ''
-		expect(multilineYaml(input)).toBe('')
+		expect(multilineString(input)).toBe('')
 	})
 })
 

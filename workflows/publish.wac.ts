@@ -3,7 +3,7 @@ import {
 	NormalJob,
 	Step,
 	expressions as ex,
-	multilineYaml,
+	multilineString,
 } from '../src'
 
 const checkout = new Step({
@@ -33,7 +33,9 @@ const installDependencies = new Step({
 
 const bumpVersion = new Step({
 	name: 'Bump Version',
-	run: multilineYaml(
+	run: multilineString(
+		`git config user.name github-actions`,
+		`git config user.email github-actions@github.com`,
 		`echo version: ${ex.expn('github.event.release.tag_name')}`,
 		`npm version ${ex.expn('github.event.release.tag_name')}`,
 	),
@@ -55,9 +57,7 @@ const npmPublish = new Step({
 const gitPush = new Step({
 	name: 'Push updates to GitHub',
 	shell: 'bash',
-	run: multilineYaml(
-		`git config user.name github-actions`,
-		`git config user.email github-actions@github.com`,
+	run: multilineString(
 		`git add .`,
 		`git commit -m "Release ${ex.expn('github.event.release.tag_name')}"`,
 		`git push origin HEAD:${ex.expn('github.event.release.target_commitish')}`,

@@ -1,2 +1,2 @@
-export * as GeneratedWorkflowTypes from "./githubActionsWorkflow";
-export * as ExtendedWorkflowTypes from "./githubActionsWorkflowExtended";
+export * as GeneratedWorkflowTypes from './githubActionsWorkflow'
+export * as ExtendedWorkflowTypes from './githubActionsWorkflowExtended'

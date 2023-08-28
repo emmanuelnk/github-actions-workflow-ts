@@ -1,11 +1,11 @@
-import * as ExtendedWorkflowTypes from "../../types/githubActionsWorkflowExtended";
+import * as ExtendedWorkflowTypes from '../../types/githubActionsWorkflowExtended'
 
 export class Step {
-  public step: ExtendedWorkflowTypes.Step;
+	public step: ExtendedWorkflowTypes.Step
 
-  constructor(stepProps: Partial<ExtendedWorkflowTypes.Step>) {
-    (this.step as unknown) = {
-      ...stepProps,
-    };
-  }
+	constructor(stepProps: Partial<ExtendedWorkflowTypes.Step>) {
+		;(this.step as unknown) = {
+			...stepProps,
+		}
+	}
 }

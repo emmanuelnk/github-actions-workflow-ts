@@ -54,9 +54,7 @@ describe('echoKeyValue', () => {
 
 describe('multilineString', () => {
 	it('should join the given strings with newline characters', () => {
-		expect(multilineString('line1', 'line2', 'line3')).toBe(
-			'line1\nline2\nline3',
-		)
+		expect(multilineString('line1', 'line2', 'line3')).toBe('line1\nline2\nline3')
 	})
 
 	it('escapes backspace characters', () => {

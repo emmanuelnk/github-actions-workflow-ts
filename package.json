@@ -32,8 +32,8 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "pnpm exec prettier --config .prettierrc.json --write"
+    "**/*.{ts,tsx}": [
+      "pnpm dlx prettier --config .prettierrc.json --write"
     ]
   },
   "dependencies": {
@@ -55,6 +55,7 @@
     "husky": "^8.0.0",
     "jest": "^28.1.2",
     "json-schema-to-typescript": "^10.1.5",
+    "lint-staged": "^14.0.1",
     "node-fetch": "^2.2.6",
     "prettier": "3.0.2",
     "ts-jest": "^28.0.5",

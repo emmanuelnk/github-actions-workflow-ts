@@ -66,9 +66,7 @@ export const writeWorkflowJSONToYamlFiles = (
 		)
 
 		console.log(
-			`[github-actions-workflow-ts] Writing to ${relativePath(
-				yamlWorkflowPath,
-			)}:`,
+			`[github-actions-workflow-ts] Writing to ${relativePath(yamlWorkflowPath)}:`,
 		)
 
 		fs.writeFileSync(

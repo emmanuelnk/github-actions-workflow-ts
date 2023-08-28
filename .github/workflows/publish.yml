@@ -48,9 +48,14 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Push updates to GitHub
         shell: bash
-        run: |-
+        run: >-
           git add .
-          git commit -m "Release ${{ github.event.release.tag_name }}"
+
+          git commit --no-verify -m "Release ${{ github.event.release.tag_name
+          }}"
+
           git push origin HEAD:${{ github.event.release.target_commitish }}
+
           git tag --force ${{ github.event.release.tag_name }}
+
           git push --force origin ${{ github.event.release.target_commitish }}

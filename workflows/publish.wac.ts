@@ -67,7 +67,9 @@ const gitPush = new Step({
 	shell: 'bash',
 	run: multilineString(
 		`git add .`,
-		`git commit -m "Release ${ex.expn('github.event.release.tag_name')}"`,
+		`git commit --no-verify -m "Release ${ex.expn(
+			'github.event.release.tag_name',
+		)}"`,
 		`git push origin HEAD:${ex.expn('github.event.release.target_commitish')}`,
 		`git tag --force ${ex.expn('github.event.release.tag_name')}`,
 		`git push --force origin ${ex.expn(

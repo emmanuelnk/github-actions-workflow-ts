@@ -27,10 +27,16 @@ const runTests = new Step({
 	run: 'pnpm test',
 })
 
+const renameCoverageFile = new Step({
+	name: 'Rename Coverage File',
+	'working-directory': 'coverage',
+	run: 'mv coverage-final.json coverage-summary.json',
+})
+
 const updateCodeCoverageBadge = new Step({
 	name: 'Update Code Coverage Badge',
 	if: `github.ref == format('refs/heads/{0}', github.event.repository.default_branch)`,
-	uses: 'we-cli/coverage-badge-action@main',
+	uses: 'we-cli/coverage-badge-action@48a2699b2e537c7519bdc970fb0ecd75c80a698e',
 })
 
 const testJob = new NormalJob('Tests', {
@@ -41,6 +47,7 @@ const testJob = new NormalJob('Tests', {
 	installPnpm,
 	installDependencies,
 	runTests,
+	renameCoverageFile,
 	updateCodeCoverageBadge,
 ])
 

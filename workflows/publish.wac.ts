@@ -66,7 +66,7 @@ const gitPush = new Step({
 	name: 'Push updates to GitHub',
 	shell: 'bash',
 	run: multilineString(
-		`git add .`,
+		`git add package.json`,
 		`git commit --no-verify -m "Release ${ex.expn(
 			'github.event.release.tag_name',
 		)}"`,

@@ -49,7 +49,7 @@ jobs:
       - name: Push updates to GitHub
         shell: bash
         run: >-
-          git add .
+          git add package.json
 
           git commit --no-verify -m "Release ${{ github.event.release.tag_name
           }}"

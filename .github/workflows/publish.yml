@@ -30,14 +30,14 @@ jobs:
           version: 8
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
+      - name: Run Build
+        run: pnpm build
       - name: Bump Version
         run: |-
           git config user.name github-actions
           git config user.email github-actions@github.com
           echo version: ${{ github.event.release.tag_name }}
           npm version ${{ github.event.release.tag_name }}
-      - name: Run Build
-        run: pnpm build
       - name: Publish to npm
         run: npm publish
         env:

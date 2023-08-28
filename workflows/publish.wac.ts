@@ -79,8 +79,8 @@ const publishJob = new NormalJob('Publish', {
 	installNode,
 	installPnpm,
 	installDependencies,
-	bumpVersion,
 	runBuild,
+	bumpVersion,
 	npmPublish,
 	gitPush,
 ])

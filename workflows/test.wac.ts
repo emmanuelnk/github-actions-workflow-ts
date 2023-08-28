@@ -1,4 +1,4 @@
-import { Workflow, NormalJob, Step } from '../..'
+import { Workflow, NormalJob, Step } from '../'
 
 const checkout = new Step({
 	name: 'Checkout',
@@ -31,9 +31,14 @@ const testJob = new NormalJob('Test', {
 	'runs-on': 'ubuntu-latest',
 }).addSteps([checkout, installNode, installPnpm, installDependencies, runTests])
 
-export const test = new Workflow('mock-test', {
+export const test = new Workflow('test', {
 	name: 'Test',
 	on: {
-		workflow_dispatch: {},
+		push: {
+			branches: ['**'],
+		},
+		pull_request: {
+			branches: ['main'],
+		},
 	},
 }).addJob(testJob)

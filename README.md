@@ -19,7 +19,9 @@ Stop writing workflows in YAML and use Typescript instead!
     - [Using the CLI](#using-the-cli)
     - [Usage With Husky (Recommended)](#usage-with-husky-recommended)
   - [Helpers](#helpers)
-    - [`multilineString()`](#multilineString)
+    - [`multilineString()`](#multilinestring)
+      - [Example 1](#example-1)
+      - [Example 2 - handling multiline indentation](#example-2---handling-multiline-indentation)
     - [`expressions`](#expressions)
       - [`.expn()`](#expn)
       - [`.env()`](#env)
@@ -131,24 +133,50 @@ This is a useful function that aids in writing multiline yaml like this:
       command exec line 1
       command exec line 2
   ```
-Example:
-  ```ts
-  import { multilineString } from 'github-actions-workflow-ts'
+#### Example 1
+```ts
+import { multilineString } from 'github-actions-workflow-ts'
 
-  // multilineString(...strings) joins all strings with a newline character '\n' which is interpreted as separate lines in YAML
-  console.log(multilineString('This is sentence 1', 'This is sentence 2'))
-  // 'This is sentence 1\nThis is sentence 2'
+// multilineString(...strings) joins all strings with a newline character '\n' which is interpreted as separate lines in YAML
+console.log(multilineString('This is sentence 1', 'This is sentence 2'))
+// 'This is sentence 1\nThis is sentence 2'
 
-  // it also has the ability to escape special characters
-  console.log(
-    multilineString(
-      `content="\${content//$'\n'/'%0A'}"`,
-      `content="\${content//$'\r'/'%0D'}"`
-    )
+// it also has the ability to escape special characters
+console.log(
+  multilineString(
+    `content="\${content//$'\n'/'%0A'}"`,
+    `content="\${content//$'\r'/'%0D'}"`
   )
-  // `content="${content//$'\n'/'%0A'}"`
-  // `content="${content//$'\r'/'%0D'}"``
-  ```
+)
+// `content="${content//$'\n'/'%0A'}"`
+// `content="${content//$'\r'/'%0D'}"``
+```
+#### Example 2 - handling multiline indentation
+```yaml
+      - name: Check for build directory
+        run: |-
+          #!/bin/bash
+          ls /tmp
+          if [ ! -d "/tmp/build" ]; then
+            mv /tmp/build .
+            ls
+          fi
+```
+Then you just add the same indentation in the string:
+```ts
+  // If you want indentation then you can do this:
+  new Step({
+    name: 'Check for build directory',
+    run: multilineString(
+      `#!/bin/bash`,
+      `ls /tmp`,
+      `if [ ! -d "/tmp/build" ]; then`,
+      `  mv /tmp/build .`, // notice the two spaces before 'mv ..'
+      `  ls`,              // notice the two spaces before 'ls ..'
+      `fi`,
+    ),
+  });
+```
 
 ### `expressions`
 #### `.expn()`

@@ -108,12 +108,10 @@ describe('build', () => {
 			const jsonToConvertToYaml = await import(workflowFilePaths[0])
 
 			expect(jsonToConvertToYaml).toEqual({
-				test: new Workflow('test', {
+				test: new Workflow('mock-test', {
 					name: 'Test',
 					on: {
-						push: {
-							branches: ['**', '!main'],
-						},
+						workflow_dispatch: {},
 					},
 					jobs: {
 						Test: {

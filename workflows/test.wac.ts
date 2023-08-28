@@ -35,6 +35,9 @@ const updateCodeCoverageBadge = new Step({
 
 const testJob = new NormalJob('Tests', {
 	'runs-on': 'ubuntu-latest',
+	permissions: {
+		contents: 'write',
+	},
 }).addSteps([
 	checkout,
 	installNode,

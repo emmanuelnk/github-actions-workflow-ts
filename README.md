@@ -3,13 +3,20 @@ Stop writing workflows in YAML and use Typescript instead!
 
 <p align="center"><img src="https://github.com/emmanuelnk/github-actions-workflow-ts/assets/19330930/9121bb33-cd51-41f3-830f-9b4bd1117320" alt="github-actions-workflow-ts-logo" width="400"/></p>
 
-
-[![](https://img.shields.io/npm/v/github-actions-workflow-ts.svg)](https://www.npmjs.com/package/github-actions-workflow-ts)
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/webiny/webiny-js/blob/master/LICENSE)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![Tests](https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml/badge.svg)](https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml)
-[![cov](https://emmanuelnk.github.io/github-actions-workflow-ts/badges/coverage.svg)](https://github.com/emmanuelnk/github-actions-workflow-ts/actions)
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 8px;">
+  <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/blob/master/LICENSE">
+      <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="license">
+  </a>
+  <a href="https://www.npmjs.com/package/github-actions-workflow-ts">
+      <img src="https://img.shields.io/npm/v/github-actions-workflow-ts.svg" alt="npm version">
+  </a>
+  <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml">
+      <img src="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml/badge.svg" alt="Tests">
+  </a>
+  <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions">
+      <img src="https://emmanuelnk.github.io/github-actions-workflow-ts/badges/coverage.svg" alt="coverage">
+  </a>
+</div>
 
 ## Table of Contents
 - [github-actions-workflow-ts](#github-actions-workflow-ts)

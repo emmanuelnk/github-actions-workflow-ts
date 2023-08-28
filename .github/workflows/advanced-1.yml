@@ -86,11 +86,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: ${{ ${{ github.event_name == 'release' && prod || dev }} }}
-    needs:
-      - Build
     permissions:
       contents: read
       id-token: write
+    needs:
+      - Build
     steps:
       - name: Checkout
         uses: actions/checkout@v3

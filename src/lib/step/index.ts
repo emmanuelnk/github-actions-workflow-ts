@@ -3,8 +3,8 @@ import * as ExtendedWorkflowTypes from '../../types/githubActionsWorkflowExtende
 export class Step {
 	public step: ExtendedWorkflowTypes.Step
 
-	constructor(stepProps: Partial<ExtendedWorkflowTypes.Step>) {
-		;(this.step as unknown) = {
+	constructor(stepProps: ExtendedWorkflowTypes.Step) {
+		this.step = {
 			...stepProps,
 		}
 	}

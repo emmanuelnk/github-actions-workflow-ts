@@ -8,15 +8,23 @@ template: |
   **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
 
 categories:
-  - title: "Breaking"
-    label: "type: breaking"
   - title: "New"
     label: "type: feature"
+  - title: "Chore"
+    label: "type: chore"
+  - title: "Refactor"
+    label: "type: refactor"
+  - title: "CI"
+    label: "type: ci"
+  - title: "Breaking"
+    label: "type: breaking"
   - title: "Bug Fixes"
     label: "type: bug"
   - title: "Documentation"
     label: "type: docs"
-  - title: "Other changes"
+  - title: "Tests"
+    label: "type: test"
+  - title: "Other"
   - title: "Dependency Updates"
     label: "type: dependencies"
     collapse-after: 5

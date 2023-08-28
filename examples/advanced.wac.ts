@@ -125,12 +125,12 @@ const deployJob = new NormalJob('Deploy', {
 	environment: ex.expn(
 		`${ops.ternary("github.event_name == 'release'", 'prod', 'dev')}`,
 	),
-	needs: [buildJob.name],
 	permissions: {
 		contents: 'read',
 		'id-token': 'write',
 	},
 })
+	.needs([buildJob])
 	.addSteps(sharedSteps)
 	.addStep(
 		new Step({

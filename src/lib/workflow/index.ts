@@ -3,6 +3,10 @@ import * as Jobs from '../job'
 
 export class Workflow {
 	public workflow: Partial<GeneratedWorkflowTypes.Workflow>
+
+	/**
+	 * The filename of the workflow e.g. `main.yml`
+	 */
 	public filename?: string
 
 	addJobs(jobs: (Jobs.NormalJob | Jobs.ReusableWorkflowCallJob)[]): this {

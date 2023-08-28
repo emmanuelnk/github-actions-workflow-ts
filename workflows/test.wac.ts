@@ -27,9 +27,22 @@ const runTests = new Step({
 	run: 'pnpm test',
 })
 
+const updateCodeCoverageBadge = new Step({
+	name: 'Update Code Coverage Badge',
+	if: `github.ref == format('refs/heads/{0}', github.event.repository.default_branch)`,
+	uses: 'we-cli/coverage-badge-action@main',
+})
+
 const testJob = new NormalJob('Tests', {
 	'runs-on': 'ubuntu-latest',
-}).addSteps([checkout, installNode, installPnpm, installDependencies, runTests])
+}).addSteps([
+	checkout,
+	installNode,
+	installPnpm,
+	installDependencies,
+	runTests,
+	updateCodeCoverageBadge,
+])
 
 export const test = new Workflow('test', {
 	name: 'Tests',

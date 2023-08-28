@@ -4,6 +4,7 @@ import {
 	Step,
 	expressions as ex,
 	multilineString,
+	echoKeyValue,
 } from '../src'
 
 const checkout = new Step({
@@ -48,7 +49,14 @@ const runBuild = new Step({
 
 const npmPublish = new Step({
 	name: 'Publish to npm',
-	run: 'npm publish',
+	run: multilineString(
+		echoKeyValue.to(
+			'//registry.npmjs.org/:_authToken',
+			ex.secret('NPM_TOKEN'),
+			'.npmrc',
+		),
+		'npm publish',
+	),
 	env: {
 		NPM_AUTH_TOKEN: ex.secret('NPM_TOKEN'),
 	},

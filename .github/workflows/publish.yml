@@ -39,7 +39,11 @@ jobs:
           echo version: ${{ github.event.release.tag_name }}
           npm version ${{ github.event.release.tag_name }}
       - name: Publish to npm
-        run: npm publish
+        run: >-
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >>
+          .npmrc
+
+          npm publish
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Push updates to GitHub

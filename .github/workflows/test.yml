@@ -30,9 +30,6 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       - name: Run Tests
         run: pnpm test
-      - name: Rename Coverage File
-        working-directory: coverage
-        run: mv coverage-final.json coverage-summary.json
       - name: Update Code Coverage Badge
         if: >-
           github.ref == format('refs/heads/{0}',

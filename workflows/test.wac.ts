@@ -50,9 +50,6 @@ const testJob = new NormalJob('Tests', {
 export const test = new Workflow('test', {
 	name: 'Tests',
 	on: {
-		push: {
-			branches: ['**'],
-		},
 		pull_request: {
 			branches: ['main'],
 		},

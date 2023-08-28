@@ -109,7 +109,7 @@ describe('build', () => {
 
 			expect(jsonToConvertToYaml).toEqual({
 				test: new Workflow('mock-test', {
-					name: 'Test',
+					name: 'ExampleMockTests',
 					on: {
 						workflow_dispatch: {},
 					},

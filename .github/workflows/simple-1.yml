@@ -4,7 +4,7 @@
 # and run "generate-workflow-files build" (or "gwf build") to regenerate this file.
 # For more information, run "generate-workflow-files --help".
 # ------------DO-NOT-MODIFY-THIS-FILE------------
-name: Example Workflow
+name: ExampleSimpleWorkflow
 'on':
   workflow_dispatch: {}
 jobs:

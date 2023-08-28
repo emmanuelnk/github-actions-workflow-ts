@@ -154,7 +154,7 @@ const releaseJob = new ReusableWorkflowCallJob('ReleaseJob', {
 })
 
 export const advancedWorkflow = new Workflow('advanced-1', {
-	name: 'advanced',
+	name: 'ExampleAdvanced',
 	on: {
 		workflow_dispatch: {},
 	},

@@ -32,7 +32,7 @@ const testJob = new NormalJob('Test', {
 }).addSteps([checkout, installNode, installPnpm, installDependencies, runTests])
 
 export const test = new Workflow('mock-test', {
-	name: 'Test',
+	name: 'ExampleMockTests',
 	on: {
 		workflow_dispatch: {},
 	},

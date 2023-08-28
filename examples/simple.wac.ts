@@ -44,7 +44,7 @@ const firstNormalJob: GWT.NormalJob = {
 }
 
 export const simpleWorkflowOne = new Workflow('simple-1', {
-	name: 'Example Workflow',
+	name: 'ExampleSimpleWorkflow',
 	on: {
 		workflow_dispatch: {},
 	},
@@ -95,7 +95,7 @@ const firstJob = new NormalJob('firstJob', {
 
 // Export it to generate it
 export const simpleWorkflowTwo = new Workflow('simple-2', {
-	name: 'Simple JSON',
+	name: 'ExampleSimpleWorkflowJSON',
 	on: { workflow_dispatch: {} },
 	jobs: {
 		firstJob: firstJob.job,

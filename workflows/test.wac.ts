@@ -27,12 +27,12 @@ const runTests = new Step({
 	run: 'pnpm test',
 })
 
-const testJob = new NormalJob('Test', {
+const testJob = new NormalJob('Tests', {
 	'runs-on': 'ubuntu-latest',
 }).addSteps([checkout, installNode, installPnpm, installDependencies, runTests])
 
 export const test = new Workflow('test', {
-	name: 'Test',
+	name: 'Tests',
 	on: {
 		push: {
 			branches: ['**'],

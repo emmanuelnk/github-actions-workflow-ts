@@ -72,7 +72,12 @@ npm install --save-dev github-actions-workflow-ts
 
 ## Overview
 
-The `github-actions-workflow-ts` package allows you to write GitHub Actions workflows using Typescript (that are then compiled to YAML files that you don't have to manage!). This allows you to easily re-use, modularize and share workflow Typescript code -- something that is not easy with YAML.
+The `github-actions-workflow-ts` package lets you to write GitHub Actions workflows using Typescript. The workflows are then auto-compiled into YAML files that you don't have to manage manually -- Workflow as Code (wac)!. 
+
+The advantage of using an imperitive language like Typscript to write Workflows is that it allows you to:
+- write them confidently with type safety
+- package/modularize common/repetitve jobs and steps (write once, use everywhere)
+- make use of control flow logic like conditionals and other imperative programming language functionality to build complex workflows that isn't really possible with YAML. 
 
 To get started, simply create a new `*.wac.ts` e.g. `deploy.wac.ts` anywhere in your project and start writing your GitHub Actions workflow.
 
@@ -95,10 +100,7 @@ Below is a simple example:
     'timeout-minutes': 2
   })
 
-  // the filename of the workflow to be generated is the 
-  // first argument of the Workflow class constructor
-  // i.e. example-filename.yml
-  // IMPORTANT: the instance of Workflow MUST be exported with `export`
+  // IMPORTANT - the instance of Workflow MUST be exported with `export`
   export const exampleWorkflow = new Workflow('example-filename', {
     name: 'Example',
     on: {

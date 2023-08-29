@@ -7,11 +7,14 @@ import {
 	echoKeyValue,
 } from '../src'
 
+const targetCommitish = ex.expn('github.event.release.target_commitish')
+const tagName = ex.expn('github.event.release.tag_name')
+
 const checkout = new Step({
 	name: 'Checkout',
 	uses: 'actions/checkout@v3',
 	with: {
-		ref: ex.expn('github.event.release.target_commitish'),
+		ref: targetCommitish,
 	},
 })
 
@@ -37,8 +40,8 @@ const bumpVersion = new Step({
 	run: multilineString(
 		`git config user.name github-actions`,
 		`git config user.email github-actions@github.com`,
-		`echo version: ${ex.expn('github.event.release.tag_name')}`,
-		`npm version ${ex.expn('github.event.release.tag_name')}`,
+		`echo version: ${tagName}`,
+		`npm version ${tagName}`,
 	),
 })
 
@@ -62,20 +65,40 @@ const npmPublish = new Step({
 	},
 })
 
-const gitPush = new Step({
+const gitStatus = new Step({
+	name: 'Check git status',
+	shell: 'bash',
+	run: 'git status',
+})
+
+const gitAdd = new Step({
+	name: 'Add files to commit',
+	shell: 'bash',
+	run: 'git add .',
+})
+
+const gitCommit = new Step({
+	name: 'Commit changes',
+	shell: 'bash',
+	run: `git commit --no-verify -m "Release ${tagName}"`,
+})
+
+const gitPushCommit = new Step({
 	name: 'Push updates to GitHub',
 	shell: 'bash',
-	run: multilineString(
-		`git add package.json`,
-		`git commit --no-verify -m "Release ${ex.expn(
-			'github.event.release.tag_name',
-		)}"`,
-		`git push origin HEAD:${ex.expn('github.event.release.target_commitish')}`,
-		`git tag --force ${ex.expn('github.event.release.tag_name')}`,
-		`git push --force origin ${ex.expn(
-			'github.event.release.target_commitish',
-		)}`,
-	),
+	run: `git push origin HEAD:${targetCommitish}`,
+})
+
+const gitTag = new Step({
+	name: 'Create tag',
+	shell: 'bash',
+	run: `git tag --force ${tagName}`,
+})
+
+const gitPushTag = new Step({
+	name: 'Push tag to GitHub',
+	shell: 'bash',
+	run: `git push --force origin ${targetCommitish}`,
 })
 
 const publishJob = new NormalJob('Publish', {
@@ -92,7 +115,14 @@ const publishJob = new NormalJob('Publish', {
 	runBuild,
 	bumpVersion,
 	npmPublish,
-	gitPush,
+	gitStatus,
+	gitAdd,
+	gitStatus,
+	gitCommit,
+	gitPushCommit,
+	gitStatus,
+	gitTag,
+	gitPushTag,
 ])
 
 export const publishWorkflow = new Workflow('publish', {

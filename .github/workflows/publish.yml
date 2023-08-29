@@ -41,37 +41,10 @@ jobs:
       - name: Check git status
         shell: bash
         run: git status
-      - name: Add files to commit
-        shell: bash
-        run: GIT_CURL_VERBOSE=1 GIT_TRACE=1 git add .
-      - name: Check git status
-        shell: bash
-        run: git status
-      - name: Fetch latest
-        shell: bash
-        run: GIT_CURL_VERBOSE=1 GIT_TRACE=1 git fetch
-      - name: Commit changes
-        shell: bash
-        run: >-
-          GIT_CURL_VERBOSE=1 GIT_TRACE=1 git commit --no-verify -m "Release ${{
-          github.event.release.tag_name }}"
       - name: Push updates to GitHub
         shell: bash
         run: >-
           GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push origin HEAD:${{
-          github.event.release.target_commitish }}
-      - name: Check git status
-        shell: bash
-        run: git status
-      - name: Create tag
-        shell: bash
-        run: >-
-          GIT_CURL_VERBOSE=1 GIT_TRACE=1 git tag --force ${{
-          github.event.release.tag_name }}
-      - name: Push tag to GitHub
-        shell: bash
-        run: >-
-          GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push --force origin ${{
           github.event.release.target_commitish }}
       - name: Publish to npm
         run: >-

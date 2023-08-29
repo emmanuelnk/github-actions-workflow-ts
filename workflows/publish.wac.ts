@@ -72,40 +72,10 @@ const gitStatus = new Step({
 	run: 'git status',
 })
 
-const gitAdd = new Step({
-	name: 'Add files to commit',
-	shell: 'bash',
-	run: `${gitDebug} git add .`,
-})
-
-const gitFetch = new Step({
-	name: 'Fetch latest',
-	shell: 'bash',
-	run: `${gitDebug} git fetch`,
-})
-
-const gitCommit = new Step({
-	name: 'Commit changes',
-	shell: 'bash',
-	run: `${gitDebug} git commit --no-verify -m "Release ${tagName}"`,
-})
-
 const gitPushCommit = new Step({
 	name: 'Push updates to GitHub',
 	shell: 'bash',
 	run: `${gitDebug} git push origin HEAD:${targetCommitish}`,
-})
-
-const gitTag = new Step({
-	name: 'Create tag',
-	shell: 'bash',
-	run: `${gitDebug} git tag --force ${tagName}`,
-})
-
-const gitPushTag = new Step({
-	name: 'Push tag to GitHub',
-	shell: 'bash',
-	run: `${gitDebug} git push --force origin ${targetCommitish}`,
 })
 
 const publishJob = new NormalJob('Publish', {
@@ -122,14 +92,7 @@ const publishJob = new NormalJob('Publish', {
 	runBuild,
 	bumpVersion,
 	gitStatus,
-	gitAdd,
-	gitStatus,
-	gitFetch,
-	gitCommit,
 	gitPushCommit,
-	gitStatus,
-	gitTag,
-	gitPushTag,
 	npmPublish,
 ])
 

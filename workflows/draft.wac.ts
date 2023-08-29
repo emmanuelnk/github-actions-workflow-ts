@@ -3,6 +3,9 @@ import { Workflow, NormalJob, Step, expressions as ex } from '../src'
 const draftStep = new Step({
 	name: 'Draft next release',
 	uses: 'release-drafter/release-drafter@v5',
+	with: {
+		commitish: 'main',
+	},
 	env: {
 		GITHUB_TOKEN: ex.secret('GITHUB_TOKEN'),
 	},

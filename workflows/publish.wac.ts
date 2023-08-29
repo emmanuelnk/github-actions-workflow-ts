@@ -9,6 +9,7 @@ import {
 
 const targetCommitish = ex.expn('github.event.release.target_commitish')
 const tagName = ex.expn('github.event.release.tag_name')
+const gitDebug = 'GIT_CURL_VERBOSE=1 GIT_TRACE=1'
 
 const checkout = new Step({
 	name: 'Checkout',
@@ -74,31 +75,31 @@ const gitStatus = new Step({
 const gitAdd = new Step({
 	name: 'Add files to commit',
 	shell: 'bash',
-	run: 'git add .',
+	run: `${gitDebug} git add .`,
 })
 
 const gitCommit = new Step({
 	name: 'Commit changes',
 	shell: 'bash',
-	run: `git commit --no-verify -m "Release ${tagName}"`,
+	run: `${gitDebug} git commit --no-verify -m "Release ${tagName}"`,
 })
 
 const gitPushCommit = new Step({
 	name: 'Push updates to GitHub',
 	shell: 'bash',
-	run: `git push origin HEAD:${targetCommitish}`,
+	run: `${gitDebug} git push origin HEAD:${targetCommitish}`,
 })
 
 const gitTag = new Step({
 	name: 'Create tag',
 	shell: 'bash',
-	run: `git tag --force ${tagName}`,
+	run: `${gitDebug} git tag --force ${tagName}`,
 })
 
 const gitPushTag = new Step({
 	name: 'Push tag to GitHub',
 	shell: 'bash',
-	run: `git push --force origin ${targetCommitish}`,
+	run: `${gitDebug} git push --force origin ${targetCommitish}`,
 })
 
 const publishJob = new NormalJob('Publish', {

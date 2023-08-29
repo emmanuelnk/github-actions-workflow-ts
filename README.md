@@ -253,7 +253,7 @@ const buildJob = new NormalJob('Build', {
 
 testJob.addStep(checkoutStep)
 buildJob
-  .needs(testJob)
+  .needs([testJob])
   .addStep(checkoutStep)
 
 export const exampleWorkflow = new Workflow('example-filename', {

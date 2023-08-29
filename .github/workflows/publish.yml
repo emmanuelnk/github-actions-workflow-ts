@@ -38,14 +38,6 @@ jobs:
           git config user.email github-actions@github.com
           echo version: ${{ github.event.release.tag_name }}
           npm version ${{ github.event.release.tag_name }}
-      - name: Publish to npm
-        run: >-
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >>
-          .npmrc
-
-          npm publish
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Check git status
         shell: bash
         run: git status
@@ -55,6 +47,9 @@ jobs:
       - name: Check git status
         shell: bash
         run: git status
+      - name: Fetch latest
+        shell: bash
+        run: GIT_CURL_VERBOSE=1 GIT_TRACE=1 git fetch
       - name: Commit changes
         shell: bash
         run: >-
@@ -78,3 +73,11 @@ jobs:
         run: >-
           GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push --force origin ${{
           github.event.release.target_commitish }}
+      - name: Publish to npm
+        run: >-
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >>
+          .npmrc
+
+          npm publish
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -78,6 +78,12 @@ const gitAdd = new Step({
 	run: `${gitDebug} git add .`,
 })
 
+const gitFetch = new Step({
+	name: 'Fetch latest',
+	shell: 'bash',
+	run: `${gitDebug} git fetch`,
+})
+
 const gitCommit = new Step({
 	name: 'Commit changes',
 	shell: 'bash',
@@ -115,15 +121,16 @@ const publishJob = new NormalJob('Publish', {
 	installDependencies,
 	runBuild,
 	bumpVersion,
-	npmPublish,
 	gitStatus,
 	gitAdd,
 	gitStatus,
+	gitFetch,
 	gitCommit,
 	gitPushCommit,
 	gitStatus,
 	gitTag,
 	gitPushTag,
+	npmPublish,
 ])
 
 export const publishWorkflow = new Workflow('publish', {

@@ -25,5 +25,7 @@ jobs:
     steps:
       - name: Draft next release
         uses: release-drafter/release-drafter@v5
+        with:
+          commitish: main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

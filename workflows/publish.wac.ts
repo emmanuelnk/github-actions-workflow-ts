@@ -9,7 +9,6 @@ import {
 
 const targetCommitish = ex.expn('github.event.release.target_commitish')
 const tagName = ex.expn('github.event.release.tag_name')
-const gitDebug = 'GIT_CURL_VERBOSE=1 GIT_TRACE=1'
 
 const checkout = new Step({
 	name: 'Checkout',
@@ -42,7 +41,7 @@ const bumpVersion = new Step({
 		`git config user.name github-actions`,
 		`git config user.email github-actions@github.com`,
 		`echo version: ${tagName}`,
-		`npm version ${tagName}`,
+		`npm version ${tagName} -m "new release: v%s 🚀 [skip ci]"`,
 	),
 })
 
@@ -75,7 +74,7 @@ const gitStatus = new Step({
 const gitPushCommit = new Step({
 	name: 'Push updates to GitHub',
 	shell: 'bash',
-	run: `${gitDebug} git push origin HEAD:${targetCommitish}`,
+	run: `git push origin HEAD:${targetCommitish}`,
 })
 
 const publishJob = new NormalJob('Publish', {

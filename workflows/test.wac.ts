@@ -1,4 +1,6 @@
-import { Workflow, NormalJob, Step } from '../'
+import { Workflow, NormalJob, Step, expressions as ex } from '../'
+
+const nodeVersions = [16, 18, 20]
 
 const checkout = new Step({
 	name: 'Checkout',
@@ -8,7 +10,7 @@ const checkout = new Step({
 const installNode = new Step({
 	name: 'Install Node',
 	uses: 'actions/setup-node@v3',
-	with: { 'node-version': 18 },
+	with: { 'node-version': ex.expn('matrix.node') },
 })
 
 const installPnpm = new Step({
@@ -29,7 +31,9 @@ const runTests = new Step({
 
 const updateCodeCoverageBadge = new Step({
 	name: 'Update Code Coverage Badge',
-	if: `github.ref == format('refs/heads/{0}', github.event.repository.default_branch)`,
+	if: `github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && matrix.node == ${
+		nodeVersions.slice(-1)[0]
+	}`,
 	uses: 'we-cli/coverage-badge-action@48a2699b2e537c7519bdc970fb0ecd75c80a698e',
 })
 
@@ -37,6 +41,11 @@ const testJob = new NormalJob('Tests', {
 	'runs-on': 'ubuntu-latest',
 	permissions: {
 		contents: 'write',
+	},
+	strategy: {
+		matrix: {
+			node: nodeVersions,
+		},
 	},
 }).addSteps([
 	checkout,

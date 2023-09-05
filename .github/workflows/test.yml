@@ -14,13 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    strategy:
+      matrix:
+        node:
+          - 16
+          - 18
+          - 20
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{ matrix.node }}
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -32,5 +38,5 @@ jobs:
       - name: Update Code Coverage Badge
         if: >-
           github.ref == format('refs/heads/{0}',
-          github.event.repository.default_branch)
+          github.event.repository.default_branch) && matrix.node == 20
         uses: we-cli/coverage-badge-action@48a2699b2e537c7519bdc970fb0ecd75c80a698e

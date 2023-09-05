@@ -216,6 +216,60 @@ describe('Workflow', () => {
 		})
 	})
 
+	describe('addEnvs', () => {
+		it('should add environment variables to the workflow', () => {
+			const workflow = new Workflow('testWorkflow', {
+				name: 'testWorkflow',
+				on: {
+					workflow_dispatch: {},
+				},
+			})
+
+			workflow.addEnvs({
+				NODE_ENV: 'production',
+				API_KEY: '12345',
+			})
+
+			expect(workflow.workflow).toEqual({
+				name: 'testWorkflow',
+				on: {
+					workflow_dispatch: {},
+				},
+				env: {
+					NODE_ENV: 'production',
+					API_KEY: '12345',
+				},
+			})
+		})
+
+		it('should merge new environment variables with existing ones', () => {
+			const workflow = new Workflow('testWorkflow', {
+				name: 'testWorkflow',
+				on: {
+					workflow_dispatch: {},
+				},
+				env: {
+					OLD_ENV: 'oldValue',
+				},
+			})
+
+			workflow.addEnvs({
+				NEW_ENV: 'newValue',
+			})
+
+			expect(workflow.workflow).toEqual({
+				name: 'testWorkflow',
+				on: {
+					workflow_dispatch: {},
+				},
+				env: {
+					OLD_ENV: 'oldValue',
+					NEW_ENV: 'newValue',
+				},
+			})
+		})
+	})
+
 	describe('constructor', () => {
 		it('should construct the workflow with given filename and properties', () => {
 			const workflow = new Workflow('testWorkflow', {

@@ -78,6 +78,32 @@ describe('NormalJob', () => {
 		})
 	})
 
+	describe('addEnvs', () => {
+		it('should add environment variables to an existing env object', () => {
+			const job = new NormalJob('testJob', {
+				'runs-on': 'ubuntu-latest',
+				env: { existingKey: 'existingValue' },
+			})
+
+			job.addEnvs({ newKey: 'newValue' })
+
+			expect(job.job.env).toEqual({
+				existingKey: 'existingValue',
+				newKey: 'newValue',
+			})
+		})
+
+		it('should initialize env object if it does not exist', () => {
+			const job = new NormalJob('testJob', {
+				'runs-on': 'ubuntu-latest',
+			})
+
+			job.addEnvs({ newKey: 'newValue' })
+
+			expect(job.job.env).toEqual({ newKey: 'newValue' })
+		})
+	})
+
 	describe('needs()', () => {
 		it("should add jobs to an empty job's needs", () => {
 			const job1 = new NormalJob('job1', {

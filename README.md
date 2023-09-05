@@ -30,8 +30,8 @@ Stop writing workflows in YAML and use Typescript instead!
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Overview](#overview)
-  - [Simple Example](#simple-example)
   - [Try it out on Replit](#try-it-out-on-replit)
+  - [Simple Example](#simple-example)
   - [Generating Workflow YAML](#generating-workflow-yaml)
     - [Using the CLI](#using-the-cli)
     - [Usage with Husky (Suggested Recommendation)](#usage-with-husky-suggested-recommendation)
@@ -82,6 +82,11 @@ The advantage of using an imperitive language like Typscript to write Workflows 
 
 To get started, simply create a new `*.wac.ts` e.g. `deploy.wac.ts` anywhere in your project and start writing your GitHub Actions workflow.
 
+## Try it out on Replit
+Want to quickly see it in action? Explore these Replit examples (create a free account to fork and modify my examples):
+- [Simple Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#workflows/simple.example.wac.ts)
+- [Advanced Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#src/workflows/advanced.example.wac.ts)
+
 ## Simple Example
 Check the [examples folder](./examples/) and the [workflows folder](./workflows/) for more advanced examples.
 
@@ -115,10 +120,6 @@ Below is a simple example:
   // add the defined job to the defined workflow
   exampleWorkflow.addJob(testJob)
   ```
-## Try it out on Replit
-Curious to see it quickly in action? Explore these Replit examples (create a free to fork and modify):
-- [Simple Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#workflows/simple.example.wac.ts)
-- [Advanced Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#src/workflows/advanced.example.wac.ts)
 
 ## Generating Workflow YAML
 ### Using the CLI

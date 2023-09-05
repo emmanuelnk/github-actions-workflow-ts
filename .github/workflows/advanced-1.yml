@@ -7,6 +7,9 @@
 name: ExampleAdvanced
 'on':
   workflow_dispatch: {}
+env:
+  SENTRY_APP_NAME: ExampleAdvanced
+  SENTRY_ORG: example-org
 jobs:
   Test:
     runs-on: ubuntu-latest

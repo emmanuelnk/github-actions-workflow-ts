@@ -159,6 +159,10 @@ export const advancedWorkflow = new Workflow('advanced-1', {
 		workflow_dispatch: {},
 	},
 })
+	.addEnvs({
+		SENTRY_APP_NAME: 'ExampleAdvanced',
+		SENTRY_ORG: 'example-org',
+	})
 	.addJob(testJob)
 	.addJob(buildJob)
 	.addJob(deployJob)

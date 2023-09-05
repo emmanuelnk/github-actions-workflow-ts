@@ -37,12 +37,15 @@ Stop writing workflows in YAML and use Typescript instead!
     - [Usage with Husky (Suggested Recommendation)](#usage-with-husky-suggested-recommendation)
   - [Workflow Classes](#workflow-classes)
     - [`new Step()`](#new-step)
+      - [`.addEnvs()`](#addenvs)
     - [`new NormalJob()`](#new-normaljob)
+      - [`.addEnvs()`](#addenvs-1)
       - [`.addStep()`](#addstep)
       - [`.addSteps()`](#addsteps)
       - [`.needs()`](#needs)
     - [`new ReusableWorkflowCallJob()`](#new-reusableworkflowcalljob)
     - [`new Workflow()`](#new-workflow)
+      - [`.addEnvs()`](#addenvs-2)
       - [`.addJob()`](#addjob)
       - [`.addJobs()`](#addjobs)
   - [Workflow Types](#workflow-types)
@@ -73,7 +76,7 @@ npm install --save-dev github-actions-workflow-ts
 
 ## Overview
 
-The `github-actions-workflow-ts` package lets you write GitHub Actions workflows using Typescript. The workflows are then auto-compiled into YAML files that you don't have to manage manually -- Workflow as Code (wac)!. 
+The `github-actions-workflow-ts` package lets you write GitHub Actions workflows using Typescript. The workflows are then auto-compiled into YAML files that you don't have to manage manually -- Workflow as Code (wac)! 
 
 The advantage of using an imperative language like Typscript to write Workflows is that it allows you to:
 - write them confidently with type safety
@@ -177,8 +180,42 @@ const checkoutStep = new Step({
 ```
 </details>
 
+#### `.addEnvs()`
+This adds environment variables to a step.
+<details><summary>Example</summary>
+
+```ts
+import { Step } from 'github-actions-workflow-ts'
+
+const checkoutStep = new Step({
+  name: 'Checkout',
+  uses: 'actions/checkout@v3',
+}).addEnvs({
+  SOME_KEY: 'some-value',
+  SOME_OTHER_KEY: 'some-other-value'
+})
+```
+</details>
+
 ### `new NormalJob()`
 The most typical job that contains steps.
+
+#### `.addEnvs()`
+This adds environment variables to a job.
+<details><summary>Example</summary>
+
+```ts
+import { NormalJob } from 'github-actions-workflow-ts'
+
+const testJob = new NormalJob('Test', {
+  'runs-on': 'ubuntu-latest',
+  'timeout-minutes': 2
+}).addEnvs({
+  SOME_KEY: 'some-value',
+  SOME_OTHER_KEY: 'some-other-value'
+})
+```
+</details>
 
 #### `.addStep()`
 This adds a single step to a normal Job
@@ -301,6 +338,25 @@ export const exampleWorkflow = new Workflow('example-filename', {
 </details>
 
 ### `new Workflow()`
+#### `.addEnvs()`
+This adds environment variables to a workflow.
+<details><summary>Example</summary>
+
+```ts
+import { Workflow } from 'github-actions-workflow-ts'
+
+export const exampleWorkflow = new Workflow('example-filename', {
+  name: 'Example',
+  on: {
+    workflow_dispatch: {}
+  }
+}).addEnvs({
+  SOME_KEY: 'some-value',
+  SOME_OTHER_KEY: 'some-other-value'
+})
+```
+</details>
+
 #### `.addJob()`
 This adds a single job to a Workflow
 

@@ -9,6 +9,17 @@ export class Workflow {
 	 */
 	public filename?: string
 
+	addEnvs(envs: GeneratedWorkflowTypes.Workflow['env']): this {
+		if (this.workflow.env && typeof this.workflow.env === 'object')
+			this.workflow.env = {
+				...(this.workflow.env as { [k: string]: string | number | boolean }),
+				...(envs as { [k: string]: string | number | boolean }),
+			}
+		else this.workflow.env = envs
+
+		return this
+	}
+
 	addJobs(jobs: (Jobs.NormalJob | Jobs.ReusableWorkflowCallJob)[]): this {
 		this.workflow.jobs = {
 			...(this.workflow.jobs || {}),

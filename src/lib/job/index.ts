@@ -6,6 +6,17 @@ export class NormalJob {
 	public job: GeneratedWorkflowTypes.NormalJob
 	public steps: ExtendedWorkflowTypes.Step[] = []
 
+	addEnvs(envs: GeneratedWorkflowTypes.NormalJob['env']): this {
+		if (this.job.env && typeof this.job.env === 'object')
+			this.job.env = {
+				...(this.job.env as { [k: string]: string | number | boolean }),
+				...(envs as { [k: string]: string | number | boolean }),
+			}
+		else this.job.env = envs
+
+		return this
+	}
+
 	addSteps(steps: Step[]): this {
 		if (this.job.steps?.length)
 			this.job.steps = [...this.job.steps, ...steps.map((step) => step.step)]

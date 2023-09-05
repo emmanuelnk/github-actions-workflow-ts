@@ -31,6 +31,7 @@ Stop writing workflows in YAML and use Typescript instead!
   - [Installation](#installation)
   - [Overview](#overview)
   - [Simple Example](#simple-example)
+  - [Try it out on Replit](#try-it-out-on-replit)
   - [Generating Workflow YAML](#generating-workflow-yaml)
     - [Using the CLI](#using-the-cli)
     - [Usage with Husky (Suggested Recommendation)](#usage-with-husky-suggested-recommendation)
@@ -114,6 +115,10 @@ Below is a simple example:
   // add the defined job to the defined workflow
   exampleWorkflow.addJob(testJob)
   ```
+## Try it out on Replit
+Curious to see it quickly in action? Explore these Replit examples (create a free to fork and modify):
+- [Simple Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#workflows/simple.example.wac.ts)
+- [Advanced Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#src/workflows/advanced.example.wac.ts)
 
 ## Generating Workflow YAML
 ### Using the CLI

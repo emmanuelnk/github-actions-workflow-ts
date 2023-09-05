@@ -40,8 +40,8 @@ jobs:
 
           echo version: ${{ github.event.release.tag_name }}
 
-          npm version ${{ github.event.release.tag_name }} -m "new release: v%s
-          🚀 [skip ci]"
+          npm version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${{
+          github.event.release.tag_name }}
       - name: Check git status
         shell: bash
         run: git status

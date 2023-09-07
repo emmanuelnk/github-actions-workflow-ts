@@ -56,6 +56,20 @@ export class ReusableWorkflowCallJob {
 	public name: string
 	public job: GeneratedWorkflowTypes.ReusableWorkflowCallJob
 
+	needs(jobs: (NormalJob | ReusableWorkflowCallJob)[]): this {
+		if (this.job.needs?.length)
+			this.job.needs = [
+				...this.job.needs,
+				...jobs.map((job) => job.name as GeneratedWorkflowTypes.Name),
+			] as GeneratedWorkflowTypes.JobNeeds
+		else
+			(this.job.needs as GeneratedWorkflowTypes.JobNeeds) = jobs.map(
+				(job) => job.name as GeneratedWorkflowTypes.Name,
+			) as GeneratedWorkflowTypes.JobNeeds
+
+		return this
+	}
+
 	constructor(
 		name: string,
 		jobProps: GeneratedWorkflowTypes.ReusableWorkflowCallJob,

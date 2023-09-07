@@ -1,15 +1,10 @@
 /**
  * Advanced example
  *
- * This file will create an advanced workflow file in the .github/workflows directory:
- * - advanced-1.yml
- *
  * This example shows the usage of:
  * - expressions helper
  * - multilineString helper
  * - echoKeyValue helper
- * - workflowOps helper
- *
  *
  * IMPORTANT: You have to export the workflow from this file for it to be generated.
  */
@@ -19,7 +14,6 @@ import {
 	Step,
 	expressions as ex,
 	echoKeyValue as echo,
-	workflowOps as ops,
 	multilineString,
 	ReusableWorkflowCallJob,
 } from '../src'
@@ -122,9 +116,7 @@ const buildJob = new NormalJob('Build', {
 const deployJob = new NormalJob('Deploy', {
 	'runs-on': 'ubuntu-latest',
 	'timeout-minutes': 10,
-	environment: ex.expn(
-		`${ops.ternary("github.event_name == 'release'", 'prod', 'dev')}`,
-	),
+	environment: ex.ternary("github.event_name == 'release'", 'prod', 'dev'),
 	permissions: {
 		contents: 'read',
 		'id-token': 'write',

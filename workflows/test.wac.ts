@@ -62,5 +62,8 @@ export const test = new Workflow('test', {
 		pull_request: {
 			branches: ['main'],
 		},
+		push: {
+			branches: ['main'],
+		},
 	},
 }).addJob(testJob)

@@ -53,6 +53,19 @@ export const expressions = {
 	var(varName: string): string {
 		return this.expn(`vars.${varName}`)
 	},
+
+	/**
+	 * Generates a YAML compatible ternary operation
+	 * i.e. `${{ <condition> && <ifTrue> || <ifFalse> }}`
+	 *
+	 * @param {string} condition - The condition to evaluate.
+	 * @param {string} ifTrue - The value to return if the condition is true.
+	 * @param {string} ifFalse - The value to return if the condition is false.
+	 * @returns {string} The formatted ternary operation.
+	 */
+	ternary(condition: string, ifTrue: string, ifFalse: string): string {
+		return `\${{ ${condition} && ${ifTrue} || ${ifFalse} }}`
+	},
 }
 
 /**
@@ -139,6 +152,8 @@ export const multilineString = (...strings: string[]): string => {
  */
 export const workflowOps = {
 	/**
+	 * @deprecated since version 0.2.0 use `expressions.ternary` instead.
+	 *
 	 * Generates a YAML compatible ternary operation
 	 * i.e. `${{ <condition> && <ifTrue> || <ifFalse> }}`
 	 *

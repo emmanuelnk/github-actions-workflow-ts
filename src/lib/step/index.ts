@@ -2,6 +2,7 @@ import * as ExtendedWorkflowTypes from '../../types/githubActionsWorkflowExtende
 
 export class Step {
 	public step: ExtendedWorkflowTypes.Step
+	public id: string | undefined
 
 	addEnvs(envs: ExtendedWorkflowTypes.Step['env']): this {
 		if (this.step.env && typeof this.step.env === 'object')
@@ -18,5 +19,6 @@ export class Step {
 		this.step = {
 			...stepProps,
 		}
+		this.id = stepProps.id
 	}
 }

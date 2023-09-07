@@ -24,6 +24,14 @@ describe('expressions', () => {
 			expect(expressions.var('MY_VAR')).toBe('${{ vars.MY_VAR }}')
 		})
 	})
+
+	describe('outputTernary', () => {
+		it('should format the provided condition, ifTrue, and ifFalse values into a ternary expression', () => {
+			expect(expressions.ternary('condition', 'trueValue', 'falseValue')).toBe(
+				'${{ condition && trueValue || falseValue }}',
+			)
+		})
+	})
 })
 
 describe('echoKeyValue', () => {

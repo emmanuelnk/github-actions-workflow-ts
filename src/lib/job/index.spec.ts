@@ -104,7 +104,7 @@ describe('NormalJob', () => {
 		})
 	})
 
-	describe('needs()', () => {
+	describe('needs', () => {
 		it("should add jobs to an empty job's needs", () => {
 			const job1 = new NormalJob('job1', {
 				'runs-on': 'ubuntu-latest',
@@ -166,16 +166,79 @@ describe('NormalJob', () => {
 })
 
 describe('ReusableWorkflowCallJob', () => {
-	it('should construct properly', () => {
-		const job = new ReusableWorkflowCallJob('testReusableJob', {
-			uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
-			secrets: 'inherit',
+	describe('constructor', () => {
+		it('should construct properly', () => {
+			const job = new ReusableWorkflowCallJob('testReusableJob', {
+				uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
+				secrets: 'inherit',
+			})
+
+			expect(job.name).toBe('testReusableJob')
+			expect(job.job).toEqual({
+				uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
+				secrets: 'inherit',
+			})
+		})
+	})
+
+	describe('needs', () => {
+		it("should add jobs to an empty job's needs", () => {
+			const job1 = new NormalJob('job1', {
+				'runs-on': 'ubuntu-latest',
+			})
+
+			const job2 = new NormalJob('job2', {
+				'runs-on': 'ubuntu-latest',
+			})
+
+			const targetJob = new ReusableWorkflowCallJob('target', {
+				uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
+			})
+
+			targetJob.needs([job1, job2])
+
+			expect(targetJob.job.needs).toEqual(['job1', 'job2'])
 		})
 
-		expect(job.name).toBe('testReusableJob')
-		expect(job.job).toEqual({
-			uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
-			secrets: 'inherit',
+		it("should add jobs to an existing job's needs", () => {
+			const job1 = new NormalJob('job1', {
+				'runs-on': 'ubuntu-latest',
+			})
+
+			const job2 = new NormalJob('job2', {
+				'runs-on': 'ubuntu-latest',
+			})
+
+			const targetJob = new ReusableWorkflowCallJob('targetJob', {
+				uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
+				needs: ['initialJob'],
+			})
+
+			targetJob.needs([job1, job2])
+
+			expect(targetJob.job.needs).toEqual(['initialJob', 'job1', 'job2'])
+		})
+
+		it('should handle a mix of NormalJob and ReusableWorkflowCallJob types', () => {
+			const job1 = new NormalJob('job1', {
+				'runs-on': 'ubuntu-latest',
+			})
+
+			const job2 = new ReusableWorkflowCallJob('job2', {
+				uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
+			})
+
+			const job3 = new NormalJob('job3', {
+				'runs-on': 'ubuntu-latest',
+			})
+
+			const targetJob = new ReusableWorkflowCallJob('targetJob', {
+				uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
+			})
+
+			targetJob.needs([job1, job2, job3])
+
+			expect(targetJob.job.needs).toEqual(['job1', 'job2', 'job3'])
 		})
 	})
 })

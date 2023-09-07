@@ -1,5 +1,5 @@
 # github-actions-workflow-ts
-Stop writing workflows in YAML and use Typescript instead!
+Stop writing workflows in YAML and use TypeScript instead!
 
 <p align="center"><img src="https://github.com/emmanuelnk/github-actions-workflow-ts/assets/19330930/9121bb33-cd51-41f3-830f-9b4bd1117320" alt="github-actions-workflow-ts-logo" width="400"/></p>
 
@@ -30,11 +30,14 @@ Stop writing workflows in YAML and use Typescript instead!
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Overview](#overview)
-  - [Try it out on Replit](#try-it-out-on-replit)
-  - [Simple Example](#simple-example)
+    - [Key Benefits:](#key-benefits)
+    - [Getting Started:](#getting-started)
+  - [Examples](#examples)
+    - [Try it out on Replit](#try-it-out-on-replit)
+    - [More Examples](#more-examples)
   - [Generating Workflow YAML](#generating-workflow-yaml)
     - [Using the CLI](#using-the-cli)
-    - [Usage with Husky (Suggested Recommendation)](#usage-with-husky-suggested-recommendation)
+    - [Integration with Husky (recommended)](#integration-with-husky-recommended)
     - [Config file](#config-file)
   - [Workflow Classes](#workflow-classes)
     - [`new Step()`](#new-step)
@@ -45,6 +48,7 @@ Stop writing workflows in YAML and use Typescript instead!
       - [`.addSteps()`](#addsteps)
       - [`.needs()`](#needs)
     - [`new ReusableWorkflowCallJob()`](#new-reusableworkflowcalljob)
+      - [`.needs()`](#needs-1)
     - [`new Workflow()`](#new-workflow)
       - [`.addEnvs()`](#addenvs-2)
       - [`.addJob()`](#addjob)
@@ -66,7 +70,6 @@ Stop writing workflows in YAML and use Typescript instead!
       - [`.toGithubOutput()`](#togithuboutput)
   - [Contributing](#contributing)
   - [Credits](#credits)
-    - [Why then not just use `webiny/github-actions-wac` package?](#why-then-not-just-use-webinygithub-actions-wac-package)
 
 ## Installation
 
@@ -76,21 +79,24 @@ npm install --save-dev github-actions-workflow-ts
 
 ## Overview
 
-The `github-actions-workflow-ts` package lets you write GitHub Actions workflows using Typescript. The workflows are then auto-compiled into YAML files that you don't have to manage manually -- Workflow as Code (wac)! 
+Introducing `github-actions-workflow-ts`: A seamless integration allowing developers to author GitHub Actions workflows with the power and flexibility of TypeScript. 
 
-The advantage of using an imperative language like Typscript to write Workflows is that it allows you to:
-- write them confidently with type safety
-- package/modularize common/repetitve jobs and steps (write once, use everywhere)
-- make use of control flow logic like conditionals and other imperative programming language functionality to build complex workflows that isn't really possible with YAML alone. 
+### Key Benefits:
 
-To get started, simply create a new `*.wac.ts` e.g. `deploy.wac.ts` anywhere in your project and start writing your GitHub Actions workflow.
+1. **Type Safety**: Elevate the confidence in your workflows with the robust type-checking capabilities of TypeScript.
+2. **Modularity**: Efficiently package and reuse common jobs and steps across various workflows, promoting the DRY (Don't Repeat Yourself) principle.
+3. **Control Flow**: Harness the inherent control flow mechanisms, like conditionals, available in imperative languages. This empowers developers to craft intricate workflows beyond the constraints of YAML.
 
-## Try it out on Replit
+### Getting Started:
+To embark on this efficient journey, create a new `*.wac.ts` file, for instance, `deploy.wac.ts`, in your project directory. Then, dive into authoring your enhanced GitHub Actions workflows!
+
+## Examples
+### Try it out on Replit
 Want to quickly see it in action? Explore these Replit examples (create a free account to fork and modify my examples):
 - [Simple Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#workflows/simple.example.wac.ts)
 - [Advanced Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#src/workflows/advanced.example.wac.ts)
 
-## Simple Example
+### More Examples
 Check the [examples folder](./examples/) and the [workflows folder](./workflows/) for more advanced examples.
 
 Below is a simple example:
@@ -126,27 +132,27 @@ Below is a simple example:
 
 ## Generating Workflow YAML
 ### Using the CLI
-- When you have written your `*.wac.ts` file, you use the `github-actions-workflow-ts` CLI to generate the yaml files. 
-- **DON'T FORGET** to **export** the Workflows you want to generate in your `.wac.ts` files i.e. 
+When you have written your `*.wac.ts` file, you use the `github-actions-workflow-ts` CLI to generate the yaml files. 
+
+**Don't forget** to **export** the workflows that you want to generate in your `*.wac.ts` files i.e. 
   ```ts
-    // generates example-filename.yml
-    export const exampleWorkflow = new Workflow('example-filename', {  
-      // ...
-    })
+    // exporting `exampleWorkflow` will generate example-filename.yml
+    export const exampleWorkflow = new Workflow('example-filename', { /***/ })
   ```
-- To generate the yaml files, run the following commands from your root directory:
+Then, from project root, run:
   ```bash
   npx generate-workflow-files build
-  ```
-- Or (short-hand):
-  ```bash
+
+  # OR
+
   npx gwf build
   ```
 
-### Usage with Husky (Suggested Recommendation)
+### Integration with Husky (recommended)
+For seamless automation and to eliminate the possibility of overlooking updates in `*.wac.ts` files, integrating with a pre-commit tool is recommended. We recommend [husky](https://github.com/typicode/husky). With Husky, each commit triggers the `npx github-actions-workflow-ts build` command, ensuring that your GitHub Actions YAML files consistently reflect the latest modifications.
+
 <details><summary>See more</summary>
 
-In order to automate all of the above and not think about forgetting to build the updated `*.wac.ts` file, one should use husky:
 - Install Husky:
   ```bash
   npm install --save-dev husky
@@ -166,7 +172,7 @@ In order to automate all of the above and not think about forgetting to build th
 </details>
 
 ### Config file
-If you want to change certain properties about how github-actions-workflow-ts generates the yaml, you can create a `wac.config.json` file in your project root. See the [example config file](./wac.config.json)
+If you want to change how github-actions-workflow-ts generates the yaml files, you can create a `wac.config.json` file in your project root. See the [example config file](./wac.config.json)
 
 <details><summary>See config options</summary>
 
@@ -348,6 +354,9 @@ export const exampleWorkflow = new Workflow('example-filename', {
 }).addJob(releaseJob)  
 ```
 </details>
+
+#### `.needs()`
+Same as [NormalJob.needs()](#needs)
 
 ### `new Workflow()`
 #### `.addEnvs()`
@@ -659,15 +668,4 @@ Returns the string `echo "key=value" >> $GITHUB_OUTPUT`
 See the [Contributing Guide](./.github/CONTRIBUTING.md)
 
 ## Credits
-Inspired by [webiny/github-actions-wac](https://github.com/webiny/github-actions-wac) which is also the original source of the filename extension (`.wac.ts`) used to distinguish the Github Actions YAML workflow Typescript files.
-
-### Why then not just use `webiny/github-actions-wac` package?
-<details><summary>See more</summary>
-
-You definitely can! It's a great project. There are some significant differences between my package and that one. This package:
-- Allows for more flexibility in naming the generated yaml workflow files e.g. use of hyphens -- `example-filename.yml`
-- Allows for a more flexible project structure since it will read all `*.wac.ts` files in a project instead of just those under `.github/workflows`. This means you can create a dedicated `./workflows` folder in your `src` folder and still be sure that the generated yaml will be placed correctly in `.github/workflows/`
-- Adds helper classes to abstract away the types if needed e.g. `new Step()`, `new NormalJob()` etc
-- Extends certain types e.g. `Step`
-- Adds utility functions to aid in the writing of common workflow syntax e.g. `${{ <expression> }}`, `echo "key"="value" >> LOCATION` and multiline yaml
-</details>
+Inspired by [webiny/github-actions-wac](https://github.com/webiny/github-actions-wac) which is also the original source of the filename extension (`.wac.ts`) used to distinguish the Github Actions YAML workflow TypeScript files. When I hit too many limitations with `github-actions-wac`, I decided to create `github-actions-workflow-ts` to address those limitations and add a lot more functionality.

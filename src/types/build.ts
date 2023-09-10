@@ -7,4 +7,9 @@ export type WacConfig = {
 	 * generated workflow files.
 	 */
 	headerText?: string[]
+	/**
+	 * Options for js-yaml dump funtion
+	 * Ref: https://github.com/nodeca/js-yaml#dump-object---options-
+	 */
+	dumpOptions?: Record<string, any>
 }

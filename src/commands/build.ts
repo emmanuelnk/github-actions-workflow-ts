@@ -113,7 +113,8 @@ export const writeWorkflowJSONToYamlFiles = (
 
 	for (const workflowName in workflowJSON) {
 		const workflowYaml = jsYaml.dump(workflowJSON[workflowName].workflow, {
-			noRefs: !config['refs'],
+			noRefs: !config.refs,
+			...(config.dumpOptions || {}),
 		})
 
 		const yamlWorkflowPath = path.join(

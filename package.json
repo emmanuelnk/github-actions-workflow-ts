@@ -1,6 +1,6 @@
 {
   "name": "github-actions-workflow-ts",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Emmanuel N Kyeyune",
   "description": "Generate GitHub Actions workflow files using TypeScript (compiles to YAML)",
   "main": "build/index",

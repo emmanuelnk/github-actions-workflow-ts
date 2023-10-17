@@ -103,3 +103,31 @@ export const publishWorkflow = new Workflow('publish', {
 		},
 	},
 }).addJob(publishJob)
+example.wac.ts
+// example.wac.ts
+
+import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+
+const checkoutStep = new Step({
+  name: 'Checkout',
+  uses: 'actions/checkout@v3',
+})
+
+const testJob = new NormalJob('Test', {
+  'runs-on': 'ubuntu-latest',
+  'timeout-minutes': 2
+})
+
+// IMPORTANT - the instance of Workflow MUST be exported with `export`
+export const exampleWorkflow = new Workflow('example-filename', {
+  name: 'Example',
+  on: {
+    workflow_dispatch: {}
+  }
+})
+
+// add the defined step to the defined job
+testJob.addStep(checkoutStep)
+
+// add the defined job to the defined workflow
+exampleWorkflow.addJob(testJob)

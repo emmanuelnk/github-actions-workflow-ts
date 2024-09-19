@@ -24,7 +24,6 @@ export type Event =
 	| 'page_build'
 	| 'public'
 	| 'pull_request'
-	| 'pull_request_comment (use issue_comment)'
 	| 'pull_request_review'
 	| 'pull_request_review_comment'
 	| 'pull_request_target'

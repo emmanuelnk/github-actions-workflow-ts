@@ -6,7 +6,6 @@
  */
 
 export type Event =
-	| 'branch_protection_rule'
 	| 'check_run'
 	| 'check_suite'
 	| 'create'
@@ -20,26 +19,25 @@ export type Event =
 	| 'issue_comment'
 	| 'issues'
 	| 'label'
-	| 'member'
+	| 'merge_group'
 	| 'milestone'
 	| 'page_build'
-	| 'project'
-	| 'project_card'
-	| 'project_column'
 	| 'public'
 	| 'pull_request'
+	| 'pull_request_comment (use issue_comment)'
 	| 'pull_request_review'
 	| 'pull_request_review_comment'
 	| 'pull_request_target'
 	| 'push'
 	| 'registry_package'
 	| 'release'
+	| 'repository_dispatch'
+	| 'schedule'
 	| 'status'
 	| 'watch'
 	| 'workflow_call'
 	| 'workflow_dispatch'
 	| 'workflow_run'
-	| 'repository_dispatch'
 export type StringContainingExpressionSyntax = string
 /**
  * You can override the default shell settings in the runner's operating system using the shell keyword. You can use built-in shell keywords, or you can define a custom set of shell options.

@@ -41,7 +41,7 @@ const bumpVersion = new Step({
 		`git config user.name github-actions`,
 		`git config user.email github-actions@github.com`,
 		`echo version: ${tagName}`,
-		`npm version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${tagName}`,
+		`npm version --no-git-tag-version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${tagName}`,
 	),
 })
 

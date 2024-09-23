@@ -1,6 +1,12 @@
-import { Workflow, NormalJob, Step, expressions as ex } from '../'
+import {
+	Workflow,
+	NormalJob,
+	Step,
+	expressions as ex,
+	ExtendedWorkflowTypes,
+} from '../'
 
-const nodeVersions = [16, 18, 20]
+const nodeVersions: ExtendedWorkflowTypes.MatrixConfiguration = [16, 18, 20]
 
 const checkout = new Step({
 	name: 'Checkout',

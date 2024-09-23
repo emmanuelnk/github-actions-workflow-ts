@@ -17,7 +17,7 @@
     "build": "pnpm run clean && pnpm run compile",
     "clean": "rm -rf ./build",
     "compile": "tsc -p tsconfig.build.json",
-    "generate-workflow-types": "ts-node scripts/generateWorkflowTypes.ts && pnpx eslint --fix src/types/githubActionsWorkflow.ts",
+    "generate-workflow-types": "ts-node scripts/generateWorkflowTypes.ts && pnpm exec eslint --fix src/types/githubActionsWorkflow.ts",
     "generate-workflow-files": "node build/bin.js build",
     "gwf": "node build/bin.js",
     "prepare": "husky install"
@@ -52,6 +52,9 @@
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
     "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.8.3",
+    "eslint-plugin-prettier": "^5.2.1",
     "husky": "^8.0.0",
     "jest": "^28.1.2",
     "json-schema-to-typescript": "^10.1.5",

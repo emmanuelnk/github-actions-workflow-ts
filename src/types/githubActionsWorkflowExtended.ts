@@ -1,4 +1,4 @@
-import { NormalJob } from './githubActionsWorkflow'
+import { NormalJob, Configuration } from './githubActionsWorkflow'
 
 /**
  * Non-generated types
@@ -18,3 +18,5 @@ export type Step = ElementOf<NormalJob['steps']>
  *
  */
 export type Steps = NormalJob['steps']
+
+export type MatrixConfiguration = string | [Configuration, ...Configuration[]]

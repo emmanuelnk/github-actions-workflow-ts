@@ -20,7 +20,7 @@ export type Event =
 	| 'issue_comment'
 	| 'issues'
 	| 'label'
-	| 'member'
+	| 'merge_group'
 	| 'milestone'
 	| 'page_build'
 	| 'project'
@@ -62,8 +62,24 @@ export type Name = string
  */
 export type Permissions = ('read-all' | 'write-all') | PermissionsEvent
 export type PermissionsLevel = 'read' | 'write' | 'none'
-export type Machine = 'linux' | 'macos' | 'windows'
-export type Architecture = 'ARM32' | 'x64' | 'x86'
+/**
+ * A build matrix is a set of different configurations of the virtual environment. For example you might run a job against more than one supported version of a language, operating system, or tool. Each configuration is a copy of the job that runs and reports a status.
+ * You can specify a matrix by supplying an array for the configuration options. For example, if the GitHub virtual environment supports Node.js versions 6, 8, and 10 you could specify an array of those versions in the matrix.
+ * When you define a matrix of operating systems, you must set the required runs-on keyword to the operating system of the current job, rather than hard-coding the operating system name. To access the operating system name, you can use the matrix.os context parameter to set runs-on. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.
+ */
+export type Matrix =
+	| {
+			[k: string]: [Configuration, ...Configuration[]] | ExpressionSyntax
+	  }
+	| ExpressionSyntax
+export type Configuration =
+	| string
+	| number
+	| boolean
+	| {
+			[k: string]: Configuration
+	  }
+	| Configuration[]
 /**
  * To set custom environment variables, you need to specify the variables in the workflow file. You can define environment variables for a step, job, or entire workflow using the jobs.<job_id>.steps[*].env, jobs.<job_id>.env, and env keywords. For more information, see https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepsenv
  */
@@ -167,12 +183,6 @@ export interface Workflow {
 				 * Runs your workflow anytime the label event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/issues/labels/.
 				 */
 				label?: {
-					[k: string]: unknown
-				} | null
-				/**
-				 * Runs your workflow anytime the member event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/repos/collaborators/.
-				 */
-				member?: {
 					[k: string]: unknown
 				} | null
 				/**
@@ -362,7 +372,6 @@ export interface Workflow {
 							[k: string]: unknown
 						}
 					}
-					[k: string]: unknown
 				}
 				/**
 				 * This event occurs when a workflow run is requested or completed, and allows you to execute a workflow based on the finished result of another workflow. For example, if your pull_request workflow generates build artifacts, you can create a new workflow that uses workflow_run to analyze the results and add a comment to the original pull request.
@@ -456,44 +465,15 @@ export interface NormalJob {
 	 * The type of machine to run the job on. The machine can be either a GitHub-hosted runner, or a self-hosted runner.
 	 */
 	'runs-on':
-		| (
-				| 'macos-10.15'
-				| 'macos-11'
-				| 'macos-12'
-				| 'macos-12-xl'
-				| 'macos-13'
-				| 'macos-13-xl'
-				| 'macos-latest'
-				| 'macos-latest-xl'
-				| 'self-hosted'
-				| 'ubuntu-18.04'
-				| 'ubuntu-20.04'
-				| 'ubuntu-22.04'
-				| 'ubuntu-latest'
-				| 'ubuntu-latest-4-cores'
-				| 'ubuntu-latest-8-cores'
-				| 'ubuntu-latest-16-cores'
-				| 'windows-2019'
-				| 'windows-2022'
-				| 'windows-latest'
-				| 'windows-latest-8-cores'
-		  )
-		| ((
-				| ['self-hosted', ...string[]]
-				| ['self-hosted', Machine, ...string[]]
-				| ['self-hosted', Architecture, ...string[]]
-				| ['self-hosted', Machine, Architecture, ...string[]]
-				| ['self-hosted', Architecture, Machine, ...string[]]
-				| ['linux', ...string[]]
-				| ['windows', ...string[]]
-		  ) &
-				unknown[])
+		| string
+		| ([string] & unknown[])
 		| {
 				group?: string
 				labels?: string | string[]
 				[k: string]: unknown
 		  }
 		| StringContainingExpressionSyntax
+		| ExpressionSyntax
 	/**
 	 * The environment that the job references.
 	 */
@@ -673,20 +653,11 @@ export interface NormalJob {
 	 * A strategy creates a build matrix for your jobs. You can define different variations of an environment to run each job in.
 	 */
 	strategy?: {
-		/**
-		 * A build matrix is a set of different configurations of the virtual environment. For example you might run a job against more than one supported version of a language, operating system, or tool. Each configuration is a copy of the job that runs and reports a status.
-		 * You can specify a matrix by supplying an array for the configuration options. For example, if the GitHub virtual environment supports Node.js versions 6, 8, and 10 you could specify an array of those versions in the matrix.
-		 * When you define a matrix of operating systems, you must set the required runs-on keyword to the operating system of the current job, rather than hard-coding the operating system name. To access the operating system name, you can use the matrix.os context parameter to set runs-on. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.
-		 */
-		matrix:
-			| {
-					[k: string]: unknown
-			  }
-			| ExpressionSyntax
+		matrix: Matrix
 		/**
 		 * When set to true, GitHub cancels all in-progress jobs if any matrix job fails. Default: true
 		 */
-		'fail-fast'?: boolean
+		'fail-fast'?: boolean | string
 		/**
 		 * The maximum number of jobs that can run simultaneously when using a matrix job strategy. By default, GitHub will maximize the number of jobs run in parallel depending on the available runners on GitHub-hosted virtual machines.
 		 */
@@ -719,6 +690,7 @@ export interface NormalJob {
 }
 export interface PermissionsEvent {
 	actions?: PermissionsLevel
+	attestations?: PermissionsLevel
 	checks?: PermissionsLevel
 	contents?: PermissionsLevel
 	deployments?: PermissionsLevel
@@ -790,7 +762,7 @@ export interface ReusableWorkflowCallJob {
 	 */
 	name?: string
 	needs?: JobNeeds
-	permissions?: PermissionsEvent
+	permissions?: Permissions
 	/**
 	 * You can use the if conditional to prevent a job from running unless a condition is met. You can use any supported context and expression to create a conditional.
 	 * Expressions in an if conditional do not require the ${{ }} syntax. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.
@@ -816,20 +788,11 @@ export interface ReusableWorkflowCallJob {
 	 * A strategy creates a build matrix for your jobs. You can define different variations of an environment to run each job in.
 	 */
 	strategy?: {
-		/**
-		 * A build matrix is a set of different configurations of the virtual environment. For example you might run a job against more than one supported version of a language, operating system, or tool. Each configuration is a copy of the job that runs and reports a status.
-		 * You can specify a matrix by supplying an array for the configuration options. For example, if the GitHub virtual environment supports Node.js versions 6, 8, and 10 you could specify an array of those versions in the matrix.
-		 * When you define a matrix of operating systems, you must set the required runs-on keyword to the operating system of the current job, rather than hard-coding the operating system name. To access the operating system name, you can use the matrix.os context parameter to set runs-on. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.
-		 */
-		matrix:
-			| {
-					[k: string]: unknown
-			  }
-			| ExpressionSyntax
+		matrix: Matrix
 		/**
 		 * When set to true, GitHub cancels all in-progress jobs if any matrix job fails. Default: true
 		 */
-		'fail-fast'?: boolean
+		'fail-fast'?: boolean | string
 		/**
 		 * The maximum number of jobs that can run simultaneously when using a matrix job strategy. By default, GitHub will maximize the number of jobs run in parallel depending on the available runners on GitHub-hosted virtual machines.
 		 */

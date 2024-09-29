@@ -24,6 +24,11 @@ const installNode = new Step({
 	with: { 'node-version': 18 },
 })
 
+const installGlobalTsx = new Step({
+	name: 'Install tsx',
+	run: 'npm install -g tsx',
+})
+
 const installPnpm = new Step({
 	name: 'Install pnpm',
 	uses: 'pnpm/action-setup@v2',
@@ -41,7 +46,7 @@ const bumpVersion = new Step({
 		`git config user.name github-actions`,
 		`git config user.email github-actions@github.com`,
 		`echo version: ${tagName}`,
-		`npm version --no-git-tag-version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${tagName}`,
+		`npm version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${tagName}`,
 	),
 })
 
@@ -77,6 +82,33 @@ const gitPushCommit = new Step({
 	run: `git push origin HEAD:${targetCommitish}`,
 })
 
+const createZeroDependencyPackage = new Step({
+	name: 'Create Zero Dependency Package',
+	run: 'tsx scripts/generateZeroDependencyPackage.ts',
+})
+
+const buildZeroDependencyPackage = new Step({
+	name: 'Build Zero Dependency Package',
+	'working-directory': 'github-actions-workflow-ts-lib',
+	run: 'npm run build',
+})
+
+const npmPublishZeroDependencyLib = new Step({
+	name: 'Publish to npm',
+	'working-directory': 'github-actions-workflow-ts-lib',
+	run: multilineString(
+		echoKeyValue.to(
+			'//registry.npmjs.org/:_authToken',
+			ex.secret('NPM_TOKEN'),
+			'.npmrc',
+		),
+		'npm publish',
+	),
+	env: {
+		NPM_AUTH_TOKEN: ex.secret('NPM_TOKEN'),
+	},
+})
+
 const publishJob = new NormalJob('Publish', {
 	'runs-on': 'ubuntu-latest',
 	'timeout-minutes': 20,
@@ -87,12 +119,16 @@ const publishJob = new NormalJob('Publish', {
 	checkout,
 	installNode,
 	installPnpm,
+	installGlobalTsx,
 	installDependencies,
 	runBuild,
 	bumpVersion,
 	gitStatus,
 	gitPushCommit,
 	npmPublish,
+	createZeroDependencyPackage,
+	buildZeroDependencyPackage,
+	npmPublishZeroDependencyLib,
 ])
 
 export const publishWorkflow = new Workflow('publish', {

@@ -3,8 +3,8 @@ import * as path from 'path'
 import * as jsYaml from 'js-yaml'
 import * as fg from 'fast-glob'
 import * as tsNode from 'ts-node'
-import { Workflow } from '../lib'
-import { BuildTypes } from '../types'
+import { Workflow } from '../../lib'
+import { BuildTypes } from '../commands/types'
 
 /**
  * Comment indicating the file should not be modified.
@@ -48,7 +48,7 @@ export const registerTsNode = (options = {}): void => {
  * Returns the config file
  * @returns { Record<string, any> | undefined} - The config file as an object
  */
-export const getConfig = (): Record<string, any> | undefined => {
+export const getConfig = (): BuildTypes.WacConfig | undefined => {
 	const configFilePath = path.join(process.cwd(), 'wac.config.json')
 
 	if (!fs.existsSync(configFilePath)) {

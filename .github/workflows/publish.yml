@@ -27,6 +27,8 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 8
+      - name: Install tsx
+        run: npm install -g tsx
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Run Build
@@ -36,7 +38,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           echo version: ${{ github.event.release.tag_name }}
-          npm version --no-git-tag-version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${{ github.event.release.tag_name }}
+          npm version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${{ github.event.release.tag_name }}
       - name: Check git status
         shell: bash
         run: git status
@@ -44,6 +46,18 @@ jobs:
         shell: bash
         run: git push origin HEAD:${{ github.event.release.target_commitish }}
       - name: Publish to npm
+        run: |-
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+          npm publish
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create Zero Dependency Package
+        run: tsx scripts/generateZeroDependencyPackage.ts
+      - name: Build Zero Dependency Package
+        working-directory: github-actions-workflow-ts-lib
+        run: npm run build
+      - name: Publish to npm
+        working-directory: github-actions-workflow-ts-lib
         run: |-
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
           npm publish

@@ -3,7 +3,8 @@ import * as build from './build'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as jsYaml from 'js-yaml'
-import { Workflow, BuildTypes } from '..'
+import { Workflow } from '../../lib'
+import { BuildTypes } from '../../cli'
 
 jest.mock('fs')
 jest.mock('path')

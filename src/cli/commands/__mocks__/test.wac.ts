@@ -1,4 +1,4 @@
-import { Workflow, NormalJob, Step } from '../..'
+import { Workflow, NormalJob, Step } from '../../../lib'
 
 const checkout = new Step({
 	name: 'Checkout',

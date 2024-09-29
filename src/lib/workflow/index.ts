@@ -1,4 +1,4 @@
-import { GeneratedWorkflowTypes } from '../../types'
+import { GeneratedWorkflowTypes } from '../types'
 import * as Jobs from '../job'
 
 export class Workflow {

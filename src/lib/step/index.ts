@@ -1,4 +1,4 @@
-import * as ExtendedWorkflowTypes from '../../types/githubActionsWorkflowExtended'
+import * as ExtendedWorkflowTypes from '../types/githubActionsWorkflowExtended'
 
 export class Step {
 	public step: ExtendedWorkflowTypes.Step

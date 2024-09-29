@@ -1,4 +1,4 @@
-import { GeneratedWorkflowTypes, ExtendedWorkflowTypes } from '../../types'
+import { GeneratedWorkflowTypes, ExtendedWorkflowTypes } from '../types'
 import { Step } from '..'
 
 export class NormalJob {

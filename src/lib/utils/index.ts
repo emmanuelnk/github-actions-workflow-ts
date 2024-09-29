@@ -126,7 +126,7 @@ export const echoKeyValue = {
 export const multilineString = (...strings: string[]): string => {
 	return strings
 		.map((str) => {
-			let escapedStr = str.replace(
+			const escapedStr = str.replace(
 				/[\b\f\n\r\t\v\0\\]/g,
 				(match: string): string => {
 					return {

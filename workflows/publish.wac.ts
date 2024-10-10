@@ -12,7 +12,7 @@ const tagName = ex.expn('github.event.release.tag_name')
 
 const checkout = new Step({
 	name: 'Checkout',
-	uses: 'actions/checkout@v3',
+	uses: 'actions/checkout@v4',
 	with: {
 		ref: targetCommitish,
 	},
@@ -20,7 +20,7 @@ const checkout = new Step({
 
 const installNode = new Step({
 	name: 'Install Node',
-	uses: 'actions/setup-node@v3',
+	uses: 'actions/setup-node@v4',
 	with: { 'node-version': 18 },
 })
 
@@ -46,7 +46,7 @@ const bumpVersion = new Step({
 		`git config user.name github-actions`,
 		`git config user.email github-actions@github.com`,
 		`echo version: ${tagName}`,
-		`npm version --no-commit-hooks -m "new release: v%s 🚀 [skip ci]" ${tagName}`,
+		`npm version --no-git-tag-version ${tagName}`,
 	),
 })
 
@@ -74,12 +74,6 @@ const gitStatus = new Step({
 	name: 'Check git status',
 	shell: 'bash',
 	run: 'git status',
-})
-
-const gitPushCommit = new Step({
-	name: 'Push updates to GitHub',
-	shell: 'bash',
-	run: `git push origin HEAD:${targetCommitish}`,
 })
 
 const createZeroDependencyPackage = new Step({
@@ -124,11 +118,40 @@ const publishJob = new NormalJob('Publish', {
 	runBuild,
 	bumpVersion,
 	gitStatus,
-	gitPushCommit,
 	npmPublish,
 	createZeroDependencyPackage,
 	buildZeroDependencyPackage,
 	npmPublishZeroDependencyLib,
+])
+
+const commitVersionJob = new NormalJob('CommitVersionBump', {
+	'runs-on': 'ubuntu-latest',
+	'timeout-minutes': 20,
+	needs: [publishJob.name],
+	permissions: {
+		contents: 'write',
+	},
+}).addSteps([
+	new Step({
+		name: 'Checkout',
+		uses: 'actions/checkout@v4',
+		with: {
+			ref: 'main',
+		},
+	}),
+	new Step({
+		name: 'Push updates to main branch',
+		shell: 'bash',
+		run: multilineString(
+			`git config user.name github-actions`,
+			`git config user.email github-actions@github.com`,
+			`echo version: ${tagName}`,
+			`npm version --no-git-tag-version ${tagName}`,
+			`git add .`,
+			`git commit -m "new release: v${tagName} 🚀 [skip ci]" --no-verify`,
+			`git push origin HEAD:main`,
+		),
+	}),
 ])
 
 export const publishWorkflow = new Workflow('publish', {
@@ -138,4 +161,4 @@ export const publishWorkflow = new Workflow('publish', {
 			types: ['published'],
 		},
 	},
-}).addJob(publishJob)
+}).addJobs([publishJob, commitVersionJob])

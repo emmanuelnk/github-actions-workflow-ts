@@ -20,6 +20,7 @@
     "compile": "tsc -p tsconfig.build.json",
     "generate-workflow-types": "ts-node scripts/generateWorkflowTypes.ts && pnpm exec eslint --fix src/lib/types/githubActionsWorkflow.ts",
     "generate-workflow-files": "node build/cli/bin.js build",
+    "generate-zero-dependency-package": "ts-node scripts/generateZeroDependencyPackage.ts",
     "gwf": "node build/cli/bin.js",
     "prepare": "husky install"
   },

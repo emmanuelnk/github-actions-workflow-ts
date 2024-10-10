@@ -7,7 +7,7 @@ const packageJson = JSON.parse(
 
 const newPackageJson = {
 	name: `${packageJson.name}-lib`,
-	version: packageJson.version,
+	version: `${packageJson.version}-beta.0`,
 	author: packageJson.author,
 	description: packageJson.description,
 	repository: packageJson.repository,

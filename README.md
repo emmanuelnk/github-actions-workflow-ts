@@ -77,6 +77,12 @@ Stop writing workflows in YAML and use TypeScript instead!
 npm install --save-dev github-actions-workflow-ts
 ```
 
+Or to use the [zero dependency no-cli package](https://www.npmjs.com/package/github-actions-workflow-ts-lib) (if you only want to generate a workflow JSON object and use it in something like [projen](https://github.com/projen/projen)):
+
+```
+npm install --save-dev github-actions-workflow-ts-lib
+```
+
 ## Overview
 
 Introducing `github-actions-workflow-ts`: A seamless integration allowing developers to author GitHub Actions workflows with the power and flexibility of TypeScript. 
@@ -129,6 +135,31 @@ Below is a simple example:
   // add the defined job to the defined workflow
   exampleWorkflow.addJob(testJob)
   ```
+If you want to use the zero dependency package, you can do this:
+```ts
+import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts-lib'
+
+const checkoutStep = new Step({
+  name: 'Checkout',
+  uses: 'actions/checkout@v3',
+})
+
+const testJob = new NormalJob('Test', {
+  'runs-on': 'ubuntu-latest',
+  'timeout-minutes': 2
+})
+
+const exampleWorkflow = new Workflow('example-filename', {
+  name: 'Example',
+  on: {
+    workflow_dispatch: {}
+  }
+})
+
+// the generated workflow object to be used in other parts of your project
+// without conversion to YAML
+console.log(exampleWorkflow.workflow)
+```
 
 ## Generating Workflow YAML
 ### Using the CLI

@@ -105,5 +105,5 @@ jobs:
           echo version: ${{ github.event.release.tag_name }}
           npm version --no-git-tag-version ${{ github.event.release.tag_name }}
           git add .
-          git commit -m "new release: v${{ github.event.release.tag_name }} 🚀 [skip ci]" --no-verify
+          git commit -m "new release: ${{ github.event.release.tag_name }} 🚀 [skip ci]" --no-verify
           git push origin HEAD:main

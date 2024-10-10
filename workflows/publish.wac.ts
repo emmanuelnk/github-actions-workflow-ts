@@ -159,7 +159,7 @@ const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
 			`echo version: ${tagName}`,
 			`npm version --no-git-tag-version ${tagName}`,
 			`git add .`,
-			`git commit -m "new release: v${tagName} 🚀 [skip ci]" --no-verify`,
+			`git commit -m "new release: ${tagName} 🚀 [skip ci]" --no-verify`,
 			`git push origin HEAD:main`,
 		),
 	}),

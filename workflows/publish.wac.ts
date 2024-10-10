@@ -50,7 +50,7 @@ const bumpVersion = new Step({
 	),
 })
 
-const runBuild = new Step({
+const build = new Step({
 	name: 'Run Build',
 	run: 'pnpm build',
 })
@@ -70,24 +70,18 @@ const npmPublish = new Step({
 	},
 })
 
-const gitStatus = new Step({
-	name: 'Check git status',
-	shell: 'bash',
-	run: 'git status',
-})
-
-const createZeroDependencyPackage = new Step({
+const createZDP = new Step({
 	name: 'Create Zero Dependency Package',
 	run: 'tsx scripts/generateZeroDependencyPackage.ts',
 })
 
-const buildZeroDependencyPackage = new Step({
+const buildZDP = new Step({
 	name: 'Build Zero Dependency Package',
 	'working-directory': 'github-actions-workflow-ts-lib',
 	run: 'npm run build',
 })
 
-const npmPublishZeroDependencyLib = new Step({
+const npmPublishZDP = new Step({
 	name: 'Publish to npm',
 	'working-directory': 'github-actions-workflow-ts-lib',
 	run: multilineString(
@@ -103,9 +97,30 @@ const npmPublishZeroDependencyLib = new Step({
 	},
 })
 
-const publishJob = new NormalJob('Publish', {
+const publishZeroDependencyPackageJob = new NormalJob(
+	'PublishZeroDependencyPackage',
+	{
+		'runs-on': 'ubuntu-latest',
+		'timeout-minutes': 20,
+		permissions: {
+			contents: 'write',
+		},
+	},
+).addSteps([
+	checkout,
+	installNode,
+	installPnpm,
+	installGlobalTsx,
+	bumpVersion,
+	createZDP,
+	buildZDP,
+	npmPublishZDP,
+])
+
+const publishPackageJob = new NormalJob('PublishPackage', {
 	'runs-on': 'ubuntu-latest',
 	'timeout-minutes': 20,
+	needs: [publishZeroDependencyPackageJob.name],
 	permissions: {
 		contents: 'write',
 	},
@@ -115,19 +130,15 @@ const publishJob = new NormalJob('Publish', {
 	installPnpm,
 	installGlobalTsx,
 	installDependencies,
-	runBuild,
+	build,
 	bumpVersion,
-	gitStatus,
 	npmPublish,
-	createZeroDependencyPackage,
-	buildZeroDependencyPackage,
-	npmPublishZeroDependencyLib,
 ])
 
-const commitVersionJob = new NormalJob('CommitVersionBump', {
+const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
 	'runs-on': 'ubuntu-latest',
 	'timeout-minutes': 20,
-	needs: [publishJob.name],
+	needs: [publishPackageJob.name],
 	permissions: {
 		contents: 'write',
 	},
@@ -161,4 +172,8 @@ export const publishWorkflow = new Workflow('publish', {
 			types: ['published'],
 		},
 	},
-}).addJobs([publishJob, commitVersionJob])
+}).addJobs([
+	publishZeroDependencyPackageJob,
+	publishPackageJob,
+	commitVersionBumpJob,
+])

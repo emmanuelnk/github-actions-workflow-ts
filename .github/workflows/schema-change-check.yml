@@ -25,7 +25,7 @@ jobs:
       - name: Install tsx
         run: npm install -g tsx
       - name: Generate Workflow Types
-        run: pnpm exec tsx scripts/generateWorkflowTypes.ts
+        run: tsx scripts/generateWorkflowTypes.ts
       - name: Get git diff
         run: git diff
       - name: Fail if git diff is not empty

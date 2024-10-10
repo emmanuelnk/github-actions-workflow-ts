@@ -18,7 +18,7 @@ const installGlobalTsx = new Step({
 
 const generateWorkflowTypes = new Step({
 	name: 'Generate Workflow Types',
-	run: 'pnpm exec tsx scripts/generateWorkflowTypes.ts',
+	run: 'tsx scripts/generateWorkflowTypes.ts',
 })
 
 const gitDiff = new Step({

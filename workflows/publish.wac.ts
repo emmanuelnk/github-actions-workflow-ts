@@ -120,7 +120,6 @@ const publishZeroDependencyPackageJob = new NormalJob(
 const publishPackageJob = new NormalJob('PublishPackage', {
 	'runs-on': 'ubuntu-latest',
 	'timeout-minutes': 20,
-	needs: [publishZeroDependencyPackageJob.name],
 	permissions: {
 		contents: 'write',
 	},
@@ -138,7 +137,7 @@ const publishPackageJob = new NormalJob('PublishPackage', {
 const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
 	'runs-on': 'ubuntu-latest',
 	'timeout-minutes': 20,
-	needs: [publishPackageJob.name],
+	needs: [publishPackageJob.name, publishZeroDependencyPackageJob.name],
 	permissions: {
 		contents: 'write',
 	},

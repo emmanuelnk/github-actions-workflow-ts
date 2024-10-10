@@ -24,6 +24,12 @@ jobs:
           node-version: 18
       - name: Install tsx
         run: npm install -g tsx
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install Dependencies
+        run: pnpm install --no-frozen-lockfile
       - name: Generate Workflow Types
         run: tsx scripts/generateWorkflowTypes.ts
       - name: Get git diff

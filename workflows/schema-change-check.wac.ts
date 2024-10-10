@@ -16,6 +16,17 @@ const installGlobalTsx = new Step({
 	run: 'npm install -g tsx',
 })
 
+const installPnpm = new Step({
+	name: 'Install pnpm',
+	uses: 'pnpm/action-setup@v2',
+	with: { version: 8 },
+})
+
+const installDependencies = new Step({
+	name: 'Install Dependencies',
+	run: 'pnpm install --no-frozen-lockfile',
+})
+
 const generateWorkflowTypes = new Step({
 	name: 'Generate Workflow Types',
 	run: 'tsx scripts/generateWorkflowTypes.ts',
@@ -48,6 +59,8 @@ const schemaChangeCheck = new NormalJob('SchemaChangeCheck', {
 	checkout,
 	installNode,
 	installGlobalTsx,
+	installPnpm,
+	installDependencies,
 	generateWorkflowTypes,
 	gitDiff,
 	isGitDiffEmpty,

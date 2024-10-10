@@ -31,7 +31,7 @@ const installGlobalTsx = new Step({
 
 const installPnpm = new Step({
 	name: 'Install pnpm',
-	uses: 'pnpm/action-setup@v2',
+	uses: 'pnpm/action-setup@v4',
 	with: { version: 8 },
 })
 

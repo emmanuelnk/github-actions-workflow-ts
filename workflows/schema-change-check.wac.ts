@@ -8,7 +8,7 @@ const checkout = new Step({
 const installNode = new Step({
 	name: 'Install Node',
 	uses: 'actions/setup-node@v4',
-	with: { 'node-version': 18 },
+	with: { 'node-version': 20 },
 })
 
 const installGlobalTsx = new Step({
@@ -18,7 +18,7 @@ const installGlobalTsx = new Step({
 
 const installPnpm = new Step({
 	name: 'Install pnpm',
-	uses: 'pnpm/action-setup@v2',
+	uses: 'pnpm/action-setup@v4',
 	with: { version: 8 },
 })
 

@@ -69,8 +69,8 @@ const schemaChangeCheck = new NormalJob('SchemaChangeCheck', {
 export const schemaChangeCheckWorkflow = new Workflow('schema-change-check', {
 	name: 'Schema Change Check',
 	on: {
-		push: {
-			branches: ['**'],
+		pull_request: {
+			types: ['opened', 'reopened', 'synchronize'],
 		},
 		schedule: [{ cron: '0 0 * * *' }],
 	},

@@ -29,7 +29,7 @@ const installDependencies = new Step({
 
 const generateWorkflowTypes = new Step({
 	name: 'Generate Workflow Types',
-	run: 'tsx scripts/generateWorkflowTypes.ts',
+	run: 'pnpm generate-workflow-types',
 })
 
 const gitDiff = new Step({

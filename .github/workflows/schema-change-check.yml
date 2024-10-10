@@ -31,7 +31,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Generate Workflow Types
-        run: tsx scripts/generateWorkflowTypes.ts
+        run: pnpm generate-workflow-types
       - name: Get git diff
         run: git diff -- ':!pnpm-lock.yaml'
       - name: Fail if git diff is not empty

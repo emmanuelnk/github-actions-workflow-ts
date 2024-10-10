@@ -3,3 +3,4 @@ build
 coverage
 .npmrc
 TODO.md
+github-actions-workflow-ts-lib

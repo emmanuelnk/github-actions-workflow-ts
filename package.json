@@ -1,8 +1,9 @@
 {
   "name": "github-actions-workflow-ts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Emmanuel N Kyeyune",
   "description": "Generate GitHub Actions workflow files using TypeScript (compiles to YAML)",
+  "repository": "https://github.com/emmanuelnk/github-actions-workflow-ts",
   "main": "build/index",
   "types": "build/index",
   "files": [
@@ -17,14 +18,15 @@
     "build": "pnpm run clean && pnpm run compile",
     "clean": "rm -rf ./build",
     "compile": "tsc -p tsconfig.build.json",
-    "generate-workflow-types": "ts-node scripts/generateWorkflowTypes.ts && pnpm exec eslint --fix src/types/githubActionsWorkflow.ts",
-    "generate-workflow-files": "node build/bin.js build",
-    "gwf": "node build/bin.js",
+    "generate-workflow-types": "ts-node scripts/generateWorkflowTypes.ts && pnpm exec eslint --fix src/lib/types/githubActionsWorkflow.ts",
+    "generate-workflow-files": "node build/cli/bin.js build",
+    "generate-zero-dependency-package": "ts-node scripts/generateZeroDependencyPackage.ts",
+    "gwf": "node build/cli/bin.js",
     "prepare": "husky install"
   },
   "bin": {
-    "generate-workflow-files": "./build/bin.js",
-    "gwf": "./build/bin.js"
+    "generate-workflow-files": "./build/cli/bin.js",
+    "gwf": "./build/cli/bin.js"
   },
   "husky": {
     "hooks": {

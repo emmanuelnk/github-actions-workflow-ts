@@ -13,7 +13,6 @@ import {
 	NormalJob,
 	Step,
 	expressions as ex,
-	ExtendedWorkflowTypes as EWT,
 	GeneratedWorkflowTypes as GWT,
 } from '../src'
 
@@ -21,9 +20,9 @@ import {
  * Example 1
  *
  * You can use just objects to define the entire workflow and type safety with
- * the help of the ExtendedWorkflowTypes and GeneratedWorkflowTypes types
+ * the help of the GeneratedWorkflowTypes types
  */
-const nodeSetupStep: EWT.Step = {
+const nodeSetupStep: GWT.Step = {
 	name: 'Setup Node',
 	uses: 'actions/setup-node@v3',
 	with: {

@@ -1,10 +1,10 @@
-import { GeneratedWorkflowTypes, ExtendedWorkflowTypes } from '../types'
+import { GeneratedWorkflowTypes } from '../types'
 import { Step } from '..'
 
 export class NormalJob {
 	public name: string
 	public job: GeneratedWorkflowTypes.NormalJob
-	public steps: ExtendedWorkflowTypes.Step[] = []
+	public steps: GeneratedWorkflowTypes.Step[] = []
 
 	addEnvs(envs: GeneratedWorkflowTypes.NormalJob['env']): this {
 		if (this.job.env && typeof this.job.env === 'object')

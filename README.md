@@ -499,11 +499,10 @@ import {
   NormalJob,
   Step,
   expressions as ex,
-  ExtendedWorkflowTypes as EWT, // contains the Step and Steps types
-  GeneratedWorkflowTypes as GWT, // contains all the other types e.g. NormalJob, ReusableWorkflowCallJob etc
+  GeneratedWorkflowTypes as GWT, // all types generated from the official Github Actions Workflow JSON Schema
 } from '../src'
 
-const nodeSetupStep: EWT.Step = {
+const nodeSetupStep: GWT.Step = {
   name: 'Setup Node',
   uses: 'actions/setup-node@v3',
   with: {

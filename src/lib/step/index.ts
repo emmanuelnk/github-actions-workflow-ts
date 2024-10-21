@@ -1,10 +1,10 @@
-import * as ExtendedWorkflowTypes from '../types/githubActionsWorkflowExtended'
+import { GeneratedWorkflowTypes } from '../types'
 
 export class Step {
-	public step: ExtendedWorkflowTypes.Step
+	public step: GeneratedWorkflowTypes.Step
 	public id: string | undefined
 
-	addEnvs(envs: ExtendedWorkflowTypes.Step['env']): this {
+	addEnvs(envs: GeneratedWorkflowTypes.Step['env']): this {
 		if (this.step.env && typeof this.step.env === 'object')
 			this.step.env = {
 				...(this.step.env as { [k: string]: string | number | boolean }),
@@ -15,7 +15,7 @@ export class Step {
 		return this
 	}
 
-	constructor(stepProps: ExtendedWorkflowTypes.Step) {
+	constructor(stepProps: GeneratedWorkflowTypes.Step) {
 		this.step = {
 			...stepProps,
 		}

@@ -73,7 +73,7 @@ export const getConfig = (): BuildTypes.WacConfig | undefined => {
  */
 export const getWorkflowFilePaths = (): string[] | undefined => {
 	const workflowFilesPaths = fg.sync(
-		path.join(process.cwd(), '**', '*.wac.ts'),
+		fg.convertPathToPattern(process.cwd()) + '/**/*.wac.ts',
 		{
 			onlyFiles: true,
 			dot: true,

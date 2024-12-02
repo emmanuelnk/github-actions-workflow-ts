@@ -72,10 +72,13 @@ export const getConfig = (): BuildTypes.WacConfig | undefined => {
  * @returns {string[] | undefined} - Array of paths to *.wac.ts files or undefined if none are found.
  */
 export const getWorkflowFilePaths = (): string[] | undefined => {
-	const workflowFilesPaths = fg.sync(`${process.cwd()}/**/*.wac.ts`, {
-		onlyFiles: true,
-		dot: true,
-	})
+	const workflowFilesPaths = fg.sync(
+		path.join(process.cwd(), '**', '*.wac.ts'),
+		{
+			onlyFiles: true,
+			dot: true,
+		},
+	)
 
 	if (!workflowFilesPaths || !workflowFilesPaths.length) {
 		console.log(

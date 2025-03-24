@@ -28,7 +28,7 @@ const runTests = new Step({
 })
 
 const testJob = new NormalJob('Test', {
-	'runs-on': 'ubuntu-latest',
+	'runs-on': ['self-hosted', 'linux', 'x64', 'gpu'],
 }).addSteps([checkout, installNode, installPnpm, installDependencies, runTests])
 
 export const test = new Workflow('mock-test', {

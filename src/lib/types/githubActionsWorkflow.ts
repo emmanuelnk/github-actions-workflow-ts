@@ -619,6 +619,44 @@ export type Types18 = [
 	)[],
 ]
 /**
+ * A string identifier to associate with the input. The value of <input_id> is a map of the input's metadata. The <input_id> must be a unique identifier within the inputs object. The <input_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.
+ *
+ * This interface was referenced by `undefined`'s JSON-Schema definition
+ * via the `patternProperty` "^[_a-zA-Z][a-zA-Z0-9_-]*$".
+ */
+export type WorkflowDispatchInput = {
+	[k: string]: unknown
+} & {
+	/**
+	 * A string description of the input parameter.
+	 */
+	description: string
+	/**
+	 * A string shown to users using the deprecated input.
+	 */
+	deprecationMessage?: string
+	/**
+	 * A boolean to indicate whether the action requires the input parameter. Set to true when the parameter is required.
+	 */
+	required?: boolean
+	/**
+	 * A string representing the default value. The default value is used when an input parameter isn't specified in a workflow file.
+	 */
+	default?: {
+		[k: string]: unknown
+	}
+	/**
+	 * A string representing the type of the input.
+	 */
+	type?: 'string' | 'choice' | 'boolean' | 'number' | 'environment'
+	/**
+	 * The options of the dropdown list, if the type is a choice.
+	 *
+	 * @minItems 1
+	 */
+	options?: [string, ...string[]]
+}
+/**
  * This event occurs when a workflow run is requested or completed, and allows you to execute a workflow based on the finished result of another workflow. For example, if your pull_request workflow generates build artifacts, you can create a new workflow that uses workflow_run to analyze the results and add a comment to the original pull request.
  */
 export type EventObject17 = {
@@ -921,10 +959,6 @@ export interface Workflow {
 							 */
 							description?: string
 							/**
-							 * A string shown to users using the deprecated input.
-							 */
-							deprecationMessage?: string
-							/**
 							 * A boolean to indicate whether the action requires the input parameter. Set to true when the parameter is required.
 							 */
 							required?: boolean
@@ -969,15 +1003,7 @@ export interface Workflow {
 					 * Input parameters allow you to specify data that the action expects to use during runtime. GitHub stores input parameters as environment variables. Input ids with uppercase letters are converted to lowercase during runtime. We recommended using lowercase input ids.
 					 */
 					inputs?: {
-						/**
-						 * A string identifier to associate with the input. The value of <input_id> is a map of the input's metadata. The <input_id> must be a unique identifier within the inputs object. The <input_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.
-						 *
-						 * This interface was referenced by `undefined`'s JSON-Schema definition
-						 * via the `patternProperty` "^[_a-zA-Z][a-zA-Z0-9_-]*$".
-						 */
-						[k: string]: {
-							[k: string]: unknown
-						}
+						[k: string]: WorkflowDispatchInput
 					}
 				}
 				workflow_run?: EventObject17
@@ -1071,7 +1097,7 @@ export interface NormalJob {
 	 */
 	'runs-on':
 		| string
-		| ([string] & unknown[])
+		| ([string, ...string[]] & unknown[])
 		| {
 				group?: string
 				labels?: string | string[]

@@ -8,7 +8,11 @@ name: ExampleMockTests
   workflow_dispatch: {}
 jobs:
   Test:
-    runs-on: ubuntu-latest
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+      - gpu
     steps:
       - name: Checkout
         uses: actions/checkout@v3

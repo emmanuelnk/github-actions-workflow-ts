@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import { compile, JSONSchema } from 'json-schema-to-typescript'
 
 const GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL =
-	'https://json.schemastore.org/github-workflow.json'
+	'https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/github-workflow.json'
 
 ;(async () => {
 	const jsonSchema = await fetch(GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL).then(

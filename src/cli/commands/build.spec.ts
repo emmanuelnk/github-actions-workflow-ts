@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as tsNode from 'ts-node'
 import * as build from './build'
 import * as fs from 'fs'
@@ -201,7 +202,7 @@ describe('build', () => {
 					},
 					jobs: {
 						Test: {
-							'runs-on': 'ubuntu-latest',
+							'runs-on': ['self-hosted', 'linux', 'x64', 'gpu'],
 							steps: [
 								{
 									name: 'Checkout',
@@ -360,7 +361,7 @@ describe('build', () => {
 		})
 
 		it('should generate no files if no .wac.ts files are found', async () => {
-			const mockWorkflowFilePaths: any = undefined
+			const mockWorkflowFilePaths: string[] | undefined = undefined
 			const mockConfig = { refs: false }
 
 			jest.spyOn(fs, 'writeFileSync').mockImplementation()

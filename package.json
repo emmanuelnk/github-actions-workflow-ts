@@ -18,10 +18,10 @@
     "build": "pnpm run clean && pnpm run compile",
     "clean": "rm -rf ./build",
     "compile": "tsc -p tsconfig.build.json",
-    "generate-workflow-types": "ts-node scripts/generateWorkflowTypes.ts && pnpm exec eslint --fix src/lib/types/githubActionsWorkflow.ts && pnpm run lint:prettier:generate-workflow-types",
+    "generate-workflow-types": "pnpm exec tsx scripts/generateWorkflowTypes.ts && pnpm exec eslint --fix src/lib/types/githubActionsWorkflow.ts && pnpm run lint:prettier:generate-workflow-types",
     "generate-workflow-files": "node build/cli/bin.js build",
     "lint:prettier:generate-workflow-types": "pnpm dlx prettier --config .prettierrc.json --write src/lib/types/githubActionsWorkflow.ts",
-    "generate-zero-dependency-package": "ts-node scripts/generateZeroDependencyPackage.ts",
+    "generate-zero-dependency-package": "pnpm exec tsx scripts/generateZeroDependencyPackage.ts",
     "gwf": "node build/cli/bin.js",
     "prepare": "husky install"
   },
@@ -65,7 +65,9 @@
     "node-fetch": "^3.3.2",
     "prettier": "3.5.3",
     "ts-jest": "^29.3.0",
-    "typescript": "^4.9.5"
+    "tsx": "^4.19.3",
+    "typescript": "^4.9.5",
+    "typescript-eslint": "^8.28.0"
   },
   "pnpm": {
     "overrides": {

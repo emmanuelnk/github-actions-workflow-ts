@@ -990,7 +990,7 @@ export interface Workflow {
               /**
                * A boolean specifying whether the secret must be supplied.
                */
-              required: boolean
+              required?: boolean
             }
           }
           [k: string]: unknown

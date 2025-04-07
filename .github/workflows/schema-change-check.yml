@@ -43,5 +43,6 @@ jobs:
             exit 0
           else
             echo "File changes detected."
+            git diff -- ':!pnpm-lock.yaml'
             exit 1
           fi

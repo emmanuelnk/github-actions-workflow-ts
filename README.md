@@ -77,24 +77,17 @@ Stop writing workflows in YAML and use TypeScript instead!
 npm install --save-dev github-actions-workflow-ts
 ```
 
-Or to use the [zero dependency no-cli package](https://www.npmjs.com/package/github-actions-workflow-ts-lib) (if you only want to generate a workflow JSON object and use it in something like [projen](https://github.com/projen/projen)):
+Or to use the [zero dependency no-cli package](https://www.npmjs.com/package/github-actions-workflow-ts-lib) (if you only want to generate workflow JSON objects and handle YAML file generation yourself):
 
 ```
 npm install --save-dev github-actions-workflow-ts-lib
 ```
 
 ## Overview
-
-Introducing `github-actions-workflow-ts`: A seamless integration allowing developers to author GitHub Actions workflows with the power and flexibility of TypeScript. 
-
-### Key Benefits:
-
-1. **Type Safety**: Elevate the confidence in your workflows with the robust type-checking capabilities of TypeScript.
-2. **Modularity**: Efficiently package and reuse common jobs and steps across various workflows, promoting the DRY (Don't Repeat Yourself) principle.
-3. **Control Flow**: Harness the inherent control flow mechanisms, like conditionals, available in imperative languages. This empowers developers to craft intricate workflows beyond the constraints of YAML.
+Use the flexibility of TypeScript (type safety and intellisense, modularity, control flow etc) to write GHA workflows.
 
 ### Getting Started:
-To embark on this efficient journey, create a new `*.wac.ts` file, for instance, `deploy.wac.ts`, in your project directory. Then, dive into authoring your enhanced GitHub Actions workflows!
+To get started, create a new `*.wac.ts` e.g. `deploy.wac.ts` anywhere in your project directory.
 
 ## Examples
 ### Try it out on Replit
@@ -121,7 +114,7 @@ Below is a simple example:
     'timeout-minutes': 2
   })
 
-  // IMPORTANT - the instance of Workflow MUST be exported with `export`
+  // 👉 IMPORTANT - every instance of Workflow (and only Workflow) MUST be exported with `export`
   export const exampleWorkflow = new Workflow('example-filename', {
     name: 'Example',
     on: {
@@ -134,6 +127,18 @@ Below is a simple example:
 
   // add the defined job to the defined workflow
   exampleWorkflow.addJob(testJob)
+
+  // ----- you can also export the workflows like this -----
+  //
+  // export default exampleWorkflow
+  //
+  // ----- OR multiple workflows in the same file -----
+  //
+  // export {
+  // 	exampleWorkflow,
+  // 	exampleWorkflowTwo,
+  // 	exampleWorkflowThree,
+  // }
   ```
 If you want to use the zero dependency package, you can do this:
 ```ts

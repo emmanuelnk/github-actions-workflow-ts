@@ -819,6 +819,27 @@ export interface Workflow {
             }
           }
           /**
+           * When using the workflow_call keyword, you can optionally specify inputs that are passed to the called workflow from the caller workflow.
+           */
+          outputs?: {
+            /**
+             * A string identifier to associate with the output. The value of <output_id> is a map of the output's metadata. The <output_id> must be a unique identifier within the outputs object. The <output_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.
+             *
+             * This interface was referenced by `undefined`'s JSON-Schema definition
+             * via the `patternProperty` "^[_a-zA-Z][a-zA-Z0-9_-]*$".
+             */
+            [k: string]: {
+              /**
+               * A string description of the output parameter.
+               */
+              description?: string
+              /**
+               * The value that the output parameter will be mapped to. You can set this to a string or an expression with context. For example, you can use the steps context to set the value of an output to the output value of a step.
+               */
+              value: string
+            }
+          }
+          /**
            * A map of the secrets that can be used in the called workflow. Within the called workflow, you can use the secrets context to refer to a secret.
            */
           secrets?: {
@@ -1035,6 +1056,7 @@ export interface PermissionsEvent {
   discussions?: PermissionsLevel
   'id-token'?: PermissionsLevel
   issues?: PermissionsLevel
+  models?: 'read' | 'none'
   packages?: PermissionsLevel
   pages?: PermissionsLevel
   'pull-requests'?: PermissionsLevel

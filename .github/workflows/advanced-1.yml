@@ -71,7 +71,7 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: ${{ github.event_name == 'release' && prod || dev }}
+    environment: ${{ github.event_name == 'release' && 'prod' || 'dev' }}
     permissions:
       contents: read
       id-token: write

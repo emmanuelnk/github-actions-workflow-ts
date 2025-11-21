@@ -103,7 +103,7 @@ const buildJob = new NormalJob('Build', {
 const deployJob = new NormalJob('Deploy', {
   'runs-on': 'ubuntu-latest',
   'timeout-minutes': 10,
-  environment: ex.ternary("github.event_name == 'release'", 'prod', 'dev'),
+  environment: ex.ternary("github.event_name == 'release'", "'prod'", "'dev'"),
   permissions: {
     contents: 'read',
     'id-token': 'write',

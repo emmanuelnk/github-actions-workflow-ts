@@ -26,18 +26,12 @@ jobs:
         uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
-          version: 8
+          version: 9
           run_install: 'false'
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles("**/pnpm-lock.yaml") }}
-          restore-keys: ${{ runner.os }}-pnpm-store-
       - name: Setup npmrc for Private Packages
         run: |-
           echo "@your-org:registry=https://npm.pkg.github.com" >> .npmrc
@@ -58,18 +52,12 @@ jobs:
         uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
-          version: 8
+          version: 9
           run_install: 'false'
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles("**/pnpm-lock.yaml") }}
-          restore-keys: ${{ runner.os }}-pnpm-store-
       - name: Setup npmrc for Private Packages
         run: |-
           echo "@your-org:registry=https://npm.pkg.github.com" >> .npmrc
@@ -83,7 +71,7 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: ${{ github.event_name == 'release' && prod || dev }}
+    environment: ${{ github.event_name == 'release' && 'prod' || 'dev' }}
     permissions:
       contents: read
       id-token: write
@@ -96,18 +84,12 @@ jobs:
         uses: pnpm/action-setup@v4
         id: pnpm-install
         with:
-          version: 8
+          version: 9
           run_install: 'false'
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles("**/pnpm-lock.yaml") }}
-          restore-keys: ${{ runner.os }}-pnpm-store-
       - name: Setup npmrc for Private Packages
         run: |-
           echo "@your-org:registry=https://npm.pkg.github.com" >> .npmrc

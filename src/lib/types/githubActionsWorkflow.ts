@@ -268,23 +268,6 @@ export type EventObject12 = {
 export type Types12 = ([unknown, ...unknown[]] | string) &
   ('created' | 'updated' | 'moved' | 'deleted')[]
 /**
- * Runs your workflow anytime the pull_request event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/pulls.
- * Note: Workflows do not run on private base repositories when you open a pull request from a forked repository.
- * When you create a pull request from a forked repository to the base repository, GitHub sends the pull_request event to the base repository and no pull request events occur on the forked repository.
- * Workflows don't run on forked repositories by default. You must enable GitHub Actions in the Actions tab of the forked repository.
- * The permissions for the GITHUB_TOKEN in forked repositories is read-only. For more information about the GITHUB_TOKEN, see https://help.github.com/en/articles/virtual-environments-for-github-actions.
- */
-export type Ref = {
-  types?: Types13
-  /**
-   * This interface was referenced by `undefined`'s JSON-Schema definition
-   * via the `patternProperty` "^(branche|tag|path)s(-ignore)?$".
-   */
-  [k: string]: unknown[]
-} & ({
-  [k: string]: unknown
-} | null)
-/**
  * Selects the types of activity that will trigger a workflow run. Most GitHub events are triggered by more than one type of activity. For example, the event for the release resource is triggered when a release is published, unpublished, created, edited, deleted, or prereleased. The types keyword enables you to narrow down activity that causes the workflow to run. When only one activity type triggers a webhook event, the types keyword is unnecessary.
  * You can use an array of event types. For more information about each event and their activity types, see https://help.github.com/en/articles/events-that-trigger-workflows#webhook-events.
  */
@@ -312,6 +295,30 @@ export type Types13 = ([unknown, ...unknown[]] | string) &
     | 'enqueued'
     | 'dequeued'
   )[]
+/**
+ * When using the push and pull_request events, you can configure a workflow to run on specific branches or tags. If you only define only tags or only branches, the workflow won't run for events affecting the undefined Git ref.
+ * The branches, branches-ignore, tags, and tags-ignore keywords accept glob patterns that use the * and ** wildcard characters to match more than one branch or tag name. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet.
+ * The patterns defined in branches and tags are evaluated against the Git ref's name. For example, defining the pattern mona/octocat in branches will match the refs/heads/mona/octocat Git ref. The pattern releases/** will match the refs/heads/releases/10 Git ref.
+ * You can use two types of filters to prevent a workflow from running on pushes and pull requests to tags and branches:
+ * - branches or branches-ignore - You cannot use both the branches and branches-ignore filters for the same event in a workflow. Use the branches filter when you need to filter branches for positive matches and exclude branches. Use the branches-ignore filter when you only need to exclude branch names.
+ * - tags or tags-ignore - You cannot use both the tags and tags-ignore filters for the same event in a workflow. Use the tags filter when you need to filter tags for positive matches and exclude tags. Use the tags-ignore filter when you only need to exclude tag names.
+ * You can exclude tags and branches using the ! character. The order that you define patterns matters.
+ * - A matching negative pattern (prefixed with !) after a positive match will exclude the Git ref.
+ * - A matching positive pattern after a negative match will include the Git ref again.
+ *
+ * @minItems 1
+ */
+export type Branch = [string, ...string[]]
+/**
+ * When using the push and pull_request events, you can configure a workflow to run when at least one file does not match paths-ignore or at least one modified file matches the configured paths. Path filters are not evaluated for pushes to tags.
+ * The paths-ignore and paths keywords accept glob patterns that use the * and ** wildcard characters to match more than one path name. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet.
+ * You can exclude paths using two types of filters. You cannot use both of these filters for the same event in a workflow.
+ * - paths-ignore - Use the paths-ignore filter when you only need to exclude path names.
+ * - paths - Use the paths filter when you need to filter paths for positive matches and exclude paths.
+ *
+ * @minItems 1
+ */
+export type Path = [string, ...string[]]
 /**
  * Runs your workflow anytime the pull_request_review event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/pulls/reviews.
  * Note: Workflows do not run on private base repositories when you open a pull request from a forked repository.
@@ -351,19 +358,6 @@ export type EventObject14 = {
 export type Types15 = ([unknown, ...unknown[]] | string) &
   ('created' | 'edited' | 'deleted')[]
 /**
- * This event is similar to pull_request, except that it runs in the context of the base repository of the pull request, rather than in the merge commit. This means that you can more safely make your secrets available to the workflows triggered by the pull request, because only workflows defined in the commit on the base repository are run. For example, this event allows you to create workflows that label and comment on pull requests, based on the contents of the event payload.
- */
-export type Ref1 = {
-  types?: Types16
-  /**
-   * This interface was referenced by `undefined`'s JSON-Schema definition
-   * via the `patternProperty` "^(branche|tag|path)s(-ignore)?$".
-   */
-  [k: string]: unknown
-} & ({
-  [k: string]: unknown
-} | null)
-/**
  * Selects the types of activity that will trigger a workflow run. Most GitHub events are triggered by more than one type of activity. For example, the event for the release resource is triggered when a release is published, unpublished, created, edited, deleted, or prereleased. The types keyword enables you to narrow down activity that causes the workflow to run. When only one activity type triggers a webhook event, the types keyword is unnecessary.
  * You can use an array of event types. For more information about each event and their activity types, see https://help.github.com/en/articles/events-that-trigger-workflows#webhook-events.
  */
@@ -387,49 +381,6 @@ export type Types16 = ([unknown, ...unknown[]] | string) &
     | 'auto_merge_enabled'
     | 'auto_merge_disabled'
   )[]
-/**
- * Runs your workflow when someone pushes to a repository branch, which triggers the push event.
- * Note: The webhook payload available to GitHub Actions does not include the added, removed, and modified attributes in the commit object. You can retrieve the full commit object using the REST API. For more information, see https://developer.github.com/v3/repos/commits/#get-a-single-commit.
- */
-export type Ref2 = {
-  branches?: Branch
-  'branches-ignore'?: Branch
-  tags?: Branch
-  'tags-ignore'?: Branch
-  paths?: Path
-  'paths-ignore'?: Path
-  /**
-   * This interface was referenced by `undefined`'s JSON-Schema definition
-   * via the `patternProperty` "^(branche|tag|path)s(-ignore)?$".
-   */
-  [k: string]: string[]
-} & ({
-  [k: string]: unknown
-} | null)
-/**
- * When using the push and pull_request events, you can configure a workflow to run on specific branches or tags. If you only define only tags or only branches, the workflow won't run for events affecting the undefined Git ref.
- * The branches, branches-ignore, tags, and tags-ignore keywords accept glob patterns that use the * and ** wildcard characters to match more than one branch or tag name. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet.
- * The patterns defined in branches and tags are evaluated against the Git ref's name. For example, defining the pattern mona/octocat in branches will match the refs/heads/mona/octocat Git ref. The pattern releases/** will match the refs/heads/releases/10 Git ref.
- * You can use two types of filters to prevent a workflow from running on pushes and pull requests to tags and branches:
- * - branches or branches-ignore - You cannot use both the branches and branches-ignore filters for the same event in a workflow. Use the branches filter when you need to filter branches for positive matches and exclude branches. Use the branches-ignore filter when you only need to exclude branch names.
- * - tags or tags-ignore - You cannot use both the tags and tags-ignore filters for the same event in a workflow. Use the tags filter when you need to filter tags for positive matches and exclude tags. Use the tags-ignore filter when you only need to exclude tag names.
- * You can exclude tags and branches using the ! character. The order that you define patterns matters.
- * - A matching negative pattern (prefixed with !) after a positive match will exclude the Git ref.
- * - A matching positive pattern after a negative match will include the Git ref again.
- *
- * @minItems 1
- */
-export type Branch = [string, ...string[]]
-/**
- * When using the push and pull_request events, you can configure a workflow to run when at least one file does not match paths-ignore or at least one modified file matches the configured paths. Path filters are not evaluated for pushes to tags.
- * The paths-ignore and paths keywords accept glob patterns that use the * and ** wildcard characters to match more than one path name. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet.
- * You can exclude paths using two types of filters. You cannot use both of these filters for the same event in a workflow.
- * - paths-ignore - Use the paths-ignore filter when you only need to exclude path names.
- * - paths - Use the paths filter when you need to filter paths for positive matches and exclude paths.
- *
- * @minItems 1
- */
-export type Path = [string, ...string[]]
 /**
  * Runs your workflow anytime a package is published or updated. For more information, see https://help.github.com/en/github/managing-packages-with-github-packages.
  */
@@ -766,11 +717,60 @@ export interface Workflow {
         public?: {
           [k: string]: unknown
         } | null
-        pull_request?: Ref
+        /**
+         * Runs your workflow anytime the pull_request event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/pulls.
+         * Note: Workflows do not run on private base repositories when you open a pull request from a forked repository.
+         * When you create a pull request from a forked repository to the base repository, GitHub sends the pull_request event to the base repository and no pull request events occur on the forked repository.
+         * Workflows don't run on forked repositories by default. You must enable GitHub Actions in the Actions tab of the forked repository.
+         * The permissions for the GITHUB_TOKEN in forked repositories is read-only. For more information about the GITHUB_TOKEN, see https://help.github.com/en/articles/virtual-environments-for-github-actions.
+         */
+        pull_request?:
+          | null
+          | ({
+              types?: Types13
+              branches?: Branch
+              'branches-ignore'?: Branch
+              tags?: Branch
+              'tags-ignore'?: Branch
+              paths?: Path
+              'paths-ignore'?: Path
+            } & {
+              [k: string]: unknown
+            })
         pull_request_review?: EventObject13
         pull_request_review_comment?: EventObject14
-        pull_request_target?: Ref1
-        push?: Ref2
+        /**
+         * This event is similar to pull_request, except that it runs in the context of the base repository of the pull request, rather than in the merge commit. This means that you can more safely make your secrets available to the workflows triggered by the pull request, because only workflows defined in the commit on the base repository are run. For example, this event allows you to create workflows that label and comment on pull requests, based on the contents of the event payload.
+         */
+        pull_request_target?:
+          | null
+          | ({
+              types?: Types16
+              branches?: Branch
+              'branches-ignore'?: Branch
+              tags?: Branch
+              'tags-ignore'?: Branch
+              paths?: Path
+              'paths-ignore'?: Path
+            } & {
+              [k: string]: unknown
+            })
+        /**
+         * Runs your workflow when someone pushes to a repository branch, which triggers the push event.
+         * Note: The webhook payload available to GitHub Actions does not include the added, removed, and modified attributes in the commit object. You can retrieve the full commit object using the REST API. For more information, see https://developer.github.com/v3/repos/commits/#get-a-single-commit.
+         */
+        push?:
+          | null
+          | ({
+              branches?: Branch
+              'branches-ignore'?: Branch
+              tags?: Branch
+              'tags-ignore'?: Branch
+              paths?: Path
+              'paths-ignore'?: Path
+            } & {
+              [k: string]: unknown
+            })
         registry_package?: EventObject15
         release?: EventObject16
         /**

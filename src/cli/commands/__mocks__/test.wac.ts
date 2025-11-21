@@ -14,7 +14,7 @@ const installNode = new Step({
 const installPnpm = new Step({
   name: 'Install pnpm',
   uses: 'pnpm/action-setup@v4',
-  with: { version: 8 },
+  with: { version: 9 },
 })
 
 const installDependencies = new Step({

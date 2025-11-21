@@ -41,18 +41,6 @@ const getPnpmStoreDirectory = new Step({
   run: echo.toGithubOutput('STORE_PATH', '$(pnpm store path)'),
 })
 
-const setupPnpmCache = new Step({
-  name: 'Setup pnpm cache',
-  uses: 'actions/cache@v3',
-  with: {
-    path: ex.expn('steps.pnpm-cache.outputs.STORE_PATH'),
-    key: `${ex.expn('runner.os')}-pnpm-store-${ex.expn(
-      'hashFiles("**/pnpm-lock.yaml")',
-    )}`,
-    'restore-keys': `${ex.expn('runner.os')}-pnpm-store-`,
-  },
-})
-
 const setupNpmrc = new Step({
   name: 'Setup npmrc for Private Packages',
   run: multilineString(
@@ -74,7 +62,6 @@ const sharedSteps = [
   checkoutStep,
   installPnpm,
   getPnpmStoreDirectory,
-  setupPnpmCache,
   setupNpmrc,
   installDependencies,
 ]

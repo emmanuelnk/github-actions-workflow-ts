@@ -6,6 +6,9 @@ const eslintPluginJest = require('eslint-plugin-jest');
 const prettier = require('eslint-config-prettier');
 
 module.exports = [
+  {
+    ignores: ['**/dist/**'],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   prettier,

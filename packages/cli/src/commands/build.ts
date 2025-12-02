@@ -5,7 +5,7 @@ import * as jsYaml from 'js-yaml'
 import fg from 'fast-glob'
 import { pathToFileURL } from 'url'
 import type { Workflow } from '@github-actions-workflow-ts/lib'
-import type { BuildTypes } from './types/index.js'
+import type { WacConfig } from './types/index.js'
 
 /**
  * Comment indicating the file should not be modified.
@@ -31,7 +31,7 @@ export const relativePath = (p: string): string =>
  * Returns the config file
  * @returns { Record<string, any> | undefined} - The config file as an object
  */
-export const getConfig = (): BuildTypes.WacConfig | undefined => {
+export const getConfig = (): WacConfig | undefined => {
   const configFilePath = path.join(process.cwd(), 'wac.config.json')
 
   if (!fs.existsSync(configFilePath)) {
@@ -106,13 +106,13 @@ export const importWorkflowFile = async (
  *
  * @param {Record<string, Workflow>} workflowJSON - The workflow data in JSON format.
  * @param {string} workflowFilePath - The path to the workflow file.
- * @param {BuildTypes.WacConfig} config - Command line arguments.
+ * @param {WacConfig} config - Command line arguments.
  * @returns {number} - The number of workflows written.
  */
 export const writeWorkflowJSONToYamlFiles = (
   workflowJSON: Record<string, Workflow>,
   workflowFilePath: string,
-  config: BuildTypes.WacConfig,
+  config: WacConfig,
 ): number => {
   let workflowCount: number = 0
 
@@ -188,7 +188,7 @@ export const generateWorkflowFiles = async (
       {
         ...argv,
         ...config,
-      } as BuildTypes.WacConfig,
+      } as WacConfig,
     )
   }
 

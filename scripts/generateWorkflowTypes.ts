@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import * as path from 'path'
 import fetch from 'node-fetch'
-import { compile, JSONSchema } from 'json-schema-to-typescript'
+import { compile, type JSONSchema } from 'json-schema-to-typescript'
 
 const GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL =
   'https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/github-workflow.json'

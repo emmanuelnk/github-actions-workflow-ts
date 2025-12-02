@@ -5,3 +5,4 @@ coverage
 TODO.md
 **/dist
 .claude/**
+RELEASE_STRATEGY.md

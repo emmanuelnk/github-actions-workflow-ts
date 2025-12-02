@@ -43,7 +43,18 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish packages
-        run: pnpm -r publish --access public --no-git-checks
+        run: |-
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          if [[ "$TAG_NAME" == *"-alpha"* ]]; then
+            echo "Publishing with alpha tag"
+            pnpm -r publish --access public --tag alpha --no-git-checks
+          elif [[ "$TAG_NAME" == *"-beta"* ]]; then
+            echo "Publishing with beta tag"
+            pnpm -r publish --access public --tag beta --no-git-checks
+          else
+            echo "Publishing with latest tag"
+            pnpm -r publish --access public --no-git-checks
+          fi
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   CommitVersionBump:

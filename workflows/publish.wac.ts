@@ -61,7 +61,19 @@ const setupNpmAuth = new Step({
 
 const publishPackages = new Step({
   name: 'Publish packages',
-  run: 'pnpm -r publish --access public --no-git-checks',
+  run: multilineString(
+    `TAG_NAME="${tagName}"`,
+    `if [[ "$TAG_NAME" == *"-alpha"* ]]; then`,
+    `  echo "Publishing with alpha tag"`,
+    `  pnpm -r publish --access public --tag alpha --no-git-checks`,
+    `elif [[ "$TAG_NAME" == *"-beta"* ]]; then`,
+    `  echo "Publishing with beta tag"`,
+    `  pnpm -r publish --access public --tag beta --no-git-checks`,
+    `else`,
+    `  echo "Publishing with latest tag"`,
+    `  pnpm -r publish --access public --no-git-checks`,
+    `fi`,
+  ),
   env: {
     NPM_TOKEN: ex.secret('NPM_TOKEN'),
   },

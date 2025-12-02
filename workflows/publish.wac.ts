@@ -46,8 +46,8 @@ const bumpVersions = new Step({
     `git config user.email github-actions@github.com`,
     `echo version: ${tagName}`,
     // Update version in both packages
-    `cd packages/lib && npm version --no-git-tag-version ${tagName}`,
-    `cd ../cli && npm version --no-git-tag-version ${tagName}`,
+    `(cd packages/lib && npm version --no-git-tag-version ${tagName})`,
+    `(cd packages/cli && npm version --no-git-tag-version ${tagName})`,
   ),
 })
 
@@ -118,8 +118,8 @@ const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
       `git config user.name github-actions`,
       `git config user.email github-actions@github.com`,
       `echo version: ${tagName}`,
-      `cd packages/lib && npm version --no-git-tag-version ${tagName}`,
-      `cd ../cli && npm version --no-git-tag-version ${tagName}`,
+      `(cd packages/lib && npm version --no-git-tag-version ${tagName})`,
+      `(cd packages/cli && npm version --no-git-tag-version ${tagName})`,
       `git add .`,
       `git commit -m "new release: ${tagName} [skip ci]" --no-verify`,
       `git push origin HEAD:main`,

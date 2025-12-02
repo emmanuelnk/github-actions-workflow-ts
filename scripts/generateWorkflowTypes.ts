@@ -4,23 +4,24 @@ import fetch from 'node-fetch'
 import { compile, JSONSchema } from 'json-schema-to-typescript'
 
 const GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL =
-	'https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/github-workflow.json'
+  'https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/github-workflow.json'
 
 ;(async () => {
-	const jsonSchema = await fetch(GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL).then(
-		(response) => response.json(),
-	)
+  const jsonSchema = await fetch(GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL).then(
+    (response) => response.json(),
+  )
 
-	const outputPath = path.join(
-		process.cwd(),
-		'src',
-		'lib',
-		'types',
-		'githubActionsWorkflow.ts',
-	)
+  const outputPath = path.join(
+    process.cwd(),
+    'packages',
+    'lib',
+    'src',
+    'types',
+    'githubActionsWorkflow.ts',
+  )
 
-	const workflowTypes = await compile(jsonSchema as JSONSchema, 'Workflow', {
-		bannerComment: `
+  const workflowTypes = await compile(jsonSchema as JSONSchema, 'Workflow', {
+    bannerComment: `
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /* eslint-disable */
@@ -30,12 +31,12 @@ const GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL =
  * and run json-schema-to-typescript to regenerate this file.
  */
 `,
-		customName: (schema, keyNameFromDefinition) => {
-			if (schema.$id === 'https://json.schemastore.org/github-workflow.json')
-				return 'Workflow'
-			return keyNameFromDefinition
-		},
-	})
+    customName: (schema, keyNameFromDefinition) => {
+      if (schema.$id === 'https://json.schemastore.org/github-workflow.json')
+        return 'Workflow'
+      return keyNameFromDefinition
+    },
+  })
 
-	await fs.writeFile(outputPath, workflowTypes)
+  await fs.writeFile(outputPath, workflowTypes)
 })()

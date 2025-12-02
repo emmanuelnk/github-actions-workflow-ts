@@ -16,7 +16,7 @@ import {
   echoKeyValue as echo,
   multilineString,
   ReusableWorkflowCallJob,
-} from '../src'
+} from '../packages/lib/src/index.js'
 
 // Like the experienced engineer you are, let us start by first defining some common reusable steps
 const checkoutStep = new Step({

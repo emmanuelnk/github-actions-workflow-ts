@@ -9,7 +9,7 @@ name: Publish Release
     types:
       - published
 jobs:
-  PublishZeroDependencyPackage:
+  PublishPackages:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -22,73 +22,35 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-      - name: Install tsx
-        run: npm install -g tsx
-      - name: Bump Version
-        run: |-
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          echo version: ${{ github.event.release.tag_name }}
-          npm version --no-git-tag-version ${{ github.event.release.tag_name }}
-      - name: Create Zero Dependency Package
-        run: tsx scripts/generateZeroDependencyPackage.ts
-      - name: Build Zero Dependency Package
-        working-directory: github-actions-workflow-ts-lib
-        run: npm run build
-      - name: Publish to npm
-        working-directory: github-actions-workflow-ts-lib
-        run: |-
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
-          npm publish
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  PublishPackage:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.target_commitish }}
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Install tsx
-        run: npm install -g tsx
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Run Build
         run: pnpm build
-      - name: Bump Version
+      - name: Bump Versions
         run: |-
           git config user.name github-actions
           git config user.email github-actions@github.com
           echo version: ${{ github.event.release.tag_name }}
-          npm version --no-git-tag-version ${{ github.event.release.tag_name }}
-      - name: Publish to npm
-        run: |-
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
-          npm publish
+          cd packages/lib && npm version --no-git-tag-version ${{ github.event.release.tag_name }}
+          cd ../cli && npm version --no-git-tag-version ${{ github.event.release.tag_name }}
+      - name: Setup npm auth
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish packages
+        run: pnpm -r publish --access public --no-git-checks
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   CommitVersionBump:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs:
-      - PublishPackage
-      - PublishZeroDependencyPackage
+      - PublishPackages
     permissions:
       contents: write
     steps:
@@ -102,7 +64,8 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           echo version: ${{ github.event.release.tag_name }}
-          npm version --no-git-tag-version ${{ github.event.release.tag_name }}
+          cd packages/lib && npm version --no-git-tag-version ${{ github.event.release.tag_name }}
+          cd ../cli && npm version --no-git-tag-version ${{ github.event.release.tag_name }}
           git add .
-          git commit -m "new release: ${{ github.event.release.tag_name }} 🚀 [skip ci]" --no-verify
+          git commit -m "new release: ${{ github.event.release.tag_name }} [skip ci]" --no-verify
           git push origin HEAD:main

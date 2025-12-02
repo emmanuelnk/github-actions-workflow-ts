@@ -1,56 +1,30 @@
-{
-  "name": "github-actions-workflow-ts",
-  "version": "1.2.3",
-  "author": "Emmanuel N Kyeyune",
-  "description": "Generate GitHub Actions workflow files using TypeScript (compiles to YAML)",
+ {
+  "name": "github-actions-workflow-ts-monorepo",
+  "private": true,
+  "description": "Generate GitHub Actions workflow files using TypeScript",
   "repository": "https://github.com/emmanuelnk/github-actions-workflow-ts",
-  "main": "build/index",
-  "types": "build/index",
-  "files": [
-    "build"
-  ],
+  "author": "Emmanuel N Kyeyune",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "tsc": "tsc",
-    "watch": "tsc --watch",
-    "test": "jest --coverage",
-    "lint": "pnpm exec eslint src --fix && pnpm exec prettier --config .prettierrc.json --write \"src/**/*.{ts,tsx}\"",
-    "build": "pnpm run clean && pnpm run compile",
-    "clean": "rm -rf ./build",
-    "compile": "tsc -p tsconfig.build.json",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm exec eslint packages --fix && pnpm exec prettier --config .prettierrc.json --write \"packages/**/*.{ts,tsx}\"",
+    "clean": "pnpm -r clean",
+    "generate-workflow-files": "node --import tsx packages/cli/dist/bin.js",
+    "gwf": "node --import tsx packages/cli/dist/bin.js",
     "generate-workflow-types": "pnpm exec tsx scripts/generateWorkflowTypes.ts && pnpm lint",
-    "generate-workflow-files": "node build/cli/bin.js build",
-    "generate-zero-dependency-package": "pnpm exec tsx scripts/generateZeroDependencyPackage.ts",
-    "gwf": "node build/cli/bin.js",
-    "prepare": "husky install"
-  },
-  "bin": {
-    "generate-workflow-files": "./build/cli/bin.js",
-    "gwf": "./build/cli/bin.js"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "pnpm dlx prettier --config .prettierrc.json --write"
-    ]
-  },
-  "dependencies": {
-    "fast-glob": "^3.3.2",
-    "js-yaml": "^4.1.0",
-    "ts-node": "^10.9.2",
-    "yargs": "^17.7.2"
+    "prepare": "husky install",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.0",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@types/jest": "^29.5.14",
-    "@types/js-yaml": "^4.0.9",
-    "@types/node-fetch": "^2.6.12",
-    "@types/yargs": "^17.0.33",
+    "@types/node": "^22.10.1",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
     "eslint": "^9.23.0",
@@ -65,12 +39,26 @@
     "prettier": "3.5.3",
     "ts-jest": "^29.3.0",
     "tsx": "^4.19.3",
-    "typescript": "^4.9.5",
+    "typescript": "^5.7.2",
     "typescript-eslint": "^8.28.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "pnpm dlx prettier --config .prettierrc.json --write"
+    ]
   },
   "pnpm": {
     "overrides": {
       "micromatch@<4.0.8": ">=4.0.8"
     }
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "pnpm@9.14.2"
 }

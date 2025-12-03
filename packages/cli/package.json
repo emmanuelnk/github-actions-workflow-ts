@@ -1,6 +1,6 @@
 {
   "name": "@github-actions-workflow-ts/cli",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-beta.1",
   "description": "CLI to generate GitHub Actions YAML from TypeScript workflow files",
   "author": "Emmanuel N Kyeyune",
   "license": "MIT",

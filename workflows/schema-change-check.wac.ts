@@ -1,4 +1,9 @@
-import { Workflow, NormalJob, Step, multilineString } from '../src'
+import {
+  Workflow,
+  NormalJob,
+  Step,
+  multilineString,
+} from '../packages/lib/src/index.js'
 
 const checkout = new Step({
   name: 'Checkout',

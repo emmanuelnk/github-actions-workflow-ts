@@ -1,0 +1,54 @@
+{
+  "name": "@github-actions-workflow-ts/cli",
+  "version": "2.0.0-alpha.2",
+  "description": "CLI to generate GitHub Actions YAML from TypeScript workflow files",
+  "author": "Emmanuel N Kyeyune",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emmanuelnk/github-actions-workflow-ts",
+    "directory": "packages/cli"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "github-actions-workflow-ts": "./bin/gwf.js",
+    "gawts": "./bin/gwf.js",
+    "gwf": "./bin/gwf.js"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --coverage",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@github-actions-workflow-ts/lib": "workspace:*",
+    "fast-glob": "^3.3.2",
+    "js-yaml": "^4.1.0",
+    "tsx": "^4.19.3",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.1",
+    "@types/yargs": "^17.0.33",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

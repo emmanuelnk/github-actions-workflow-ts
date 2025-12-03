@@ -3,4 +3,6 @@ build
 coverage
 .npmrc
 TODO.md
-github-actions-workflow-ts-lib
+**/dist
+.claude/**
+RELEASE_STRATEGY.md

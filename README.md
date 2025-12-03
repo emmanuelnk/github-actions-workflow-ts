@@ -11,8 +11,8 @@ Stop writing workflows in YAML and use TypeScript instead!
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/blob/master/LICENSE">
       <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="license">
   </a>
-  <a href="https://www.npmjs.com/package/github-actions-workflow-ts">
-      <img src="https://img.shields.io/npm/v/github-actions-workflow-ts.svg" alt="npm version">
+  <a href="https://www.npmjs.com/package/@github-actions-workflow-ts/lib">
+      <img src="https://img.shields.io/npm/v/@github-actions-workflow-ts/lib.svg" alt="npm version">
   </a>
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml">
       <img src="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml/badge.svg" alt="Tests">
@@ -29,8 +29,10 @@ Stop writing workflows in YAML and use TypeScript instead!
 - [github-actions-workflow-ts](#github-actions-workflow-ts)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
+    - [Full Installation (recommended)](#full-installation-recommended)
+    - [Library Only](#library-only)
+  - [Migration from v1](#migration-from-v1)
   - [Overview](#overview)
-    - [Key Benefits:](#key-benefits)
     - [Getting Started:](#getting-started)
   - [Examples](#examples)
     - [Try it out on Replit](#try-it-out-on-replit)
@@ -73,15 +75,47 @@ Stop writing workflows in YAML and use TypeScript instead!
 
 ## Installation
 
-```
-npm install --save-dev github-actions-workflow-ts
+### Full Installation (recommended)
+
+Install both the library and CLI to write workflows in TypeScript and generate YAML files:
+
+```bash
+npm install --save-dev @github-actions-workflow-ts/lib @github-actions-workflow-ts/cli
 ```
 
-Or to use the [zero dependency no-cli package](https://www.npmjs.com/package/github-actions-workflow-ts-lib) (if you only want to generate workflow JSON objects and handle YAML file generation yourself):
+### Library Only
 
+If you only want to generate workflow JSON objects and handle YAML file generation yourself, install just the zero-dependency library:
+
+```bash
+npm install --save-dev @github-actions-workflow-ts/lib
 ```
-npm install --save-dev github-actions-workflow-ts-lib
-```
+
+The library package has **zero dependencies** and works in both ESM and CommonJS projects.
+
+## Migration from v1
+
+If you're migrating from the legacy `github-actions-workflow-ts` or `github-actions-workflow-ts-lib` packages:
+
+1. **Update your dependencies:**
+   ```bash
+   # Remove old packages
+   npm uninstall github-actions-workflow-ts github-actions-workflow-ts-lib
+
+   # Install new scoped packages
+   npm install --save-dev @github-actions-workflow-ts/lib @github-actions-workflow-ts/cli
+   ```
+
+2. **Update your imports:**
+   ```diff
+   - import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+   + import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
+
+   - import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts-lib'
+   + import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
+   ```
+
+3. **CLI commands remain the same** - `npx gwf build` and `npx generate-workflow-files build` work as before.
 
 ## Overview
 Use the flexibility of TypeScript (type safety and intellisense, modularity, control flow etc) to write GHA workflows.
@@ -102,7 +136,7 @@ Below is a simple example:
   ```ts
   // example.wac.ts
 
-  import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+  import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
   const checkoutStep = new Step({
     name: 'Checkout',
@@ -140,9 +174,9 @@ Below is a simple example:
   // 	exampleWorkflowThree,
   // }
   ```
-If you want to use the zero dependency package, you can do this:
+If you only installed the library (without CLI), you can use the workflow objects directly:
 ```ts
-import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts-lib'
+import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -226,7 +260,7 @@ The building block of every `NormalJob`. Contains instructions on what to run in
 <details><summary>Example</summary>
 
 ```ts
-import { Step } from 'github-actions-workflow-ts'
+import { Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -240,7 +274,7 @@ This adds environment variables to a step.
 <details><summary>Example</summary>
 
 ```ts
-import { Step } from 'github-actions-workflow-ts'
+import { Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -260,7 +294,7 @@ This adds environment variables to a job.
 <details><summary>Example</summary>
 
 ```ts
-import { NormalJob } from 'github-actions-workflow-ts'
+import { NormalJob } from '@github-actions-workflow-ts/lib'
 
 const testJob = new NormalJob('Test', {
   'runs-on': 'ubuntu-latest',
@@ -278,7 +312,7 @@ This adds a single step to a normal Job
 <details><summary>Example</summary>
 
 ```ts
-import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -300,7 +334,7 @@ This adds multiple steps to a normal Job
 <details><summary>Example</summary>
 
 ```ts
-import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -333,7 +367,7 @@ This adds any jobs that the current job depends on to the current job's `needs` 
 <details><summary>Example</summary>
 
 ```ts
-import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -366,7 +400,7 @@ export const exampleWorkflow = new Workflow('example-filename', {
 exampleWorkflow.addJobs([
   testJob,
   buildJob
-])  
+])
 ```
 </details>
 
@@ -376,7 +410,7 @@ A job that allows you to call another workflow and use it in the same run.
 <details><summary>Example</summary>
 
 ```ts
-import { Workflow, ReusableWorkflowCallJob } from 'github-actions-workflow-ts'
+import { Workflow, ReusableWorkflowCallJob } from '@github-actions-workflow-ts/lib'
 
 const releaseJob = new ReusableWorkflowCallJob('ReleaseJob', {
 	uses: 'your-org/your-repo/.github/workflows/reusable-workflow.yml@main',
@@ -388,7 +422,7 @@ export const exampleWorkflow = new Workflow('example-filename', {
   on: {
     workflow_dispatch: {}
   }
-}).addJob(releaseJob)  
+}).addJob(releaseJob)
 ```
 </details>
 
@@ -401,7 +435,7 @@ This adds environment variables to a workflow.
 <details><summary>Example</summary>
 
 ```ts
-import { Workflow } from 'github-actions-workflow-ts'
+import { Workflow } from '@github-actions-workflow-ts/lib'
 
 export const exampleWorkflow = new Workflow('example-filename', {
   name: 'Example',
@@ -421,7 +455,7 @@ This adds a single job to a Workflow
 <details><summary>Example</summary>
 
 ```ts
-import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -442,7 +476,7 @@ export const exampleWorkflow = new Workflow('example-filename', {
   }
 })
 
-exampleWorkflow.addJob(testJob)  
+exampleWorkflow.addJob(testJob)
 ```
 </details>
 
@@ -452,7 +486,7 @@ This adds multiple jobs to a Workflow
 <details><summary>Example</summary>
 
 ```ts
-import { Workflow, NormalJob, Step } from 'github-actions-workflow-ts'
+import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
 const checkoutStep = new Step({
   name: 'Checkout',
@@ -483,7 +517,7 @@ export const exampleWorkflow = new Workflow('example-filename', {
 exampleWorkflow.addJobs([
   testJob,
   buildJob
-])  
+])
 ```
 </details>
 
@@ -505,7 +539,7 @@ import {
   Step,
   expressions as ex,
   GeneratedWorkflowTypes as GWT, // all types generated from the official Github Actions Workflow JSON Schema
-} from '../src'
+} from '@github-actions-workflow-ts/lib'
 
 const nodeSetupStep: GWT.Step = {
   name: 'Setup Node',
@@ -553,9 +587,9 @@ This is a useful function that aids in writing multiline yaml like this:
 
 Example 1
 ```ts
-import { multilineString } from 'github-actions-workflow-ts'
+import { multilineString } from '@github-actions-workflow-ts/lib'
 
-// multilineString(...strings) joins all strings with a newline 
+// multilineString(...strings) joins all strings with a newline
 // character '\n' which is interpreted as separate lines in YAML
 console.log(multilineString('This is sentence 1', 'This is sentence 2'))
 // 'This is sentence 1\nThis is sentence 2'
@@ -605,7 +639,7 @@ Returns the expression string `${{ <expression> }}`
 <details><summary>Example</summary>
 
   ```ts
-  import { expressions } from 'github-actions-workflow-ts'
+  import { expressions } from '@github-actions-workflow-ts/lib'
 
   console.log(expressions.expn('hashFiles("**/pnpm-lock.yaml")'))
   // '${{ hashFiles("**/pnpm-lock.yaml") }}'
@@ -617,7 +651,7 @@ Returns the expression string `${{ env.SOMETHING }}`
 <details><summary>Example</summary>
 
   ```ts
-  import { expressions } from 'github-actions-workflow-ts'
+  import { expressions } from '@github-actions-workflow-ts/lib'
 
   console.log(expressions.env('GITHUB_SHA'))
   // '${{ env.GITHUB_SHA }}'
@@ -629,7 +663,7 @@ Returns the expression string `${{ secrets.SOMETHING }}`
 <details><summary>Example</summary>
 
   ```ts
-  import { expressions } from 'github-actions-workflow-ts'
+  import { expressions } from '@github-actions-workflow-ts/lib'
 
   console.log(expressions.secret('GITHUB_TOKEN'))
   // '${{ secrets.GITHUB_TOKEN }}'
@@ -641,7 +675,7 @@ Returns the expression string `${{ vars.SOMETHING }}`
 <details><summary>Example</summary>
 
   ```ts
-  import { expressions } from 'github-actions-workflow-ts'
+  import { expressions } from '@github-actions-workflow-ts/lib'
 
   console.log(expressions.var('SENTRY_APP_ID'))
   // '${{ vars.SENTRY_APP_ID }}'
@@ -652,7 +686,7 @@ Returns the expression string `${{ vars.SOMETHING }}`
 <details><summary>Example</summary>
 
   ```ts
-  import { expressions } from 'github-actions-workflow-ts'
+  import { expressions } from '@github-actions-workflow-ts/lib'
 
   // ternary(condition, ifTrue, ifFalse)
   console.log(expressions.ternary("github.event_name == 'release'", 'prod', 'dev'))
@@ -666,7 +700,7 @@ Returns the string `echo "key=value" >> <SOMETHING>`
 <details><summary>Example</summary>
 
   ```ts
-  import { echoKeyValue } from 'github-actions-workflow-ts'
+  import { echoKeyValue } from '@github-actions-workflow-ts/lib'
 
   // echoKeyValue.to(key, value, to) returns 'echo "key=value" >> <SOMETHING>'
   echoKeyValue.to('@your-org:registry', 'https://npm.pkg.github.com', '.npmrc')
@@ -679,7 +713,7 @@ Returns the string `echo "key=value" >> $GITHUB_ENV`
 <details><summary>Example</summary>
 
   ```ts
-  import { echoKeyValue } from 'github-actions-workflow-ts'
+  import { echoKeyValue } from '@github-actions-workflow-ts/lib'
 
   // echoKeyValue.toGithubEnv(key, value, to) returns 'echo "key=value" >> $GITHUB_ENV'
   echoKeyValue.toGithubEnv('NODE_VERSION', '18')
@@ -692,7 +726,7 @@ Returns the string `echo "key=value" >> $GITHUB_OUTPUT`
 <details><summary>Example</summary>
 
   ```ts
-  import { echoKeyValue } from 'github-actions-workflow-ts'
+  import { echoKeyValue } from '@github-actions-workflow-ts/lib'
 
   // echoKeyValue.toGithubOutput(key, value, to) returns 'echo "key=value" >> $GITHUB_OUTPUT'
   echoKeyValue.toGithubOutput('NODE_VERSION', '18')

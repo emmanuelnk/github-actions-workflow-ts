@@ -22,11 +22,12 @@ jobs:
           - 18
           - 20
           - 22
+          - 24
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
       - name: Install pnpm
@@ -35,8 +36,7 @@ jobs:
           version: 9
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
+      - name: Run Build
+        run: pnpm build
       - name: Run Tests
         run: pnpm test
-      - name: Update Code Coverage Badge
-        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && matrix.node == 22
-        uses: we-cli/coverage-badge-action@48a2699b2e537c7519bdc970fb0ecd75c80a698e

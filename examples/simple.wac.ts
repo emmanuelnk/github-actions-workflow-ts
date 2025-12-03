@@ -9,12 +9,12 @@
  */
 
 import {
-	Workflow,
-	NormalJob,
-	Step,
-	expressions as ex,
-	GeneratedWorkflowTypes as GWT,
-} from '../src'
+  Workflow,
+  NormalJob,
+  Step,
+  expressions as ex,
+  GeneratedWorkflowTypes as GWT,
+} from '../packages/lib/src/index.js'
 
 /**
  * Example 1
@@ -23,33 +23,33 @@ import {
  * the help of the GeneratedWorkflowTypes types
  */
 const nodeSetupStep: GWT.Step = {
-	name: 'Setup Node',
-	uses: 'actions/setup-node@v3',
-	with: {
-		'node-version': '18.x',
-	},
+  name: 'Setup Node',
+  uses: 'actions/setup-node@v3',
+  with: {
+    'node-version': '18.x',
+  },
 }
 
 const firstNormalJob: GWT.NormalJob = {
-	'runs-on': 'ubuntu-latest',
-	'timeout-minutes': 5,
-	steps: [
-		nodeSetupStep,
-		{
-			name: 'Echo',
-			run: 'echo "Hello, World!"',
-		},
-	],
+  'runs-on': 'ubuntu-latest',
+  'timeout-minutes': 5,
+  steps: [
+    nodeSetupStep,
+    {
+      name: 'Echo',
+      run: 'echo "Hello, World!"',
+    },
+  ],
 }
 
 export const simpleWorkflowOne = new Workflow('simple-1', {
-	name: 'ExampleSimpleWorkflow',
-	on: {
-		workflow_dispatch: {},
-	},
-	jobs: {
-		firstJob: firstNormalJob,
-	},
+  name: 'ExampleSimpleWorkflow',
+  on: {
+    workflow_dispatch: {},
+  },
+  jobs: {
+    firstJob: firstNormalJob,
+  },
 })
 
 /**
@@ -61,44 +61,44 @@ export const simpleWorkflowOne = new Workflow('simple-1', {
  */
 
 const echoStep = new Step({
-	name: 'Echo',
-	run: 'echo "Hello, World!"',
+  name: 'Echo',
+  run: 'echo "Hello, World!"',
 })
 
 const checkoutStep = new Step({
-	name: 'Checkout',
-	uses: 'actions/checkout@v3',
-	with: {
-		ref: 'dev',
-	},
+  name: 'Checkout',
+  uses: 'actions/checkout@v3',
+  with: {
+    ref: 'dev',
+  },
 })
 
 const stepWithVariable = new Step({
-	name: 'Echo Event Name',
-	run: 'echo ${{ github.event_name }}',
+  name: 'Echo Event Name',
+  run: 'echo ${{ github.event_name }}',
 })
 
 const stepWithOutputHelpers = new Step({
-	name: 'Comment on Issue',
-	run: 'gh issue comment $ISSUE --body "Thank you for opening this issue!"',
-	env: {
-		GITHUB_TOKEN: ex.secret('GITHUB_TOKEN'),
-		ISSUE: ex.env('ISSUE'),
-	},
+  name: 'Comment on Issue',
+  run: 'gh issue comment $ISSUE --body "Thank you for opening this issue!"',
+  env: {
+    GITHUB_TOKEN: ex.secret('GITHUB_TOKEN'),
+    ISSUE: ex.env('ISSUE'),
+  },
 })
 
 const firstJob = new NormalJob('firstJob', {
-	'runs-on': 'ubuntu-latest',
-	'timeout-minutes': 5,
+  'runs-on': 'ubuntu-latest',
+  'timeout-minutes': 5,
 }).addSteps([echoStep, checkoutStep])
 
 // Export it to generate it
 export const simpleWorkflowTwo = new Workflow('simple-2', {
-	name: 'ExampleSimpleWorkflowJSON',
-	on: { workflow_dispatch: {} },
-	jobs: {
-		firstJob: firstJob.job,
-	},
+  name: 'ExampleSimpleWorkflowJSON',
+  on: { workflow_dispatch: {} },
+  jobs: {
+    firstJob: firstJob.job,
+  },
 })
 
 /**
@@ -106,14 +106,14 @@ export const simpleWorkflowTwo = new Workflow('simple-2', {
  */
 
 const secondJob = new NormalJob('secondJob', {
-	'runs-on': 'ubuntu-latest',
-	'timeout-minutes': 5,
+  'runs-on': 'ubuntu-latest',
+  'timeout-minutes': 5,
 })
 
 secondJob
-	.addStep(echoStep)
-	.addStep(checkoutStep)
-	.addStep(stepWithVariable)
-	.addStep(stepWithOutputHelpers)
+  .addStep(echoStep)
+  .addStep(checkoutStep)
+  .addStep(stepWithVariable)
+  .addStep(stepWithOutputHelpers)
 
 simpleWorkflowTwo.addJob(firstJob).addJob(secondJob)

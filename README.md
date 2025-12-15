@@ -35,7 +35,7 @@ Stop writing workflows in YAML and use TypeScript instead!
   - [Overview](#overview)
     - [Getting Started:](#getting-started)
   - [Examples](#examples)
-    - [Try it out on Replit](#try-it-out-on-replit)
+    - [Try it out on CodeSandbox](#try-it-out-on-codesandbox)
     - [More Examples](#more-examples)
   - [Generating Workflow YAML](#generating-workflow-yaml)
     - [Using the CLI](#using-the-cli)
@@ -124,10 +124,10 @@ Use the flexibility of TypeScript (type safety and intellisense, modularity, con
 To get started, create a new `*.wac.ts` e.g. `deploy.wac.ts` anywhere in your project directory.
 
 ## Examples
-### Try it out on Replit
-Want to quickly see it in action? Explore these Replit examples (create a free account to fork and modify my examples):
-- [Simple Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#workflows/simple.example.wac.ts)
-- [Advanced Example](https://replit.com/@EmmanuelKyeyune/github-actions-workflow-ts-example#src/workflows/advanced.example.wac.ts)
+### Try it out on CodeSandbox
+Want to quickly see it in action? Explore these CodeSandbox examples (create a free account to fork and modify my examples):
+- [Simple Example](https://codesandbox.io/p/devbox/github-actions-workflow-ts-2vthc5?file=%2Fsrc%2Fworkflows%2Fsimple.example.wac.ts)
+- [Advanced Example](https://codesandbox.io/p/devbox/github-actions-workflow-ts-2vthc5?file=%2Fsrc%2Fworkflows%2Fadvanced.example.wac.ts)
 
 ### More Examples
 Check the [examples folder](./examples/) and the [workflows folder](./workflows/) for more advanced examples.

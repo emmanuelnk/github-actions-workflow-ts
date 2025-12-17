@@ -93,7 +93,11 @@ npm install --save-dev @github-actions-workflow-ts/lib
 
 The library package has **zero dependencies** and works in both ESM and CommonJS projects.
 
+<details><summary>
+	
 ## Migration from v1
+
+</summary>
 
 If you're migrating from the legacy `github-actions-workflow-ts` or `github-actions-workflow-ts-lib` packages:
 
@@ -116,6 +120,8 @@ If you're migrating from the legacy `github-actions-workflow-ts` or `github-acti
    ```
 
 3. **CLI commands remain the same** - `npx gwf build` and `npx generate-workflow-files build` work as before.
+
+</details>
 
 ## Overview
 Use the flexibility of TypeScript (type safety and intellisense, modularity, control flow etc) to write GHA workflows.

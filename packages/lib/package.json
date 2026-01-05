@@ -1,6 +1,6 @@
 {
   "name": "@github-actions-workflow-ts/lib",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Type-safe GitHub Actions workflow builder - Library",
   "author": "Emmanuel N Kyeyune",
   "license": "MIT",

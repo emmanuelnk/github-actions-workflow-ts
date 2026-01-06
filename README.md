@@ -46,18 +46,18 @@ Stop writing workflows in YAML and use TypeScript instead!
     - [Config file](#config-file)
   - [Workflow Classes](#workflow-classes)
     - [`new Step()`](#new-step)
-      - [`.addEnvs()`](#addenvs)
+      - [`.addEnvs({})`](#addenvs)
     - [`new NormalJob()`](#new-normaljob)
-      - [`.addEnvs()`](#addenvs-1)
+      - [`.addEnvs({})`](#addenvs-1)
       - [`.addStep()`](#addstep)
-      - [`.addSteps()`](#addsteps)
-      - [`.needs()`](#needs)
+      - [`.addSteps([])`](#addsteps)
+      - [`.needs([])`](#needs)
     - [`new ReusableWorkflowCallJob()`](#new-reusableworkflowcalljob)
-      - [`.needs()`](#needs-1)
+      - [`.needs([])`](#needs-1)
     - [`new Workflow()`](#new-workflow)
-      - [`.addEnvs()`](#addenvs-2)
+      - [`.addEnvs({})`](#addenvs-2)
       - [`.addJob()`](#addjob)
-      - [`.addJobs()`](#addjobs)
+      - [`.addJobs([])`](#addjobs)
   - [Workflow Types](#workflow-types)
     - [GeneratedWorkflowTypes](#generatedworkflowtypes)
     - [ExtendedWorkflowTypes](#extendedworkflowtypes)
@@ -278,7 +278,7 @@ const checkoutStep = new Step({
 ```
 </details>
 
-#### `.addEnvs()`
+#### `.addEnvs({})`
 This adds environment variables to a step.
 <details><summary>Example</summary>
 
@@ -298,7 +298,7 @@ const checkoutStep = new Step({
 ### `new NormalJob()`
 The most typical job that contains steps.
 
-#### `.addEnvs()`
+#### `.addEnvs({})`
 This adds environment variables to a job.
 <details><summary>Example</summary>
 
@@ -337,7 +337,7 @@ testJob.addStep(checkoutStep)
 ```
 </details>
 
-#### `.addSteps()`
+#### `.addSteps([])`
 This adds multiple steps to a normal Job
 
 <details><summary>Example</summary>
@@ -370,7 +370,7 @@ testJob.addSteps([
 ```
 </details>
 
-#### `.needs()`
+#### `.needs([])`
 This adds any jobs that the current job depends on to the current job's `needs` property
 
 <details><summary>Example</summary>
@@ -435,11 +435,11 @@ export const exampleWorkflow = new Workflow('example-filename', {
 ```
 </details>
 
-#### `.needs()`
+#### `.needs([])`
 Same as [NormalJob.needs()](#needs)
 
 ### `new Workflow()`
-#### `.addEnvs()`
+#### `.addEnvs({})`
 This adds environment variables to a workflow.
 <details><summary>Example</summary>
 
@@ -489,7 +489,7 @@ exampleWorkflow.addJob(testJob)
 ```
 </details>
 
-#### `.addJobs()`
+#### `.addJobs([])`
 This adds multiple jobs to a Workflow
 
 <details><summary>Example</summary>
@@ -724,7 +724,7 @@ Returns the string `echo "key=value" >> $GITHUB_ENV`
   ```ts
   import { echoKeyValue } from '@github-actions-workflow-ts/lib'
 
-  // echoKeyValue.toGithubEnv(key, value, to) returns 'echo "key=value" >> $GITHUB_ENV'
+  // echoKeyValue.toGithubEnv(key, value) returns 'echo "key=value" >> $GITHUB_ENV'
   echoKeyValue.toGithubEnv('NODE_VERSION', '18')
   // 'echo "NODE_VERSION=18" >> $GITHUB_ENV'
   ```
@@ -737,7 +737,7 @@ Returns the string `echo "key=value" >> $GITHUB_OUTPUT`
   ```ts
   import { echoKeyValue } from '@github-actions-workflow-ts/lib'
 
-  // echoKeyValue.toGithubOutput(key, value, to) returns 'echo "key=value" >> $GITHUB_OUTPUT'
+  // echoKeyValue.toGithubOutput(key, value) returns 'echo "key=value" >> $GITHUB_OUTPUT'
   echoKeyValue.toGithubOutput('NODE_VERSION', '18')
   // 'echo "NODE_VERSION=18" >> $GITHUB_OUTPUT'
   ```

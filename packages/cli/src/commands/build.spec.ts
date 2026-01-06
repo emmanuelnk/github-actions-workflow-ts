@@ -45,7 +45,7 @@ describe('build', () => {
   let consoleLogSpy: jest.SpiedFunction<typeof console.log>
 
   beforeEach(() => {
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation()
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
     jest.clearAllMocks()
   })
 

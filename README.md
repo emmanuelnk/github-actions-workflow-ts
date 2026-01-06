@@ -17,6 +17,9 @@ Stop writing workflows in YAML and use TypeScript instead!
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml">
       <img src="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml/badge.svg" alt="Tests">
   </a>
+      <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/schema-change-check.yml">
+      <img src="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/schema-change-check.yml/badge.svg" alt="Schema Change Check">
+  </a>
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions">
       <img src="https://emmanuelnk.github.io/github-actions-workflow-ts/badges/coverage.svg" alt="coverage">
   </a>

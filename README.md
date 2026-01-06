@@ -127,7 +127,7 @@ If you're migrating from the legacy `github-actions-workflow-ts` or `github-acti
 </details>
 
 ## Overview
-Use the flexibility of TypeScript (type safety and intellisense, modularity, control flow etc) to write GHA workflows.
+Use the flexibility of TypeScript (type safety and intellisense, modularity, control flow etc) to write GHA workflows. Types are auto-generated from [Schemastore's Github Actions Workflow JSON Schema](https://json.schemastore.org/github-workflow.json).
 
 ### Getting Started:
 To get started, create a new `*.wac.ts` e.g. `deploy.wac.ts` anywhere in your project directory.

@@ -1,6 +1,6 @@
 {
   "name": "@github-actions-workflow-ts/actions",
-  "version": "0.1.0-alpha.2",
+  "version": "2.0.1-beta.1",
   "description": "Typed wrappers for popular GitHub Actions",
   "author": "Emmanuel N Kyeyune",
   "license": "MIT",
@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "generate": "tsx scripts/generate.ts",
-    "build": "pnpm run generate && pnpm run build:esm && pnpm run build:cjs && pnpm run build:fixcjs",
+    "build": "pnpm run build:esm && pnpm run build:cjs && pnpm run build:fixcjs",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:fixcjs": "echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",

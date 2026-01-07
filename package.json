@@ -14,7 +14,7 @@
     "generate-workflow-files": "node --import tsx packages/cli/dist/bin.js",
     "gwf": "node --import tsx packages/cli/dist/bin.js",
     "generate-workflow-types": "pnpm exec tsx scripts/generateWorkflowTypes.ts && pnpm lint",
-    "generate-action-types": "pnpm exec tsx packages/actions/scripts/generate.ts && pnpm lint",
+    "generate-action-types": "GITHUB_TOKEN=$(gh auth token) pnpm exec tsx packages/actions/scripts/generate.ts && pnpm lint",
     "prepare": "husky install",
     "changeset": "changeset",
     "version": "changeset version",

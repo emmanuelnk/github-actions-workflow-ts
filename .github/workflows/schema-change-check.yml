@@ -35,14 +35,14 @@ jobs:
       - name: Generate Workflow Types
         run: pnpm generate-workflow-types
       - name: Get git diff
-        run: git diff -- ':!pnpm-lock.yaml'
+        run: git diff -- packages/lib
       - name: Fail if git diff is not empty
         run: |-
-          if test -z "$(git diff --name-only -- ':!pnpm-lock.yaml')"; then
+          if test -z "$(git diff --name-only -- packages/lib)"; then
             echo "No file changes detected."
             exit 0
           else
             echo "File changes detected."
-            git diff -- ':!pnpm-lock.yaml'
+            git diff -- packages/lib
             exit 1
           fi

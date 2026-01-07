@@ -2,7 +2,7 @@ import {
   Workflow,
   NormalJob,
   Step,
-  multilineString,
+  dedentString,
 } from '../packages/lib/src/index.js'
 
 const checkout = new Step({
@@ -39,21 +39,21 @@ const generateWorkflowTypes = new Step({
 
 const gitDiff = new Step({
   name: 'Get git diff',
-  run: `git diff -- ':!pnpm-lock.yaml'`,
+  run: `git diff -- packages/lib`,
 })
 
 const isGitDiffEmpty = new Step({
   name: 'Fail if git diff is not empty',
-  run: multilineString(
-    `if test -z "$(git diff --name-only -- ':!pnpm-lock.yaml')"; then`,
-    `  echo "No file changes detected."`,
-    `  exit 0`,
-    `else`,
-    `  echo "File changes detected."`,
-    `  git diff -- ':!pnpm-lock.yaml'`,
-    `  exit 1`,
-    `fi`,
-  ),
+  run: dedentString(`
+    if test -z "$(git diff --name-only -- packages/lib)"; then
+      echo "No file changes detected."
+      exit 0
+    else
+      echo "File changes detected."
+      git diff -- packages/lib
+      exit 1
+    fi
+  `),
 })
 
 const schemaChangeCheck = new NormalJob('SchemaChangeCheck', {

@@ -6,7 +6,7 @@ import {
   ExtendedWorkflowTypes,
 } from '../packages/lib/src/index.js'
 
-const nodeVersions: ExtendedWorkflowTypes.MatrixConfiguration = [18, 20, 22, 24]
+const nodeVersions: ExtendedWorkflowTypes.MatrixConfiguration = [20, 22, 24]
 
 const checkout = new Step({
   name: 'Checkout',

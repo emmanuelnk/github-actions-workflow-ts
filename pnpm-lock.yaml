@@ -75,6 +75,28 @@ importers:
         specifier: ^8.28.0
         version: 8.47.0(eslint@9.39.1)(typescript@5.9.3)
 
+  packages/actions:
+    dependencies:
+      '@github-actions-workflow-ts/lib':
+        specifier: workspace:*
+        version: link:../lib
+    devDependencies:
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
+      '@types/node':
+        specifier: ^22.10.1
+        version: 22.19.1
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.1
+      tsx:
+        specifier: ^4.19.3
+        version: 4.20.6
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/cli:
     dependencies:
       '@github-actions-workflow-ts/lib':

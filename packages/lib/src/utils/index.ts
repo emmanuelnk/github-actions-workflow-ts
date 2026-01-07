@@ -110,6 +110,25 @@ export const echoKeyValue = {
 }
 
 /**
+ * Escapes special characters in a string (used by multilineString and dedentString).
+ * Converts control characters and backslashes to their escaped representations.
+ */
+const escapeSpecialChars = (str: string): string => {
+  return str.replace(/[\b\f\n\r\t\v\0\\]/g, (match: string): string => {
+    return {
+      '\b': '\\b',
+      '\f': '\\f',
+      '\n': '\\n',
+      '\r': '\\r',
+      '\t': '\\t',
+      '\v': '\\v',
+      '\0': '\\0',
+      '\\': '\\\\',
+    }[match] as string
+  })
+}
+
+/**
  * Joins multiple strings with newline characters to create a multi-line YAML string.
  *
  * @param {...string[]} strings - An array of strings to join.
@@ -124,27 +143,67 @@ export const echoKeyValue = {
  * ```
  */
 export const multilineString = (...strings: string[]): string => {
-  return strings
-    .map((str) => {
-      const escapedStr = str.replace(
-        /[\b\f\n\r\t\v\0\\]/g,
-        (match: string): string => {
-          return {
-            '\b': '\\b',
-            '\f': '\\f',
-            '\n': '\\n',
-            '\r': '\\r',
-            '\t': '\\t',
-            '\v': '\\v',
-            '\0': '\\0',
-            '\\': '\\\\',
-          }[match] as string
-        },
-      )
+  return strings.map((str) => escapeSpecialChars(str)).join('\n')
+}
 
-      return escapedStr
-    })
-    .join('\n')
+/**
+ * Strips leading whitespace from a template literal string while preserving relative indentation.
+ * Useful for writing inline multi-line strings (like scripts) that render cleanly in YAML.
+ *
+ * Note: Unlike multilineString, this function does NOT escape special characters.
+ * Use literal backslashes (\\n, \\t) in your template if you need them in the output.
+ *
+ * @param {string} str - The template literal string to dedent.
+ * @returns {string} The dedented string with common leading whitespace removed.
+ *
+ * @example
+ * ```typescript
+ * const script = dedentString(`
+ *   github.rest.issues.createComment({
+ *     issue_number: context.issue.number,
+ *     owner: context.repo.owner,
+ *     repo: context.repo.repo,
+ *     body: '✅ Build succeeded!'
+ *   })
+ * `)
+ * // Results in:
+ * // github.rest.issues.createComment({
+ * //   issue_number: context.issue.number,
+ * //   owner: context.repo.owner,
+ * //   repo: context.repo.repo,
+ * //   body: '✅ Build succeeded!'
+ * // })
+ * ```
+ */
+export const dedentString = (str: string): string => {
+  // Split into lines
+  const lines = str.split('\n')
+
+  // Remove first line if empty (common with template literals)
+  if (lines[0].trim() === '') {
+    lines.shift()
+  }
+
+  // Remove last line if empty
+  if (lines.length > 0 && lines[lines.length - 1].trim() === '') {
+    lines.pop()
+  }
+
+  // Find minimum indentation (ignoring empty lines)
+  const minIndent = lines
+    .filter((line) => line.trim().length > 0)
+    .reduce((min, line) => {
+      const match = line.match(/^(\s*)/)
+      const indent = match ? match[1].length : 0
+      return Math.min(min, indent)
+    }, Infinity)
+
+  // Remove the common indentation from all lines
+  if (minIndent === Infinity || minIndent === 0) {
+    return lines.join('\n')
+  }
+
+  return lines.map((line) => line.slice(minIndent)).join('\n')
 }
 
 /**

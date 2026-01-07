@@ -81,10 +81,17 @@ export class SoftpropsActionGhReleaseV2 extends BaseAction<
   constructor(props: SoftpropsActionGhReleaseV2Props = {}) {
     const outputNames = ['url', 'id', 'upload_url', 'assets'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'softprops/action-gh-release@v2',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'softprops/action-gh-release@v2'
       },

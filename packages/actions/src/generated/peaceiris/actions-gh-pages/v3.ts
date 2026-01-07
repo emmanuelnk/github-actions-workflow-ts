@@ -81,10 +81,17 @@ export class PeaceirisActionsGhPagesV3 extends BaseAction<
   constructor(props: PeaceirisActionsGhPagesV3Props = {}) {
     const outputNames = [] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'peaceiris/actions-gh-pages@v3',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'peaceiris/actions-gh-pages@v3'
       },

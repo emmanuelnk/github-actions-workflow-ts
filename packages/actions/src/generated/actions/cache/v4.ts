@@ -58,10 +58,17 @@ export class ActionsCacheV4 extends BaseAction<
   constructor(props: ActionsCacheV4Props = {}) {
     const outputNames = ['cache-hit'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'actions/cache@v4',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/cache@v4' },
       outputNames,
     )

@@ -105,10 +105,17 @@ export class DockerBuildPushActionV5 extends BaseAction<
   constructor(props: DockerBuildPushActionV5Props = {}) {
     const outputNames = ['imageid', 'digest', 'metadata'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'docker/build-push-action@v5',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'docker/build-push-action@v5'
       },

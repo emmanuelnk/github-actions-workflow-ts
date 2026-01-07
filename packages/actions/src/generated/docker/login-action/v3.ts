@@ -53,10 +53,17 @@ export class DockerLoginActionV3 extends BaseAction<
   constructor(props: DockerLoginActionV3Props = {}) {
     const outputNames = [] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'docker/login-action@v3',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'docker/login-action@v3' },
       outputNames,
     )

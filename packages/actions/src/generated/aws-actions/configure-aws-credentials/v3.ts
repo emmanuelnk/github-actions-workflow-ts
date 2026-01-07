@@ -92,10 +92,17 @@ export class AwsActionsConfigureAwsCredentialsV3 extends BaseAction<
       'aws-session-token',
     ] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'aws-actions/configure-aws-credentials@v3',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'aws-actions/configure-aws-credentials@v3'
       },

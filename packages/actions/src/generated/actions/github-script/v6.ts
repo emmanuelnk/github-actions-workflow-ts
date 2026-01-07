@@ -57,10 +57,17 @@ export class ActionsGithubScriptV6 extends BaseAction<
   constructor(props: ActionsGithubScriptV6Props = {}) {
     const outputNames = ['result'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'actions/github-script@v6',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/github-script@v6' },
       outputNames,
     )

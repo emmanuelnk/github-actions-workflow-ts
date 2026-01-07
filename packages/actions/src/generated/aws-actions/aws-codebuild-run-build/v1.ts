@@ -75,10 +75,17 @@ export class AwsActionsAwsCodebuildRunBuildV1 extends BaseAction<
   constructor(props: AwsActionsAwsCodebuildRunBuildV1Props = {}) {
     const outputNames = ['aws-build-id'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'aws-actions/aws-codebuild-run-build@v1',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'aws-actions/aws-codebuild-run-build@v1'
       },

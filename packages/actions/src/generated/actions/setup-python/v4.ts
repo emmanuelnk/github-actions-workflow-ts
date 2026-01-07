@@ -62,10 +62,17 @@ export class ActionsSetupPythonV4 extends BaseAction<
   constructor(props: ActionsSetupPythonV4Props = {}) {
     const outputNames = ['python-version', 'cache-hit', 'python-path'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'actions/setup-python@v4',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/setup-python@v4' },
       outputNames,
     )

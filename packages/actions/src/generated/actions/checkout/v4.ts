@@ -81,10 +81,17 @@ export class ActionsCheckoutV4 extends BaseAction<
   constructor(props: ActionsCheckoutV4Props = {}) {
     const outputNames = ['ref', 'commit'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'actions/checkout@v4',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/checkout@v4' },
       outputNames,
     )

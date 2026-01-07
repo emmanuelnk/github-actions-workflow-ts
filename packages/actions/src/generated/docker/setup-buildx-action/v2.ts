@@ -80,10 +80,17 @@ export class DockerSetupBuildxActionV2 extends BaseAction<
       'flags',
     ] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'docker/setup-buildx-action@v2',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'docker/setup-buildx-action@v2'
       },

@@ -71,10 +71,17 @@ export class AwsActionsAwsCloudformationGithubDeployV1 extends BaseAction<
   constructor(props: AwsActionsAwsCloudformationGithubDeployV1Props = {}) {
     const outputNames = ['stack-id'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'aws-actions/aws-cloudformation-github-deploy@v1',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'aws-actions/aws-cloudformation-github-deploy@v1'
       },

@@ -387,10 +387,17 @@ export class ${className} extends BaseAction<'${uses}', ${className}Outputs> {
   constructor(props: ${className}Props = {}) {
     const outputNames = ${outputNamesArray}
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: '${uses}',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: '${uses}' },
       outputNames,
     )

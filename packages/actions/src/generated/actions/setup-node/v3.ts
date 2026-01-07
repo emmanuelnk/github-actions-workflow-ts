@@ -61,10 +61,17 @@ export class ActionsSetupNodeV3 extends BaseAction<
   constructor(props: ActionsSetupNodeV3Props = {}) {
     const outputNames = ['cache-hit', 'node-version'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'actions/setup-node@v3',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/setup-node@v3' },
       outputNames,
     )

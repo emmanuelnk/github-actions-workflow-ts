@@ -57,10 +57,17 @@ export class ActionsDownloadArtifactV4 extends BaseAction<
   constructor(props: ActionsDownloadArtifactV4Props = {}) {
     const outputNames = ['download-path'] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'actions/download-artifact@v4',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'actions/download-artifact@v4'
       },

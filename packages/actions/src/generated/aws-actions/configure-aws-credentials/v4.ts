@@ -98,10 +98,17 @@ export class AwsActionsConfigureAwsCredentialsV4 extends BaseAction<
       'aws-expiration',
     ] as const
 
+    // Destructure to control property order in output
+    const { id, name, with: withProps, env, ...rest } = props
+
     super(
       {
-        ...props,
+        ...(name !== undefined && { name }),
+        ...(id !== undefined && { id }),
         uses: 'aws-actions/configure-aws-credentials@v4',
+        ...(withProps !== undefined && { with: withProps }),
+        ...(env !== undefined && { env }),
+        ...rest,
       } as GeneratedWorkflowTypes.Step & {
         uses: 'aws-actions/configure-aws-credentials@v4'
       },

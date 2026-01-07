@@ -32,9 +32,30 @@ export const trackedActions: TrackedAction[] = [
     repo: 'configure-aws-credentials',
     versions: ['v3', 'v4'],
   },
-  { owner: 'aws-actions', repo: 'amazon-ecr-login', versions: ['v1', 'v2'] },
+  { owner: 'aws-actions', repo: 'amazon-ecr-login', versions: ['v2'] },
+  {
+    owner: 'aws-actions',
+    repo: 'amazon-ecs-deploy-task-definition',
+    versions: ['v2'],
+  },
+  {
+    owner: 'aws-actions',
+    repo: 'amazon-ecs-render-task-definition',
+    versions: ['v2'],
+  },
+  { owner: 'aws-actions', repo: 'aws-codebuild-run-build', versions: ['v1'] },
+  {
+    owner: 'aws-actions',
+    repo: 'aws-cloudformation-github-deploy',
+    versions: ['v1'],
+  },
 
   // Other popular actions
   { owner: 'softprops', repo: 'action-gh-release', versions: ['v1', 'v2'] },
   { owner: 'peaceiris', repo: 'actions-gh-pages', versions: ['v3', 'v4'] },
+  {
+    owner: 'release-drafter',
+    repo: 'release-drafter',
+    versions: ['v6'],
+  },
 ]

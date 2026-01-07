@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { promises as fs } from 'fs'
 import * as path from 'path'
 import * as yaml from 'js-yaml'
@@ -65,6 +66,153 @@ function getRelativeBasePath(): string {
   return '../../../base.js'
 }
 
+interface GitHubTag {
+  name: string
+}
+
+/**
+ * Parse a version string into its components
+ * Returns null if the version doesn't match semver-like patterns
+ */
+function parseVersion(
+  version: string,
+): { major: number; minor: number; patch: number } | null {
+  // Match patterns like v1, v1.0, v1.0.0, 1, 1.0, 1.0.0
+  const match = version.match(/^v?(\d+)(?:\.(\d+))?(?:\.(\d+))?$/)
+  if (!match) return null
+
+  return {
+    major: parseInt(match[1], 10),
+    minor: match[2] !== undefined ? parseInt(match[2], 10) : 0,
+    patch: match[3] !== undefined ? parseInt(match[3], 10) : 0,
+  }
+}
+
+/**
+ * Check if a version tag matches the requested major version
+ */
+function matchesMajorVersion(
+  tagVersion: string,
+  requestedVersion: string,
+): boolean {
+  const requested = parseVersion(requestedVersion)
+  const tag = parseVersion(tagVersion)
+
+  if (!requested || !tag) return false
+
+  return tag.major === requested.major
+}
+
+/**
+ * Compare two semver versions, returns positive if a > b, negative if a < b, 0 if equal
+ */
+function compareSemver(
+  a: { major: number; minor: number; patch: number },
+  b: { major: number; minor: number; patch: number },
+): number {
+  if (a.major !== b.major) return a.major - b.major
+  if (a.minor !== b.minor) return a.minor - b.minor
+  return a.patch - b.patch
+}
+
+/**
+ * Get GitHub API headers, including auth token if available
+ */
+function getGitHubHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github.v3+json',
+    'User-Agent': 'github-actions-workflow-ts',
+  }
+
+  const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  return headers
+}
+
+/**
+ * Fetch all tags from a GitHub repository
+ */
+async function fetchRepoTags(owner: string, repo: string): Promise<string[]> {
+  const tags: string[] = []
+  let page = 1
+  const perPage = 100
+
+  try {
+    while (true) {
+      const url = `https://api.github.com/repos/${owner}/${repo}/tags?per_page=${perPage}&page=${page}`
+      const response = await fetch(url, {
+        headers: getGitHubHeaders(),
+      })
+
+      if (!response.ok) {
+        console.warn(
+          `  ⚠ Failed to fetch tags for ${owner}/${repo}: ${response.status}`,
+        )
+        break
+      }
+
+      const data = (await response.json()) as GitHubTag[]
+      if (data.length === 0) break
+
+      tags.push(...data.map((tag) => tag.name))
+
+      if (data.length < perPage) break
+      page++
+    }
+  } catch (error) {
+    console.warn(`  ⚠ Error fetching tags for ${owner}/${repo}:`, error)
+  }
+
+  return tags
+}
+
+/**
+ * Resolve a major version tag (e.g., v6) to the latest semver tag (e.g., v6.1.0)
+ * This mirrors how GitHub Actions resolves version tags
+ */
+async function resolveVersionTag(
+  owner: string,
+  repo: string,
+  version: string,
+): Promise<string> {
+  const requestedParsed = parseVersion(version)
+
+  // If the version is already a full semver (has minor and patch), return as-is
+  if (requestedParsed) {
+    const versionStr = version.replace(/^v?/, '')
+    if (versionStr.includes('.') && versionStr.split('.').length >= 2) {
+      // Check if it has at least minor version specified (e.g., v1.2 or v1.2.3)
+      const parts = versionStr.split('.')
+      if (parts.length >= 3 || (parts.length === 2 && parts[1] !== '0')) {
+        return version
+      }
+    }
+  }
+
+  // Fetch all tags and find the latest matching the major version
+  const tags = await fetchRepoTags(owner, repo)
+
+  const matchingTags = tags
+    .filter((tag) => matchesMajorVersion(tag, version))
+    .map((tag) => ({ tag, parsed: parseVersion(tag)! }))
+    .filter((t) => t.parsed !== null)
+    .sort((a, b) => compareSemver(b.parsed, a.parsed)) // Sort descending
+
+  if (matchingTags.length > 0) {
+    const resolved = matchingTags[0].tag
+    if (resolved !== version) {
+      console.log(`    ↳ Resolved ${version} → ${resolved}`)
+    }
+    return resolved
+  }
+
+  // Fallback to original version if no matching tags found
+  return version
+}
+
 /**
  * Fetch action.yml from GitHub
  */
@@ -73,8 +221,11 @@ async function fetchActionYml(
   repo: string,
   version: string,
 ): Promise<ActionYml | null> {
-  const url = `https://raw.githubusercontent.com/${owner}/${repo}/${version}/action.yml`
-  const altUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${version}/action.yaml`
+  // Resolve the version tag to the latest semver within that major version
+  const resolvedVersion = await resolveVersionTag(owner, repo, version)
+
+  const url = `https://raw.githubusercontent.com/${owner}/${repo}/${resolvedVersion}/action.yml`
+  const altUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${resolvedVersion}/action.yaml`
 
   try {
     let response = await fetch(url)
@@ -84,14 +235,17 @@ async function fetchActionYml(
     }
     if (!response.ok) {
       console.warn(
-        `  ⚠ Failed to fetch ${owner}/${repo}@${version}: ${response.status}`,
+        `  ⚠ Failed to fetch ${owner}/${repo}@${resolvedVersion}: ${response.status}`,
       )
       return null
     }
     const text = await response.text()
     return yaml.load(text) as ActionYml
   } catch (error) {
-    console.warn(`  ⚠ Error fetching ${owner}/${repo}@${version}:`, error)
+    console.warn(
+      `  ⚠ Error fetching ${owner}/${repo}@${resolvedVersion}:`,
+      error,
+    )
     return null
   }
 }

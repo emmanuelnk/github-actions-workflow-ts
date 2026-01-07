@@ -1,0 +1,53 @@
+{
+  "name": "@github-actions-workflow-ts/actions",
+  "version": "0.1.0-alpha.2",
+  "description": "Typed wrappers for popular GitHub Actions",
+  "author": "Emmanuel N Kyeyune",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emmanuelnk/github-actions-workflow-ts",
+    "directory": "packages/actions"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate": "tsx scripts/generate.ts",
+    "build": "pnpm run generate && pnpm run build:esm && pnpm run build:cjs && pnpm run build:fixcjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:fixcjs": "echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+    "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --coverage --passWithNoTests",
+    "clean": "rm -rf dist src/generated"
+  },
+  "dependencies": {
+    "@github-actions-workflow-ts/lib": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.1",
+    "js-yaml": "^4.1.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

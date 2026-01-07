@@ -3,7 +3,7 @@ import {
   NormalJob,
   Step,
   expressions as ex,
-  multilineString,
+  dedentString,
 } from '../packages/lib/src/index.js'
 
 const targetCommitish = ex.expn('github.event.release.target_commitish')
@@ -41,14 +41,14 @@ const build = new Step({
 
 const bumpVersions = new Step({
   name: 'Bump Versions',
-  run: multilineString(
-    `git config user.name github-actions`,
-    `git config user.email github-actions@github.com`,
-    `echo version: ${tagName}`,
-    // Update version in both packages
-    `(cd packages/lib && npm version --no-git-tag-version ${tagName})`,
-    `(cd packages/cli && npm version --no-git-tag-version ${tagName})`,
-  ),
+  // Update version in both packages
+  run: dedentString(`
+    git config user.name github-actions
+    git config user.email github-actions@github.com
+    echo version: ${tagName}
+    (cd packages/lib && npm version --no-git-tag-version ${tagName})
+    (cd packages/cli && npm version --no-git-tag-version ${tagName})
+  `),
 })
 
 const setupNpmAuth = new Step({
@@ -61,19 +61,19 @@ const setupNpmAuth = new Step({
 
 const publishPackages = new Step({
   name: 'Publish packages',
-  run: multilineString(
-    `TAG_NAME="${tagName}"`,
-    `if [[ "$TAG_NAME" == *"-alpha"* ]]; then`,
-    `  echo "Publishing with alpha tag"`,
-    `  pnpm -r publish --access public --tag alpha --no-git-checks`,
-    `elif [[ "$TAG_NAME" == *"-beta"* ]]; then`,
-    `  echo "Publishing with beta tag"`,
-    `  pnpm -r publish --access public --tag beta --no-git-checks`,
-    `else`,
-    `  echo "Publishing with latest tag"`,
-    `  pnpm -r publish --access public --no-git-checks`,
-    `fi`,
-  ),
+  run: dedentString(`
+    TAG_NAME="${tagName}"
+    if [[ "$TAG_NAME" == *"-alpha"* ]]; then
+      echo "Publishing with alpha tag"
+      pnpm -r publish --access public --tag alpha --no-git-checks
+    elif [[ "$TAG_NAME" == *"-beta"* ]]; then
+      echo "Publishing with beta tag"
+      pnpm -r publish --access public --tag beta --no-git-checks
+    else
+      echo "Publishing with latest tag"
+      pnpm -r publish --access public --no-git-checks
+    fi
+  `),
   env: {
     NPM_TOKEN: ex.secret('NPM_TOKEN'),
   },
@@ -114,16 +114,16 @@ const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
   new Step({
     name: 'Push updates to main branch',
     shell: 'bash',
-    run: multilineString(
-      `git config user.name github-actions`,
-      `git config user.email github-actions@github.com`,
-      `echo version: ${tagName}`,
-      `(cd packages/lib && npm version --no-git-tag-version ${tagName})`,
-      `(cd packages/cli && npm version --no-git-tag-version ${tagName})`,
-      `git add .`,
-      `git commit -m "new release: ${tagName} [skip ci]" --no-verify`,
-      `git push origin HEAD:main`,
-    ),
+    run: dedentString(`
+      git config user.name github-actions
+      git config user.email github-actions@github.com
+      echo version: ${tagName}
+      (cd packages/lib && npm version --no-git-tag-version ${tagName})
+      (cd packages/cli && npm version --no-git-tag-version ${tagName})
+      git add .
+      git commit -m "new release: ${tagName} [skip ci]" --no-verify
+      git push origin HEAD:main
+    `),
   }),
 ])
 

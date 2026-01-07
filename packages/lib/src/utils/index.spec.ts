@@ -2,6 +2,7 @@ import {
   expressions,
   echoKeyValue,
   multilineString,
+  dedentString,
   workflowOps,
 } from './index.js'
 
@@ -140,6 +141,82 @@ describe('multilineString', () => {
   it('handles empty strings', () => {
     const input = ''
     expect(multilineString(input)).toBe('')
+  })
+})
+
+describe('dedentString', () => {
+  it('should remove common leading whitespace from all lines', () => {
+    const input = `
+      line1
+      line2
+      line3
+    `
+    expect(dedentString(input)).toBe('line1\nline2\nline3')
+  })
+
+  it('should preserve relative indentation', () => {
+    const input = `
+      function test() {
+        return true
+      }
+    `
+    expect(dedentString(input)).toBe('function test() {\n  return true\n}')
+  })
+
+  it('should handle template literal with code', () => {
+    const input = `
+      github.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: '✅ Build succeeded!'
+      })
+    `
+    const expected = `github.rest.issues.createComment({
+  issue_number: context.issue.number,
+  owner: context.repo.owner,
+  repo: context.repo.repo,
+  body: '✅ Build succeeded!'
+})`
+    expect(dedentString(input)).toBe(expected)
+  })
+
+  it('should handle empty lines in the middle', () => {
+    const input = `
+      line1
+
+      line3
+    `
+    expect(dedentString(input)).toBe('line1\n\nline3')
+  })
+
+  it('should handle single line input', () => {
+    expect(dedentString('  hello  ')).toBe('hello  ')
+  })
+
+  it('should handle input without leading newline', () => {
+    const input = '  line1\n  line2'
+    expect(dedentString(input)).toBe('line1\nline2')
+  })
+
+  it('should return empty string for empty input', () => {
+    expect(dedentString('')).toBe('')
+  })
+
+  it('should handle input with no indentation', () => {
+    const input = `
+line1
+line2
+`
+    expect(dedentString(input)).toBe('line1\nline2')
+  })
+
+  it('should preserve literal backslashes', () => {
+    const input = `
+      content="\${content//$'\\n'/'%0A'}"
+    `
+    // Backslashes should be preserved as-is (no escaping)
+    expect(dedentString(input)).toBe("content=\"${content//$'\\n'/'%0A'}\"")
   })
 })
 

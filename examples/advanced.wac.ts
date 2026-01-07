@@ -3,7 +3,7 @@
  *
  * This example shows the usage of:
  * - expressions helper
- * - multilineString helper
+ * - dedentString helper
  * - echoKeyValue helper
  *
  * IMPORTANT: You have to export the workflow from this file for it to be generated.
@@ -14,7 +14,7 @@ import {
   Step,
   expressions as ex,
   echoKeyValue as echo,
-  multilineString,
+  dedentString,
   ReusableWorkflowCallJob,
 } from '../packages/lib/src/index.js'
 
@@ -43,14 +43,10 @@ const getPnpmStoreDirectory = new Step({
 
 const setupNpmrc = new Step({
   name: 'Setup npmrc for Private Packages',
-  run: multilineString(
-    echo.to('@your-org:registry', 'https://npm.pkg.github.com', '.npmrc'),
-    echo.to(
-      '//npm.pkg.github.com/:_authToken',
-      ex.secret('GITHUB_TOKEN'),
-      '.npmrc',
-    ),
-  ),
+  run: dedentString(`
+    ${echo.to('@your-org:registry', 'https://npm.pkg.github.com', '.npmrc')}
+    ${echo.to('//npm.pkg.github.com/:_authToken', ex.secret('GITHUB_TOKEN'), '.npmrc')}
+  `),
 })
 
 const installDependencies = new Step({
@@ -120,10 +116,10 @@ const deployJob = new NormalJob('Deploy', {
   .addStep(
     new Step({
       name: 'Multi line yaml with special characters',
-      run: multilineString(
-        `content="\${content//$'\n'/'%0A'}"`,
-        `content="\${content//$'\r'/'%0D'}"`,
-      ),
+      run: dedentString(`
+        content="\${content//$'\\n'/'%0A'}"
+        content="\${content//$'\\r'/'%0D'}"
+      `),
     }),
   )
 

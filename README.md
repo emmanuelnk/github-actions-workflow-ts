@@ -40,6 +40,7 @@ Stop writing workflows in YAML and use TypeScript instead!
   - [Examples](#examples)
     - [Try it out on CodeSandbox](#try-it-out-on-codesandbox)
     - [More Examples](#more-examples)
+  - [Typed Actions Package](#typed-actions-package)
   - [Generating Workflow YAML](#generating-workflow-yaml)
     - [Using the CLI](#using-the-cli)
     - [Integration with Husky (recommended)](#integration-with-husky-recommended)
@@ -62,6 +63,7 @@ Stop writing workflows in YAML and use TypeScript instead!
     - [GeneratedWorkflowTypes](#generatedworkflowtypes)
     - [ExtendedWorkflowTypes](#extendedworkflowtypes)
   - [Helpers](#helpers)
+    - [`dedentString()`](#dedentstring)
     - [`multilineString()`](#multilinestring)
     - [`expressions`](#expressions)
       - [`.expn()`](#expn)
@@ -140,6 +142,53 @@ Want to quickly see it in action? Explore these CodeSandbox examples (create a f
 
 ### More Examples
 Check the [examples folder](./examples/) and the [workflows folder](./workflows/) for more advanced examples.
+
+## Typed Actions Package
+
+For full type safety when using popular GitHub Actions, install the `@github-actions-workflow-ts/actions` package:
+
+```bash
+npm install --save-dev @github-actions-workflow-ts/actions
+```
+
+This package provides typed wrappers for actions from `actions/*`, `docker/*`, `aws-actions/*`, and other popular third-party actions. You get:
+- **Typed `with` inputs** - autocomplete and type checking for action inputs
+- **Typed outputs** - access step outputs with full type safety
+- **Version-specific classes** - e.g., `ActionsSetupNodeV4` for `actions/setup-node@v4`
+
+<details><summary>Example</summary>
+
+```ts
+import { Workflow, NormalJob } from '@github-actions-workflow-ts/lib'
+import { ActionsCheckoutV4, ActionsSetupNodeV4 } from '@github-actions-workflow-ts/actions'
+
+const checkout = new ActionsCheckoutV4({
+  name: 'Checkout code',
+  with: {
+    'fetch-depth': 0,  // Typed input!
+  },
+})
+
+const setupNode = new ActionsSetupNodeV4({
+  id: 'setup-node',
+  name: 'Setup Node.js',
+  with: {
+    'node-version': '20.x',
+    cache: 'pnpm',  // Typed - knows valid values!
+  },
+})
+
+// Access typed outputs
+console.log(setupNode.outputs['node-version'])  // '${{ steps.setup-node.outputs.node-version }}'
+console.log(setupNode.outputs['cache-hit'])     // '${{ steps.setup-node.outputs.cache-hit }}'
+
+const job = new NormalJob('build', { 'runs-on': 'ubuntu-latest' })
+  .addStep(checkout)
+  .addStep(setupNode)
+```
+</details>
+
+See the [full documentation and available actions](./packages/actions/README.md) for more details.
 
 Below is a simple example:
   ```ts
@@ -583,6 +632,42 @@ export const simpleWorkflowOne = new Workflow('simple-1', {
 </details>
 
 ## Helpers
+### `dedentString()`
+A helper function that removes leading indentation from multi-line strings. This is useful for writing readable multi-line scripts in your TypeScript code while generating clean YAML output.
+
+<details><summary>Example</summary>
+
+```ts
+import { Step, dedentString } from '@github-actions-workflow-ts/lib'
+
+const deployStep = new Step({
+  name: 'Deploy',
+  run: dedentString(`
+    echo "Starting deployment..."
+    if [ -d "./dist" ]; then
+      rsync -avz ./dist/ user@server:/var/www/
+      echo "Deployment complete!"
+    else
+      echo "No dist directory found"
+      exit 1
+    fi
+  `),
+})
+
+// Generates clean YAML:
+// - name: Deploy
+//   run: |-
+//     echo "Starting deployment..."
+//     if [ -d "./dist" ]; then
+//       rsync -avz ./dist/ user@server:/var/www/
+//       echo "Deployment complete!"
+//     else
+//       echo "No dist directory found"
+//       exit 1
+//     fi
+```
+</details>
+
 ### `multilineString()`
 This is a useful function that aids in writing multiline yaml like this:
   ```yaml

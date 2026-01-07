@@ -39,18 +39,18 @@ const generateWorkflowTypes = new Step({
 
 const gitDiff = new Step({
   name: 'Get git diff',
-  run: `git diff -- ':!pnpm-lock.yaml'`,
+  run: `git diff -- packages/lib`,
 })
 
 const isGitDiffEmpty = new Step({
   name: 'Fail if git diff is not empty',
   run: dedentString(`
-    if test -z "$(git diff --name-only -- ':!pnpm-lock.yaml')"; then
+    if test -z "$(git diff --name-only -- packages/lib)"; then
       echo "No file changes detected."
       exit 0
     else
       echo "File changes detected."
-      git diff -- ':!pnpm-lock.yaml'
+      git diff -- packages/lib
       exit 1
     fi
   `),

@@ -143,53 +143,6 @@ Want to quickly see it in action? Explore these CodeSandbox examples (create a f
 ### More Examples
 Check the [examples folder](./examples/) and the [workflows folder](./workflows/) for more advanced examples.
 
-## Typed Actions Package
-
-For full type safety when using popular GitHub Actions, install the `@github-actions-workflow-ts/actions` package:
-
-```bash
-npm install --save-dev @github-actions-workflow-ts/actions
-```
-
-This package provides typed wrappers for actions from `actions/*`, `docker/*`, `aws-actions/*`, and other popular third-party actions. You get:
-- **Typed `with` inputs** - autocomplete and type checking for action inputs
-- **Typed outputs** - access step outputs with full type safety
-- **Version-specific classes** - e.g., `ActionsSetupNodeV4` for `actions/setup-node@v4`
-
-<details><summary>Example</summary>
-
-```ts
-import { Workflow, NormalJob } from '@github-actions-workflow-ts/lib'
-import { ActionsCheckoutV4, ActionsSetupNodeV4 } from '@github-actions-workflow-ts/actions'
-
-const checkout = new ActionsCheckoutV4({
-  name: 'Checkout code',
-  with: {
-    'fetch-depth': 0,  // Typed input!
-  },
-})
-
-const setupNode = new ActionsSetupNodeV4({
-  id: 'setup-node',
-  name: 'Setup Node.js',
-  with: {
-    'node-version': '20.x',
-    cache: 'pnpm',  // Typed - knows valid values!
-  },
-})
-
-// Access typed outputs
-console.log(setupNode.outputs['node-version'])  // '${{ steps.setup-node.outputs.node-version }}'
-console.log(setupNode.outputs['cache-hit'])     // '${{ steps.setup-node.outputs.cache-hit }}'
-
-const job = new NormalJob('build', { 'runs-on': 'ubuntu-latest' })
-  .addStep(checkout)
-  .addStep(setupNode)
-```
-</details>
-
-See the [full documentation and available actions](./packages/actions/README.md) for more details.
-
 Below is a simple example:
   ```ts
   // example.wac.ts
@@ -257,6 +210,55 @@ const exampleWorkflow = new Workflow('example-filename', {
 // without conversion to YAML
 console.log(exampleWorkflow.workflow)
 ```
+
+## Typed Actions Package
+
+For full type safety when using popular GitHub Actions, install the `@github-actions-workflow-ts/actions` package:
+
+```bash
+npm install --save-dev @github-actions-workflow-ts/actions
+```
+
+This package provides typed wrappers for actions from `actions/*`, `docker/*`, `aws-actions/*`, and other popular third-party actions. You get:
+- **Typed `with` inputs** - autocomplete and type checking for action inputs
+- **Typed outputs** - access step outputs with full type safety
+- **Version-specific classes** - e.g., `ActionsSetupNodeV4` for `actions/setup-node@v4`
+
+<details><summary>Example</summary>
+
+```ts
+import { Workflow, NormalJob } from '@github-actions-workflow-ts/lib'
+import { ActionsCheckoutV4, ActionsSetupNodeV4 } from '@github-actions-workflow-ts/actions'
+
+const checkout = new ActionsCheckoutV4({
+  name: 'Checkout code',
+  // 'with' will only accept valid keys 
+  with: {
+    'fetch-depth': 0,
+  },
+})
+
+const setupNode = new ActionsSetupNodeV4({
+  id: 'setup-node',
+  name: 'Setup Node.js',
+  // 'with' will only accept valid keys 
+  with: {
+    'node-version': '20.x',
+    cache: 'pnpm',
+  },
+})
+
+// Access typed outputs
+console.log(setupNode.outputs['node-version'])  // '${{ steps.setup-node.outputs.node-version }}'
+console.log(setupNode.outputs['cache-hit'])     // '${{ steps.setup-node.outputs.cache-hit }}'
+
+const job = new NormalJob('build', { 'runs-on': 'ubuntu-latest' })
+  .addStep(checkout)
+  .addStep(setupNode)
+```
+</details>
+
+See the [full documentation and available actions](./packages/actions/README.md) for more details.
 
 ## Generating Workflow YAML
 ### Using the CLI

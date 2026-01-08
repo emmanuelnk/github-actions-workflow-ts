@@ -38,6 +38,7 @@ jobs:
           echo version: ${{ github.event.release.tag_name }}
           (cd packages/lib && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
           (cd packages/cli && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
+          (cd packages/actions && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
       - name: Setup npm auth
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
         env:
@@ -77,6 +78,7 @@ jobs:
           echo version: ${{ github.event.release.tag_name }}
           (cd packages/lib && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
           (cd packages/cli && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
+          (cd packages/actions && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
           git add .
           git commit -m "new release: ${{ github.event.release.tag_name }} [skip ci]" --no-verify
           git push origin HEAD:main

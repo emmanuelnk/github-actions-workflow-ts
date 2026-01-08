@@ -26,7 +26,7 @@ const draftJob = new NormalJob('PrLabeler', {
 export const draftWorkflow = new Workflow('pr-labeler', {
   name: 'PR Labeler',
   on: {
-    pull_request: {
+    pull_request_target: {
       types: ['opened', 'reopened', 'synchronize'],
     },
   },

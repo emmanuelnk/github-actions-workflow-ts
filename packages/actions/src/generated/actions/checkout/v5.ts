@@ -63,7 +63,7 @@ export interface ActionsCheckoutV5Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/checkout@v5'. */
-  uses?: 'actions/checkout@v5'
+  uses?: 'actions/checkout@v5' | (`actions/checkout@v5.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsCheckoutV5Inputs
   /** Sets environment variables for this step. */

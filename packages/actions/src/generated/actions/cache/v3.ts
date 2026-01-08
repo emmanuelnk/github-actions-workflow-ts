@@ -37,7 +37,7 @@ export interface ActionsCacheV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/cache@v3'. */
-  uses?: 'actions/cache@v3'
+  uses?: 'actions/cache@v3' | (`actions/cache@v3.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsCacheV3Inputs
   /** Sets environment variables for this step. */

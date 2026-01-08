@@ -57,7 +57,9 @@ export interface AwsActionsAwsCodebuildRunBuildV1Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/aws-codebuild-run-build@v1'. */
-  uses?: 'aws-actions/aws-codebuild-run-build@v1'
+  uses?:
+    | 'aws-actions/aws-codebuild-run-build@v1'
+    | (`aws-actions/aws-codebuild-run-build@v1.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAwsCodebuildRunBuildV1Inputs
   /** Sets environment variables for this step. */

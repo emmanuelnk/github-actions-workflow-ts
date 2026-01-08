@@ -53,7 +53,9 @@ export interface AwsActionsAwsCloudformationGithubDeployV1Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/aws-cloudformation-github-deploy@v1'. */
-  uses?: 'aws-actions/aws-cloudformation-github-deploy@v1'
+  uses?:
+    | 'aws-actions/aws-cloudformation-github-deploy@v1'
+    | (`aws-actions/aws-cloudformation-github-deploy@v1.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAwsCloudformationGithubDeployV1Inputs
   /** Sets environment variables for this step. */

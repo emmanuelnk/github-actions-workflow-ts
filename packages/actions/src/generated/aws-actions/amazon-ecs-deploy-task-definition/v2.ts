@@ -84,7 +84,9 @@ export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/amazon-ecs-deploy-task-definition@v2'. */
-  uses?: 'aws-actions/amazon-ecs-deploy-task-definition@v2'
+  uses?:
+    | 'aws-actions/amazon-ecs-deploy-task-definition@v2'
+    | (`aws-actions/amazon-ecs-deploy-task-definition@v2.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcsDeployTaskDefinitionV2Inputs
   /** Sets environment variables for this step. */

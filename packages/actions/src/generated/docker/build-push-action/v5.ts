@@ -87,7 +87,9 @@ export interface DockerBuildPushActionV5Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'docker/build-push-action@v5'. */
-  uses?: 'docker/build-push-action@v5'
+  uses?:
+    | 'docker/build-push-action@v5'
+    | (`docker/build-push-action@v5.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerBuildPushActionV5Inputs
   /** Sets environment variables for this step. */

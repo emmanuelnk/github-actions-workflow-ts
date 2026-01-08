@@ -22,7 +22,7 @@ export interface GithubCodeqlActionV2Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'github/codeql-action@v2'. */
-  uses?: 'github/codeql-action@v2'
+  uses?: 'github/codeql-action@v2' | (`github/codeql-action@v2.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: GithubCodeqlActionV2Inputs
   /** Sets environment variables for this step. */

@@ -63,7 +63,9 @@ export interface PeaceirisActionsGhPagesV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'peaceiris/actions-gh-pages@v4'. */
-  uses?: 'peaceiris/actions-gh-pages@v4'
+  uses?:
+    | 'peaceiris/actions-gh-pages@v4'
+    | (`peaceiris/actions-gh-pages@v4.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: PeaceirisActionsGhPagesV4Inputs
   /** Sets environment variables for this step. */

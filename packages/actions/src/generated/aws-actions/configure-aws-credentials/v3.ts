@@ -69,7 +69,9 @@ export interface AwsActionsConfigureAwsCredentialsV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v3'. */
-  uses?: 'aws-actions/configure-aws-credentials@v3'
+  uses?:
+    | 'aws-actions/configure-aws-credentials@v3'
+    | (`aws-actions/configure-aws-credentials@v3.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsConfigureAwsCredentialsV3Inputs
   /** Sets environment variables for this step. */

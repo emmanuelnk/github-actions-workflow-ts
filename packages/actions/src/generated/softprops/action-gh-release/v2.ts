@@ -63,7 +63,9 @@ export interface SoftpropsActionGhReleaseV2Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'softprops/action-gh-release@v2'. */
-  uses?: 'softprops/action-gh-release@v2'
+  uses?:
+    | 'softprops/action-gh-release@v2'
+    | (`softprops/action-gh-release@v2.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: SoftpropsActionGhReleaseV2Inputs
   /** Sets environment variables for this step. */

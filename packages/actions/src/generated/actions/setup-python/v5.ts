@@ -46,7 +46,7 @@ export interface ActionsSetupPythonV5Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/setup-python@v5'. */
-  uses?: 'actions/setup-python@v5'
+  uses?: 'actions/setup-python@v5' | (`actions/setup-python@v5.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsSetupPythonV5Inputs
   /** Sets environment variables for this step. */

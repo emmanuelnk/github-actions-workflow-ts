@@ -372,7 +372,7 @@ export interface ${className}Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match '${uses}'. */
-  uses?: '${uses}'
+  uses?: '${uses}' | \`${uses}.\${string}\` & {}
   /** A map of the input parameters defined by the action. */
   with?: ${className}Inputs
   /** Sets environment variables for this step. */

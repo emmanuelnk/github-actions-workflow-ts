@@ -67,7 +67,9 @@ export interface DockerSetupBuildxActionV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'docker/setup-buildx-action@v3'. */
-  uses?: 'docker/setup-buildx-action@v3'
+  uses?:
+    | 'docker/setup-buildx-action@v3'
+    | (`docker/setup-buildx-action@v3.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerSetupBuildxActionV3Inputs
   /** Sets environment variables for this step. */

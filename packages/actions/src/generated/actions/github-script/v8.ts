@@ -41,7 +41,9 @@ export interface ActionsGithubScriptV8Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/github-script@v8'. */
-  uses?: 'actions/github-script@v8'
+  uses?:
+    | 'actions/github-script@v8'
+    | (`actions/github-script@v8.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsGithubScriptV8Inputs
   /** Sets environment variables for this step. */

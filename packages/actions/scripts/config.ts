@@ -16,7 +16,7 @@ export const trackedActions: TrackedAction[] = [
   { owner: 'actions', repo: 'cache', versions: ['v3', 'v4'] },
   { owner: 'actions', repo: 'upload-artifact', versions: ['v3', 'v4'] },
   { owner: 'actions', repo: 'download-artifact', versions: ['v3', 'v4'] },
-  { owner: 'actions', repo: 'github-script', versions: ['v6', 'v7'] },
+  { owner: 'actions', repo: 'github-script', versions: ['v6', 'v7', 'v8'] },
 
   // GitHub org actions (github/*)
   { owner: 'github', repo: 'codeql-action', versions: ['v2', 'v3'] },

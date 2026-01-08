@@ -41,7 +41,7 @@ export const trackedActions: TrackedAction[] = [
   {
     owner: 'aws-actions',
     repo: 'amazon-ecs-render-task-definition',
-    versions: ['v2'],
+    versions: ['v1'],
   },
   { owner: 'aws-actions', repo: 'aws-codebuild-run-build', versions: ['v1'] },
   {

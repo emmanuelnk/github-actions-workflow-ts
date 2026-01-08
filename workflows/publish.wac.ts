@@ -48,6 +48,7 @@ const bumpVersions = new Step({
     echo version: ${tagName}
     (cd packages/lib && npm version --no-git-tag-version ${tagName})
     (cd packages/cli && npm version --no-git-tag-version ${tagName})
+    (cd packages/actions && npm version --no-git-tag-version ${tagName})
   `),
 })
 
@@ -120,6 +121,7 @@ const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
       echo version: ${tagName}
       (cd packages/lib && npm version --no-git-tag-version ${tagName})
       (cd packages/cli && npm version --no-git-tag-version ${tagName})
+      (cd packages/actions && npm version --no-git-tag-version ${tagName})
       git add .
       git commit -m "new release: ${tagName} [skip ci]" --no-verify
       git push origin HEAD:main

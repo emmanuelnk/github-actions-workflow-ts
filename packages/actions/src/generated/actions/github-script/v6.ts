@@ -60,13 +60,13 @@ export class ActionsGithubScriptV6 extends BaseAction<
     const outputNames = ['result'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/github-script@v6',
+        uses: uses ?? 'actions/github-script@v6',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

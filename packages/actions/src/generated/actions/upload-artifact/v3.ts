@@ -54,13 +54,13 @@ export class ActionsUploadArtifactV3 extends BaseAction<
     const outputNames = [] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/upload-artifact@v3',
+        uses: uses ?? 'actions/upload-artifact@v3',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

@@ -63,13 +63,13 @@ export class ActionsSetupPythonV4 extends BaseAction<
     const outputNames = ['python-version', 'cache-hit', 'python-path'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/setup-python@v4',
+        uses: uses ?? 'actions/setup-python@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

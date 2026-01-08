@@ -84,13 +84,13 @@ export class SoftpropsActionGhReleaseV2 extends BaseAction<
     const outputNames = ['url', 'id', 'upload_url', 'assets'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'softprops/action-gh-release@v2',
+        uses: uses ?? 'softprops/action-gh-release@v2',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

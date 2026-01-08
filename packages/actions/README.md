@@ -57,7 +57,7 @@ const job = new NormalJob('build', { 'runs-on': 'ubuntu-latest' })
 | Action | Versions | Links |
 |--------|----------|-------|
 | actions/cache | `ActionsCacheV3`, `ActionsCacheV4` | [GitHub](https://github.com/actions/cache) · [Marketplace](https://github.com/marketplace/actions/cache) |
-| actions/checkout | `ActionsCheckoutV3`, `ActionsCheckoutV4` | [GitHub](https://github.com/actions/checkout) · [Marketplace](https://github.com/marketplace/actions/checkout) |
+| actions/checkout | `ActionsCheckoutV3`, `ActionsCheckoutV4`, `ActionsCheckoutV5`, `ActionsCheckoutV6` | [GitHub](https://github.com/actions/checkout) · [Marketplace](https://github.com/marketplace/actions/checkout) |
 | actions/download-artifact | `ActionsDownloadArtifactV3`, `ActionsDownloadArtifactV4` | [GitHub](https://github.com/actions/download-artifact) · [Marketplace](https://github.com/marketplace/actions/download-artifact) |
 | actions/github-script | `ActionsGithubScriptV6`, `ActionsGithubScriptV7` | [GitHub](https://github.com/actions/github-script) · [Marketplace](https://github.com/marketplace/actions/github-script) |
 | actions/setup-node | `ActionsSetupNodeV3`, `ActionsSetupNodeV4` | [GitHub](https://github.com/actions/setup-node) · [Marketplace](https://github.com/marketplace/actions/setup-node) |

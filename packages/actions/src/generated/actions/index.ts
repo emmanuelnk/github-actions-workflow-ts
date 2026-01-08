@@ -1,6 +1,8 @@
 // This file is auto-generated. Do not edit manually.
 export * from './checkout/v3.js'
 export * from './checkout/v4.js'
+export * from './checkout/v5.js'
+export * from './checkout/v6.js'
 export * from './setup-node/v3.js'
 export * from './setup-node/v4.js'
 export * from './setup-python/v4.js'

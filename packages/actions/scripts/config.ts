@@ -10,7 +10,7 @@ export interface TrackedAction {
 
 export const trackedActions: TrackedAction[] = [
   // Official GitHub Actions (actions/*)
-  { owner: 'actions', repo: 'checkout', versions: ['v3', 'v4'] },
+  { owner: 'actions', repo: 'checkout', versions: ['v3', 'v4', 'v5', 'v6'] },
   { owner: 'actions', repo: 'setup-node', versions: ['v3', 'v4'] },
   { owner: 'actions', repo: 'setup-python', versions: ['v4', 'v5'] },
   { owner: 'actions', repo: 'cache', versions: ['v3', 'v4'] },

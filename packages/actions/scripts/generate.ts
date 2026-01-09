@@ -510,13 +510,10 @@ function generateActionsTable(
         })
         .join(', ')
 
-      // Links column
+      // Links column (GitHub repo only, marketplace links are often incorrect)
       const repoLink = `[GitHub](https://github.com/${actionPath})`
-      const marketplaceLink = `[Marketplace](https://github.com/marketplace/actions/${repo})`
 
-      rows.push(
-        `| ${actionPath} | ${versionLinks} | ${repoLink} · ${marketplaceLink} |`,
-      )
+      rows.push(`| ${actionPath} | ${versionLinks} | ${repoLink} |`)
     }
   }
 
@@ -560,7 +557,7 @@ async function updateReadme(
   }
 
   const tableHeader =
-    '| Action | Versions | Links |\n|--------|----------|-------|'
+    '| Action | Versions | GitHub |\n|--------|----------|--------|'
   const tableContent = generateActionsTable(ownerRepos)
 
   const newContent =

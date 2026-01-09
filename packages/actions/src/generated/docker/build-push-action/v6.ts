@@ -89,7 +89,9 @@ export interface DockerBuildPushActionV6Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'docker/build-push-action@v6'. */
-  uses?: 'docker/build-push-action@v6'
+  uses?:
+    | 'docker/build-push-action@v6'
+    | (`docker/build-push-action@v6.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerBuildPushActionV6Inputs
   /** Sets environment variables for this step. */
@@ -108,13 +110,13 @@ export class DockerBuildPushActionV6 extends BaseAction<
     const outputNames = ['imageid', 'digest', 'metadata'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'docker/build-push-action@v6',
+        uses: uses ?? 'docker/build-push-action@v6',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

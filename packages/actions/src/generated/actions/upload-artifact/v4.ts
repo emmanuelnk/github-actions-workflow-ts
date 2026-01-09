@@ -40,7 +40,9 @@ export interface ActionsUploadArtifactV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/upload-artifact@v4'. */
-  uses?: 'actions/upload-artifact@v4'
+  uses?:
+    | 'actions/upload-artifact@v4'
+    | (`actions/upload-artifact@v4.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsUploadArtifactV4Inputs
   /** Sets environment variables for this step. */
@@ -63,13 +65,13 @@ export class ActionsUploadArtifactV4 extends BaseAction<
     ] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/upload-artifact@v4',
+        uses: uses ?? 'actions/upload-artifact@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

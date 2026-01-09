@@ -63,7 +63,9 @@ export interface PeaceirisActionsGhPagesV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'peaceiris/actions-gh-pages@v4'. */
-  uses?: 'peaceiris/actions-gh-pages@v4'
+  uses?:
+    | 'peaceiris/actions-gh-pages@v4'
+    | (`peaceiris/actions-gh-pages@v4.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: PeaceirisActionsGhPagesV4Inputs
   /** Sets environment variables for this step. */
@@ -82,13 +84,13 @@ export class PeaceirisActionsGhPagesV4 extends BaseAction<
     const outputNames = [] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'peaceiris/actions-gh-pages@v4',
+        uses: uses ?? 'peaceiris/actions-gh-pages@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

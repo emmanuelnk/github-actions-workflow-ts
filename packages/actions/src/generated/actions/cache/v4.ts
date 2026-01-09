@@ -40,7 +40,7 @@ export interface ActionsCacheV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/cache@v4'. */
-  uses?: 'actions/cache@v4'
+  uses?: 'actions/cache@v4' | (`actions/cache@v4.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsCacheV4Inputs
   /** Sets environment variables for this step. */
@@ -59,13 +59,13 @@ export class ActionsCacheV4 extends BaseAction<
     const outputNames = ['cache-hit'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/cache@v4',
+        uses: uses ?? 'actions/cache@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

@@ -46,7 +46,7 @@ export interface ActionsSetupPythonV5Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/setup-python@v5'. */
-  uses?: 'actions/setup-python@v5'
+  uses?: 'actions/setup-python@v5' | (`actions/setup-python@v5.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsSetupPythonV5Inputs
   /** Sets environment variables for this step. */
@@ -65,13 +65,13 @@ export class ActionsSetupPythonV5 extends BaseAction<
     const outputNames = ['python-version', 'cache-hit', 'python-path'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/setup-python@v5',
+        uses: uses ?? 'actions/setup-python@v5',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

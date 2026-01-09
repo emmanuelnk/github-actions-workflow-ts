@@ -74,7 +74,9 @@ export interface AwsActionsConfigureAwsCredentialsV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v4'. */
-  uses?: 'aws-actions/configure-aws-credentials@v4'
+  uses?:
+    | 'aws-actions/configure-aws-credentials@v4'
+    | (`aws-actions/configure-aws-credentials@v4.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsConfigureAwsCredentialsV4Inputs
   /** Sets environment variables for this step. */
@@ -99,13 +101,13 @@ export class AwsActionsConfigureAwsCredentialsV4 extends BaseAction<
     ] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'aws-actions/configure-aws-credentials@v4',
+        uses: uses ?? 'aws-actions/configure-aws-credentials@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

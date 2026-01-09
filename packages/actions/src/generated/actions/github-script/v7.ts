@@ -41,7 +41,9 @@ export interface ActionsGithubScriptV7Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/github-script@v7'. */
-  uses?: 'actions/github-script@v7'
+  uses?:
+    | 'actions/github-script@v7'
+    | (`actions/github-script@v7.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsGithubScriptV7Inputs
   /** Sets environment variables for this step. */
@@ -60,13 +62,13 @@ export class ActionsGithubScriptV7 extends BaseAction<
     const outputNames = ['result'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/github-script@v7',
+        uses: uses ?? 'actions/github-script@v7',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

@@ -39,7 +39,9 @@ export interface ActionsDownloadArtifactV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/download-artifact@v4'. */
-  uses?: 'actions/download-artifact@v4'
+  uses?:
+    | 'actions/download-artifact@v4'
+    | (`actions/download-artifact@v4.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsDownloadArtifactV4Inputs
   /** Sets environment variables for this step. */
@@ -58,13 +60,13 @@ export class ActionsDownloadArtifactV4 extends BaseAction<
     const outputNames = ['download-path'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'actions/download-artifact@v4',
+        uses: uses ?? 'actions/download-artifact@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

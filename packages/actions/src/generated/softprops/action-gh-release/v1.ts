@@ -55,7 +55,9 @@ export interface SoftpropsActionGhReleaseV1Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'softprops/action-gh-release@v1'. */
-  uses?: 'softprops/action-gh-release@v1'
+  uses?:
+    | 'softprops/action-gh-release@v1'
+    | (`softprops/action-gh-release@v1.${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: SoftpropsActionGhReleaseV1Inputs
   /** Sets environment variables for this step. */
@@ -74,13 +76,13 @@ export class SoftpropsActionGhReleaseV1 extends BaseAction<
     const outputNames = ['url', 'id', 'upload_url', 'assets'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, ...rest } = props
+    const { id, name, with: withProps, env, uses, ...rest } = props
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: 'softprops/action-gh-release@v1',
+        uses: uses ?? 'softprops/action-gh-release@v1',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,

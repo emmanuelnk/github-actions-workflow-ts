@@ -129,14 +129,22 @@ export function validateActionVersion(
 }
 
 /**
- * Log version warnings to console.
+ * Log version warnings to console, deduplicating by uses string.
  */
 export function logVersionWarnings(warnings: VersionWarning[]): void {
   if (warnings.length === 0) return
 
+  // Deduplicate warnings by uses string
+  const uniqueWarnings = new Map<string, VersionWarning>()
+  for (const warning of warnings) {
+    if (!uniqueWarnings.has(warning.uses)) {
+      uniqueWarnings.set(warning.uses, warning)
+    }
+  }
+
   console.log('\n[github-actions-workflow-ts] ⚠️  Version warnings detected:')
 
-  for (const warning of warnings) {
+  for (const warning of uniqueWarnings.values()) {
     console.log(`  • ${warning.uses}: ${warning.message}`)
   }
 

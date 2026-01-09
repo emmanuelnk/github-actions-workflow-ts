@@ -8,5 +8,6 @@
   ],
   "dumpOptions": {
     "lineWidth": -1
-  }
+  },
+  "actionsPackageOutdatedVersionWarnings": true
 }

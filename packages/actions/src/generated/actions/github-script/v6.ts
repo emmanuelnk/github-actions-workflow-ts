@@ -10,22 +10,35 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/actions/github-script
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ActionsGithubScriptV6SourceVersion = 'v6.4.1'
+
 export interface ActionsGithubScriptV6Inputs {
   /** The script to run */
   script: string | boolean | number
-  /** The GitHub token used to create an authenticated client */
+  /** The GitHub token used to create an authenticated client
+   * @default ${{ github.token }} */
   'github-token'?: string | boolean | number
-  /** Whether to tell the GitHub client to log details of its requests. true or false. Default is to run in debug mode when the GitHub Actions step debug logging is turned on. */
+  /** Whether to tell the GitHub client to log details of its requests. true or false. Default is to run in debug mode when the GitHub Actions step debug logging is turned on.
+   * @default ${{ runner.debug == '1' }} */
   debug?: string | boolean | number
-  /** An optional user-agent string */
+  /** An optional user-agent string
+   * @default actions\/github-script */
   'user-agent'?: string | boolean | number
   /** A comma-separated list of API previews to accept */
   previews?: string | boolean | number
-  /** Either "string" or "json" (default "json")—how the result will be encoded */
+  /** Either "string" or "json" (default "json")—how the result will be encoded
+   * @default json */
   'result-encoding'?: string | boolean | number
-  /** The number of times to retry a request */
+  /** The number of times to retry a request
+   * @default 0 */
   retries?: string | boolean | number
-  /** A comma separated list of status codes that will NOT be retried e.g. "400,500". No effect unless `retries` is set */
+  /** A comma separated list of status codes that will NOT be retried e.g. "400,500". No effect unless `retries` is set
+   * @default 400,401,403,404,422 */
   'retry-exempt-status-codes'?: string | boolean | number
 }
 
@@ -38,10 +51,16 @@ export interface ActionsGithubScriptV6Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/github-script@v6'. */
+  /**
+   * The action reference.
+   * - Default: 'actions/github-script@v6' (uses latest v6.x.x)
+   * - Pinned: 'actions/github-script@v6.4.1' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'actions/github-script@v6'
-    | (`actions/github-script@v6.${string}` & {})
+    | 'actions/github-script@v6.4.1'
+    | (`actions/github-script@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsGithubScriptV6Inputs
   /** Sets environment variables for this step. */
@@ -56,6 +75,9 @@ export class ActionsGithubScriptV6 extends BaseAction<
   'actions/github-script@v6',
   ActionsGithubScriptV6Outputs
 > {
+  static readonly sourceVersion = 'v6.4.1'
+  static readonly defaultUses = 'actions/github-script@v6'
+
   constructor(props: ActionsGithubScriptV6Props = {}) {
     const outputNames = ['result'] as const
 
@@ -72,6 +94,8 @@ export class ActionsGithubScriptV6 extends BaseAction<
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/github-script@v6' },
       outputNames,
+      'v6.4.1',
+      'actions/github-script@v6',
     )
   }
 }

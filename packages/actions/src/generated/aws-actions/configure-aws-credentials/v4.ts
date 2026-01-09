@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/aws-actions/configure-aws-credentials
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const AwsActionsConfigureAwsCredentialsV4SourceVersion = 'v4.3.1'
+
 export interface AwsActionsConfigureAwsCredentialsV4Inputs {
   /** AWS Region, e.g. us-east-2 */
   'aws-region': string | boolean | number
@@ -25,7 +32,8 @@ export interface AwsActionsConfigureAwsCredentialsV4Inputs {
   'web-identity-token-file'?: string | boolean | number
   /** Use existing credentials from the environment to assume a new role, rather than providing credentials as input. */
   'role-chaining'?: string | boolean | number
-  /** The audience to use for the OIDC provider */
+  /** The audience to use for the OIDC provider
+   * @default sts.amazonaws.com */
   audience?: string | boolean | number
   /** Proxy to use for the AWS SDK agent */
   'http-proxy'?: string | boolean | number
@@ -45,7 +53,8 @@ export interface AwsActionsConfigureAwsCredentialsV4Inputs {
   'managed-session-policies'?: string | boolean | number
   /** Whether to set credentials as step output */
   'output-credentials'?: string | boolean | number
-  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials. */
+  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials.
+   * @default true */
   'output-env-credentials'?: string | boolean | number
   /** Whether to unset the existing credentials in your runner. May be useful if you run this action multiple times in the same job */
   'unset-current-credentials'?: string | boolean | number
@@ -73,10 +82,16 @@ export interface AwsActionsConfigureAwsCredentialsV4Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v4'. */
+  /**
+   * The action reference.
+   * - Default: 'aws-actions/configure-aws-credentials@v4' (uses latest v4.x.x)
+   * - Pinned: 'aws-actions/configure-aws-credentials@v4.3.1' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'aws-actions/configure-aws-credentials@v4'
-    | (`aws-actions/configure-aws-credentials@v4.${string}` & {})
+    | 'aws-actions/configure-aws-credentials@v4.3.1'
+    | (`aws-actions/configure-aws-credentials@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsConfigureAwsCredentialsV4Inputs
   /** Sets environment variables for this step. */
@@ -91,6 +106,9 @@ export class AwsActionsConfigureAwsCredentialsV4 extends BaseAction<
   'aws-actions/configure-aws-credentials@v4',
   AwsActionsConfigureAwsCredentialsV4Outputs
 > {
+  static readonly sourceVersion = 'v4.3.1'
+  static readonly defaultUses = 'aws-actions/configure-aws-credentials@v4'
+
   constructor(props: AwsActionsConfigureAwsCredentialsV4Props = {}) {
     const outputNames = [
       'aws-account-id',
@@ -115,6 +133,8 @@ export class AwsActionsConfigureAwsCredentialsV4 extends BaseAction<
         uses: 'aws-actions/configure-aws-credentials@v4'
       },
       outputNames,
+      'v4.3.1',
+      'aws-actions/configure-aws-credentials@v4',
     )
   }
 }

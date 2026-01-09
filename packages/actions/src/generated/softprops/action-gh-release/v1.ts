@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/softprops/action-gh-release
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const SoftpropsActionGhReleaseV1SourceVersion = 'v1'
+
 export interface SoftpropsActionGhReleaseV1Inputs {
   /** Note-worthy description of changes in release */
   body?: string | boolean | number
@@ -29,7 +36,8 @@ export interface SoftpropsActionGhReleaseV1Inputs {
   fail_on_unmatched_files?: string | boolean | number
   /** Repository to make releases against, in <owner>\/<repo> format */
   repository?: string | boolean | number
-  /** Authorized secret GitHub Personal Access Token. Defaults to github.token */
+  /** Authorized secret GitHub Personal Access Token. Defaults to github.token
+   * @default ${{ github.token }} */
   token?: string | boolean | number
   /** Commitish value that determines where the Git tag is created from. Can be any branch or commit SHA. */
   target_commitish?: string | boolean | number
@@ -54,10 +62,16 @@ export interface SoftpropsActionGhReleaseV1Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'softprops/action-gh-release@v1'. */
+  /**
+   * The action reference.
+   * - Default: 'softprops/action-gh-release@v1' (uses latest v1.x.x)
+   * - Pinned: 'softprops/action-gh-release@v1' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'softprops/action-gh-release@v1'
-    | (`softprops/action-gh-release@v1.${string}` & {})
+    | 'softprops/action-gh-release@v1'
+    | (`softprops/action-gh-release@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: SoftpropsActionGhReleaseV1Inputs
   /** Sets environment variables for this step. */
@@ -72,6 +86,9 @@ export class SoftpropsActionGhReleaseV1 extends BaseAction<
   'softprops/action-gh-release@v1',
   SoftpropsActionGhReleaseV1Outputs
 > {
+  static readonly sourceVersion = 'v1'
+  static readonly defaultUses = 'softprops/action-gh-release@v1'
+
   constructor(props: SoftpropsActionGhReleaseV1Props = {}) {
     const outputNames = ['url', 'id', 'upload_url', 'assets'] as const
 
@@ -90,6 +107,8 @@ export class SoftpropsActionGhReleaseV1 extends BaseAction<
         uses: 'softprops/action-gh-release@v1'
       },
       outputNames,
+      'v1',
+      'softprops/action-gh-release@v1',
     )
   }
 }

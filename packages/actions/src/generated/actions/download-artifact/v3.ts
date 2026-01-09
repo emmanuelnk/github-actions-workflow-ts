@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/actions/download-artifact
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ActionsDownloadArtifactV3SourceVersion = 'v3.0.2'
+
 export interface ActionsDownloadArtifactV3Inputs {
   /** Artifact name */
   name?: string | boolean | number
@@ -26,10 +33,16 @@ export interface ActionsDownloadArtifactV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/download-artifact@v3'. */
+  /**
+   * The action reference.
+   * - Default: 'actions/download-artifact@v3' (uses latest v3.x.x)
+   * - Pinned: 'actions/download-artifact@v3.0.2' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'actions/download-artifact@v3'
-    | (`actions/download-artifact@v3.${string}` & {})
+    | 'actions/download-artifact@v3.0.2'
+    | (`actions/download-artifact@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsDownloadArtifactV3Inputs
   /** Sets environment variables for this step. */
@@ -44,6 +57,9 @@ export class ActionsDownloadArtifactV3 extends BaseAction<
   'actions/download-artifact@v3',
   ActionsDownloadArtifactV3Outputs
 > {
+  static readonly sourceVersion = 'v3.0.2'
+  static readonly defaultUses = 'actions/download-artifact@v3'
+
   constructor(props: ActionsDownloadArtifactV3Props = {}) {
     const outputNames = [] as const
 
@@ -62,6 +78,8 @@ export class ActionsDownloadArtifactV3 extends BaseAction<
         uses: 'actions/download-artifact@v3'
       },
       outputNames,
+      'v3.0.2',
+      'actions/download-artifact@v3',
     )
   }
 }

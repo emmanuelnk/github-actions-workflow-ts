@@ -215,12 +215,13 @@ async function resolveVersionTag(
 
 /**
  * Fetch action.yml from GitHub
+ * Returns both the parsed action.yml and the resolved version
  */
 async function fetchActionYml(
   owner: string,
   repo: string,
   version: string,
-): Promise<ActionYml | null> {
+): Promise<{ actionYml: ActionYml; resolvedVersion: string } | null> {
   // Resolve the version tag to the latest semver within that major version
   const resolvedVersion = await resolveVersionTag(owner, repo, version)
 
@@ -240,7 +241,10 @@ async function fetchActionYml(
       return null
     }
     const text = await response.text()
-    return yaml.load(text) as ActionYml
+    return {
+      actionYml: yaml.load(text) as ActionYml,
+      resolvedVersion,
+    }
   } catch (error) {
     console.warn(
       `  ⚠ Error fetching ${owner}/${repo}@${resolvedVersion}:`,
@@ -278,13 +282,20 @@ function generateInputsInterface(
     const description = escapeJsDoc(input.description)
     const isRequired = input.required === true || input.required === 'true'
     const isDeprecated = !!input.deprecationMessage
-    const deprecationNote = isDeprecated
+    const hasDefault = input.default !== undefined && input.default !== ''
+
+    // Build JSDoc parts
+    const descPart = description || ''
+    const defaultPart = hasDefault
+      ? `\n   * @default ${escapeJsDoc(String(input.default))}`
+      : ''
+    const deprecationPart = isDeprecated
       ? `\n   * @deprecated ${escapeJsDoc(input.deprecationMessage)}`
       : ''
 
     const jsDoc =
-      description || isDeprecated
-        ? `  /** ${description}${deprecationNote} */\n`
+      descPart || hasDefault || isDeprecated
+        ? `  /** ${descPart}${defaultPart}${deprecationPart} */\n`
         : ''
 
     // Determine property name - quote if contains special chars
@@ -328,11 +339,17 @@ function generateActionFile(
   owner: string,
   repo: string,
   version: string,
+  resolvedVersion: string,
   actionYml: ActionYml,
 ): string {
   const className = generateClassName(owner, repo, version)
   const basePath = getRelativeBasePath()
   const uses = `${owner}/${repo}@${version}`
+
+  // Format resolved version for display (e.g., "v6.2.0")
+  const sourceVersionDisplay = resolvedVersion.startsWith('v')
+    ? resolvedVersion
+    : `v${resolvedVersion}`
 
   const actionName = escapeJsDoc(actionYml.name) || `${owner}/${repo}`
   const actionDescription = escapeJsDoc(actionYml.description) || ''
@@ -360,6 +377,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/${owner}/${repo}
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ${className}SourceVersion = '${sourceVersionDisplay}'
+
 ${inputsInterface}
 
 ${outputsType}
@@ -371,8 +395,16 @@ export interface ${className}Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match '${uses}'. */
-  uses?: '${uses}' | \`${uses}.\${string}\` & {}
+  /**
+   * The action reference.
+   * - Default: '${uses}' (uses latest ${version}.x.x)
+   * - Pinned: '${owner}/${repo}@${sourceVersionDisplay}' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
+  uses?:
+    | '${uses}'
+    | '${owner}/${repo}@${sourceVersionDisplay}'
+    | (\`${owner}/${repo}@\${string}\` & {})
   /** A map of the input parameters defined by the action. */
   with?: ${className}Inputs
   /** Sets environment variables for this step. */
@@ -384,6 +416,9 @@ export interface ${className}Props {
 }
 
 export class ${className} extends BaseAction<'${uses}', ${className}Outputs> {
+  static readonly sourceVersion = '${sourceVersionDisplay}'
+  static readonly defaultUses = '${uses}'
+
   constructor(props: ${className}Props = {}) {
     const outputNames = ${outputNamesArray}
 
@@ -400,6 +435,8 @@ export class ${className} extends BaseAction<'${uses}', ${className}Outputs> {
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: '${uses}' },
       outputNames,
+      '${sourceVersionDisplay}',
+      '${uses}',
     )
   }
 }
@@ -566,8 +603,10 @@ async function generate(): Promise<void> {
     for (const version of action.versions) {
       console.log(`  → ${version}`)
 
-      const actionYml = await fetchActionYml(action.owner, action.repo, version)
-      if (!actionYml) continue
+      const result = await fetchActionYml(action.owner, action.repo, version)
+      if (!result) continue
+
+      const { actionYml, resolvedVersion } = result
 
       const className = generateClassName(action.owner, action.repo, version)
       const versionFile = version.toLowerCase().replace(/[^a-z0-9]/g, '')
@@ -577,6 +616,7 @@ async function generate(): Promise<void> {
         action.owner,
         action.repo,
         version,
+        resolvedVersion,
         actionYml,
       )
 

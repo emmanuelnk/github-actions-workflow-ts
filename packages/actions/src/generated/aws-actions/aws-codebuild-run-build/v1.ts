@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/aws-actions/aws-codebuild-run-build
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const AwsActionsAwsCodebuildRunBuildV1SourceVersion = 'v1.0.18'
+
 export interface AwsActionsAwsCodebuildRunBuildV1Inputs {
   /** AWS CodeBuild Project Name */
   'project-name': string | boolean | number
@@ -43,7 +50,8 @@ export interface AwsActionsAwsCodebuildRunBuildV1Inputs {
   'disable-github-env-vars'?: string | boolean | number
   /** The type of build output artifact */
   'artifacts-type-override'?: string | boolean | number
-  /** Comma separated list of process signals on which to stop the build. Default is SIGINT. */
+  /** Comma separated list of process signals on which to stop the build. Default is SIGINT.
+   * @default SIGINT */
   'stop-on-signals'?: string | boolean | number
 }
 
@@ -56,10 +64,16 @@ export interface AwsActionsAwsCodebuildRunBuildV1Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/aws-codebuild-run-build@v1'. */
+  /**
+   * The action reference.
+   * - Default: 'aws-actions/aws-codebuild-run-build@v1' (uses latest v1.x.x)
+   * - Pinned: 'aws-actions/aws-codebuild-run-build@v1.0.18' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'aws-actions/aws-codebuild-run-build@v1'
-    | (`aws-actions/aws-codebuild-run-build@v1.${string}` & {})
+    | 'aws-actions/aws-codebuild-run-build@v1.0.18'
+    | (`aws-actions/aws-codebuild-run-build@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAwsCodebuildRunBuildV1Inputs
   /** Sets environment variables for this step. */
@@ -74,6 +88,9 @@ export class AwsActionsAwsCodebuildRunBuildV1 extends BaseAction<
   'aws-actions/aws-codebuild-run-build@v1',
   AwsActionsAwsCodebuildRunBuildV1Outputs
 > {
+  static readonly sourceVersion = 'v1.0.18'
+  static readonly defaultUses = 'aws-actions/aws-codebuild-run-build@v1'
+
   constructor(props: AwsActionsAwsCodebuildRunBuildV1Props = {}) {
     const outputNames = ['aws-build-id'] as const
 
@@ -92,6 +109,8 @@ export class AwsActionsAwsCodebuildRunBuildV1 extends BaseAction<
         uses: 'aws-actions/aws-codebuild-run-build@v1'
       },
       outputNames,
+      'v1.0.18',
+      'aws-actions/aws-codebuild-run-build@v1',
     )
   }
 }

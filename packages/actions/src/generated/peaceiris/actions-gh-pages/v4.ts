@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/peaceiris/actions-gh-pages
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const PeaceirisActionsGhPagesV4SourceVersion = 'v4.0.0'
+
 export interface PeaceirisActionsGhPagesV4Inputs {
   /** Set a SSH private key from repository secret value for pushing to the remote branch. */
   deploy_key?: string | boolean | number
@@ -17,19 +24,24 @@ export interface PeaceirisActionsGhPagesV4Inputs {
   github_token?: string | boolean | number
   /** Set a personal access token for pushing to the remote branch. */
   personal_token?: string | boolean | number
-  /** Set a target branch for deployment. */
+  /** Set a target branch for deployment.
+   * @default gh-pages */
   publish_branch?: string | boolean | number
-  /** Set an input directory for deployment. */
+  /** Set an input directory for deployment.
+   * @default public */
   publish_dir?: string | boolean | number
   /** Set an destination subdirectory for deployment. */
   destination_dir?: string | boolean | number
   /** Set an external repository (owner\/repo). */
   external_repository?: string | boolean | number
-  /** If empty commits should be made to the publication branch */
+  /** If empty commits should be made to the publication branch
+   * @default false */
   allow_empty_commit?: string | boolean | number
-  /** If existing files in the publish branch should be not removed before deploying */
+  /** If existing files in the publish branch should be not removed before deploying
+   * @default false */
   keep_files?: string | boolean | number
-  /** Keep only the latest commit on a GitHub Pages branch */
+  /** Keep only the latest commit on a GitHub Pages branch
+   * @default false */
   force_orphan?: string | boolean | number
   /** Set Git user.name */
   user_name?: string | boolean | number
@@ -43,13 +55,16 @@ export interface PeaceirisActionsGhPagesV4Inputs {
   tag_name?: string | boolean | number
   /** Set tag message */
   tag_message?: string | boolean | number
-  /** Enable the GitHub Pages built-in Jekyll */
+  /** Enable the GitHub Pages built-in Jekyll
+   * @default false */
   enable_jekyll?: string | boolean | number
-  /** An alias for enable_jekyll to disable adding .nojekyll file to a publishing branch */
+  /** An alias for enable_jekyll to disable adding .nojekyll file to a publishing branch
+   * @default false */
   disable_nojekyll?: string | boolean | number
   /** Set custom domain */
   cname?: string | boolean | number
-  /** Set files or directories to exclude from a publish directory. */
+  /** Set files or directories to exclude from a publish directory.
+   * @default .github */
   exclude_assets?: string | boolean | number
 }
 
@@ -62,10 +77,16 @@ export interface PeaceirisActionsGhPagesV4Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'peaceiris/actions-gh-pages@v4'. */
+  /**
+   * The action reference.
+   * - Default: 'peaceiris/actions-gh-pages@v4' (uses latest v4.x.x)
+   * - Pinned: 'peaceiris/actions-gh-pages@v4.0.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'peaceiris/actions-gh-pages@v4'
-    | (`peaceiris/actions-gh-pages@v4.${string}` & {})
+    | 'peaceiris/actions-gh-pages@v4.0.0'
+    | (`peaceiris/actions-gh-pages@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: PeaceirisActionsGhPagesV4Inputs
   /** Sets environment variables for this step. */
@@ -80,6 +101,9 @@ export class PeaceirisActionsGhPagesV4 extends BaseAction<
   'peaceiris/actions-gh-pages@v4',
   PeaceirisActionsGhPagesV4Outputs
 > {
+  static readonly sourceVersion = 'v4.0.0'
+  static readonly defaultUses = 'peaceiris/actions-gh-pages@v4'
+
   constructor(props: PeaceirisActionsGhPagesV4Props = {}) {
     const outputNames = [] as const
 
@@ -98,6 +122,8 @@ export class PeaceirisActionsGhPagesV4 extends BaseAction<
         uses: 'peaceiris/actions-gh-pages@v4'
       },
       outputNames,
+      'v4.0.0',
+      'peaceiris/actions-gh-pages@v4',
     )
   }
 }

@@ -10,18 +10,29 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/docker/setup-buildx-action
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const DockerSetupBuildxActionV2SourceVersion = 'v2.10.0'
+
 export interface DockerSetupBuildxActionV2Inputs {
   /** Buildx version. (eg. v0.3.0) */
   version?: string | boolean | number
-  /** Sets the builder driver to be used */
+  /** Sets the builder driver to be used
+   * @default docker-container */
   driver?: string | boolean | number
   /** List of additional driver-specific options. (eg. image=moby\/buildkit:master) */
   'driver-opts'?: string | boolean | number
-  /** Flags for buildkitd daemon */
+  /** Flags for buildkitd daemon
+   * @default --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host */
   'buildkitd-flags'?: string | boolean | number
-  /** Sets up docker build command as an alias to docker buildx build */
+  /** Sets up docker build command as an alias to docker buildx build
+   * @default false */
   install?: string | boolean | number
-  /** Switch to this builder instance */
+  /** Switch to this builder instance
+   * @default true */
   use?: string | boolean | number
   /** Optional address for docker socket or context from `docker context ls` */
   endpoint?: string | boolean | number
@@ -33,7 +44,8 @@ export interface DockerSetupBuildxActionV2Inputs {
   'config-inline'?: string | boolean | number
   /** Append additional nodes to the builder */
   append?: string | boolean | number
-  /** Cleanup temp files and remove builder at the end of a job */
+  /** Cleanup temp files and remove builder at the end of a job
+   * @default true */
   cleanup?: string | boolean | number
 }
 
@@ -53,10 +65,16 @@ export interface DockerSetupBuildxActionV2Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'docker/setup-buildx-action@v2'. */
+  /**
+   * The action reference.
+   * - Default: 'docker/setup-buildx-action@v2' (uses latest v2.x.x)
+   * - Pinned: 'docker/setup-buildx-action@v2.10.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'docker/setup-buildx-action@v2'
-    | (`docker/setup-buildx-action@v2.${string}` & {})
+    | 'docker/setup-buildx-action@v2.10.0'
+    | (`docker/setup-buildx-action@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerSetupBuildxActionV2Inputs
   /** Sets environment variables for this step. */
@@ -71,6 +89,9 @@ export class DockerSetupBuildxActionV2 extends BaseAction<
   'docker/setup-buildx-action@v2',
   DockerSetupBuildxActionV2Outputs
 > {
+  static readonly sourceVersion = 'v2.10.0'
+  static readonly defaultUses = 'docker/setup-buildx-action@v2'
+
   constructor(props: DockerSetupBuildxActionV2Props = {}) {
     const outputNames = [
       'name',
@@ -97,6 +118,8 @@ export class DockerSetupBuildxActionV2 extends BaseAction<
         uses: 'docker/setup-buildx-action@v2'
       },
       outputNames,
+      'v2.10.0',
+      'docker/setup-buildx-action@v2',
     )
   }
 }

@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/github/codeql-action
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const GithubCodeqlActionV3SourceVersion = 'v3.31.9'
+
 export type GithubCodeqlActionV3Inputs = Record<string, never>
 
 export type GithubCodeqlActionV3Outputs = never
@@ -21,8 +28,16 @@ export interface GithubCodeqlActionV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'github/codeql-action@v3'. */
-  uses?: 'github/codeql-action@v3' | (`github/codeql-action@v3.${string}` & {})
+  /**
+   * The action reference.
+   * - Default: 'github/codeql-action@v3' (uses latest v3.x.x)
+   * - Pinned: 'github/codeql-action@v3.31.9' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
+  uses?:
+    | 'github/codeql-action@v3'
+    | 'github/codeql-action@v3.31.9'
+    | (`github/codeql-action@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: GithubCodeqlActionV3Inputs
   /** Sets environment variables for this step. */
@@ -37,6 +52,9 @@ export class GithubCodeqlActionV3 extends BaseAction<
   'github/codeql-action@v3',
   GithubCodeqlActionV3Outputs
 > {
+  static readonly sourceVersion = 'v3.31.9'
+  static readonly defaultUses = 'github/codeql-action@v3'
+
   constructor(props: GithubCodeqlActionV3Props = {}) {
     const outputNames = [] as const
 
@@ -53,6 +71,8 @@ export class GithubCodeqlActionV3 extends BaseAction<
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'github/codeql-action@v3' },
       outputNames,
+      'v3.31.9',
+      'github/codeql-action@v3',
     )
   }
 }

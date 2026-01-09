@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/docker/login-action
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const DockerLoginActionV3SourceVersion = 'v3.6.0'
+
 export interface DockerLoginActionV3Inputs {
   /** Server address of Docker registry. If not set then will default to Docker Hub */
   registry?: string | boolean | number
@@ -19,7 +26,8 @@ export interface DockerLoginActionV3Inputs {
   password?: string | boolean | number
   /** Specifies whether the given registry is ECR (auto, true or false) */
   ecr?: string | boolean | number
-  /** Log out from the Docker registry at the end of a job */
+  /** Log out from the Docker registry at the end of a job
+   * @default true */
   logout?: string | boolean | number
   /** Raw authentication to registries, defined as YAML objects */
   'registry-auth'?: string | boolean | number
@@ -34,8 +42,16 @@ export interface DockerLoginActionV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'docker/login-action@v3'. */
-  uses?: 'docker/login-action@v3' | (`docker/login-action@v3.${string}` & {})
+  /**
+   * The action reference.
+   * - Default: 'docker/login-action@v3' (uses latest v3.x.x)
+   * - Pinned: 'docker/login-action@v3.6.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
+  uses?:
+    | 'docker/login-action@v3'
+    | 'docker/login-action@v3.6.0'
+    | (`docker/login-action@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerLoginActionV3Inputs
   /** Sets environment variables for this step. */
@@ -50,6 +66,9 @@ export class DockerLoginActionV3 extends BaseAction<
   'docker/login-action@v3',
   DockerLoginActionV3Outputs
 > {
+  static readonly sourceVersion = 'v3.6.0'
+  static readonly defaultUses = 'docker/login-action@v3'
+
   constructor(props: DockerLoginActionV3Props = {}) {
     const outputNames = [] as const
 
@@ -66,6 +85,8 @@ export class DockerLoginActionV3 extends BaseAction<
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'docker/login-action@v3' },
       outputNames,
+      'v3.6.0',
+      'docker/login-action@v3',
     )
   }
 }

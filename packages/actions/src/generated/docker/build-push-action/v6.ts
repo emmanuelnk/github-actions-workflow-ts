@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/docker/build-push-action
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const DockerBuildPushActionV6SourceVersion = 'v6.18.0'
+
 export interface DockerBuildPushActionV6Inputs {
   /** List of a customs host-to-IP mapping (e.g., docker:10.180.0.1) */
   'add-hosts'?: string | boolean | number
@@ -39,11 +46,13 @@ export interface DockerBuildPushActionV6Inputs {
   file?: string | boolean | number
   /** List of metadata for an image */
   labels?: string | boolean | number
-  /** Load is a shorthand for --output=type=docker */
+  /** Load is a shorthand for --output=type=docker
+   * @default false */
   load?: string | boolean | number
   /** Set the networking mode for the RUN instructions during build */
   network?: string | boolean | number
-  /** Do not use cache when building the image */
+  /** Do not use cache when building the image
+   * @default false */
   'no-cache'?: string | boolean | number
   /** Do not cache specified stages */
   'no-cache-filters'?: string | boolean | number
@@ -53,9 +62,11 @@ export interface DockerBuildPushActionV6Inputs {
   platforms?: string | boolean | number
   /** Generate provenance attestation for the build (shorthand for --attest=type=provenance) */
   provenance?: string | boolean | number
-  /** Always attempt to pull all referenced images */
+  /** Always attempt to pull all referenced images
+   * @default false */
   pull?: string | boolean | number
-  /** Push is a shorthand for --output=type=registry */
+  /** Push is a shorthand for --output=type=registry
+   * @default false */
   push?: string | boolean | number
   /** Generate SBOM attestation for the build (shorthand for --attest=type=sbom) */
   sbom?: string | boolean | number
@@ -75,7 +86,8 @@ export interface DockerBuildPushActionV6Inputs {
   target?: string | boolean | number
   /** Ulimit options (e.g., nofile=1024:1024) */
   ulimit?: string | boolean | number
-  /** GitHub Token used to authenticate against a repository for Git context */
+  /** GitHub Token used to authenticate against a repository for Git context
+   * @default ${{ github.token }} */
   'github-token'?: string | boolean | number
 }
 
@@ -88,10 +100,16 @@ export interface DockerBuildPushActionV6Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'docker/build-push-action@v6'. */
+  /**
+   * The action reference.
+   * - Default: 'docker/build-push-action@v6' (uses latest v6.x.x)
+   * - Pinned: 'docker/build-push-action@v6.18.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'docker/build-push-action@v6'
-    | (`docker/build-push-action@v6.${string}` & {})
+    | 'docker/build-push-action@v6.18.0'
+    | (`docker/build-push-action@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerBuildPushActionV6Inputs
   /** Sets environment variables for this step. */
@@ -106,6 +124,9 @@ export class DockerBuildPushActionV6 extends BaseAction<
   'docker/build-push-action@v6',
   DockerBuildPushActionV6Outputs
 > {
+  static readonly sourceVersion = 'v6.18.0'
+  static readonly defaultUses = 'docker/build-push-action@v6'
+
   constructor(props: DockerBuildPushActionV6Props = {}) {
     const outputNames = ['imageid', 'digest', 'metadata'] as const
 
@@ -124,6 +145,8 @@ export class DockerBuildPushActionV6 extends BaseAction<
         uses: 'docker/build-push-action@v6'
       },
       outputNames,
+      'v6.18.0',
+      'docker/build-push-action@v6',
     )
   }
 }

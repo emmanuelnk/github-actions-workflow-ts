@@ -41,7 +41,7 @@ const checkout = new ActionsCheckoutV4({
 const setupNode = new ActionsSetupNodeV4({
   id: 'setup-node',
   name: 'Setup Node.js',
-  uses: 'actions/setup-node@v4', // version is enforced! i.e. actions/setup-node@v3 would be invalid
+  uses: 'actions/setup-node@v4',
   with: {
     'node-version': '20.x',
     cache: 'pnpm',

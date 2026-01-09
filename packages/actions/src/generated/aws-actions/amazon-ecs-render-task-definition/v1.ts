@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/aws-actions/amazon-ecs-render-task-definition
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const AwsActionsAmazonEcsRenderTaskDefinitionV1SourceVersion = 'v1.8.2'
+
 export interface AwsActionsAmazonEcsRenderTaskDefinitionV1Inputs {
   /** The path to the ECS task definition JSON file */
   'task-definition'?: string | boolean | number
@@ -48,10 +55,16 @@ export interface AwsActionsAmazonEcsRenderTaskDefinitionV1Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/amazon-ecs-render-task-definition@v1'. */
+  /**
+   * The action reference.
+   * - Default: 'aws-actions/amazon-ecs-render-task-definition@v1' (uses latest v1.x.x)
+   * - Pinned: 'aws-actions/amazon-ecs-render-task-definition@v1.8.2' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'aws-actions/amazon-ecs-render-task-definition@v1'
-    | (`aws-actions/amazon-ecs-render-task-definition@v1.${string}` & {})
+    | 'aws-actions/amazon-ecs-render-task-definition@v1.8.2'
+    | (`aws-actions/amazon-ecs-render-task-definition@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcsRenderTaskDefinitionV1Inputs
   /** Sets environment variables for this step. */
@@ -66,6 +79,10 @@ export class AwsActionsAmazonEcsRenderTaskDefinitionV1 extends BaseAction<
   'aws-actions/amazon-ecs-render-task-definition@v1',
   AwsActionsAmazonEcsRenderTaskDefinitionV1Outputs
 > {
+  static readonly sourceVersion = 'v1.8.2'
+  static readonly defaultUses =
+    'aws-actions/amazon-ecs-render-task-definition@v1'
+
   constructor(props: AwsActionsAmazonEcsRenderTaskDefinitionV1Props = {}) {
     const outputNames = ['task-definition'] as const
 
@@ -84,6 +101,8 @@ export class AwsActionsAmazonEcsRenderTaskDefinitionV1 extends BaseAction<
         uses: 'aws-actions/amazon-ecs-render-task-definition@v1'
       },
       outputNames,
+      'v1.8.2',
+      'aws-actions/amazon-ecs-render-task-definition@v1',
     )
   }
 }

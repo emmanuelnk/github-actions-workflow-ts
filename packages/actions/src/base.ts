@@ -13,6 +13,18 @@ export class BaseAction<
   TOutputs extends string,
 > extends Step {
   /**
+   * The version of the action from which types were generated.
+   * Override in subclasses.
+   */
+  static readonly sourceVersion: string = ''
+
+  /**
+   * The default uses string for this action (e.g., 'actions/checkout@v4').
+   * Override in subclasses.
+   */
+  static readonly defaultUses: string = ''
+
+  /**
    * The step configuration with strongly-typed `uses` field.
    */
   declare readonly step: GeneratedWorkflowTypes.Step & { uses: TUses }
@@ -28,8 +40,23 @@ export class BaseAction<
   constructor(
     stepProps: GeneratedWorkflowTypes.Step & { uses: TUses },
     outputNames: readonly TOutputs[],
+    sourceVersion?: string,
+    defaultUses?: string,
   ) {
     super(stepProps)
+
+    // Store source version info for CLI validation
+    // Using underscore prefix to indicate internal properties
+    const stepWithMeta = this.step as GeneratedWorkflowTypes.Step & {
+      _sourceVersion?: string
+      _defaultUses?: string
+    }
+    if (sourceVersion) {
+      stepWithMeta._sourceVersion = sourceVersion
+    }
+    if (defaultUses) {
+      stepWithMeta._defaultUses = defaultUses
+    }
 
     // Build the outputs object with expression strings
     this.outputs = {} as Record<TOutputs, string>

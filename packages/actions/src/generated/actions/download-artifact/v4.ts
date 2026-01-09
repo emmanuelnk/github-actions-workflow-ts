@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/actions/download-artifact
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ActionsDownloadArtifactV4SourceVersion = 'v4.3.0'
+
 export interface ActionsDownloadArtifactV4Inputs {
   /** Name of the artifact to download. If unspecified, all artifacts for the run are downloaded. */
   name?: string | boolean | number
@@ -19,13 +26,16 @@ export interface ActionsDownloadArtifactV4Inputs {
   path?: string | boolean | number
   /** A glob pattern matching the artifacts that should be downloaded. Ignored if name is specified. */
   pattern?: string | boolean | number
-  /** When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. */
+  /** When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path.
+   * @default false */
   'merge-multiple'?: string | boolean | number
   /** The GitHub token used to authenticate with the GitHub API. This is required when downloading artifacts from a different repository or from a different workflow run. If this is not specified, the action will attempt to download artifacts from the current repository and the current workflow run. */
   'github-token'?: string | boolean | number
-  /** The repository owner and the repository name joined together by "\/". If github-token is specified, this is the repository that artifacts will be downloaded from. */
+  /** The repository owner and the repository name joined together by "\/". If github-token is specified, this is the repository that artifacts will be downloaded from.
+   * @default ${{ github.repository }} */
   repository?: string | boolean | number
-  /** The id of the workflow run where the desired download artifact was uploaded from. If github-token is specified, this is the run that artifacts will be downloaded from. */
+  /** The id of the workflow run where the desired download artifact was uploaded from. If github-token is specified, this is the run that artifacts will be downloaded from.
+   * @default ${{ github.run_id }} */
   'run-id'?: string | boolean | number
 }
 
@@ -38,10 +48,16 @@ export interface ActionsDownloadArtifactV4Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/download-artifact@v4'. */
+  /**
+   * The action reference.
+   * - Default: 'actions/download-artifact@v4' (uses latest v4.x.x)
+   * - Pinned: 'actions/download-artifact@v4.3.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'actions/download-artifact@v4'
-    | (`actions/download-artifact@v4.${string}` & {})
+    | 'actions/download-artifact@v4.3.0'
+    | (`actions/download-artifact@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsDownloadArtifactV4Inputs
   /** Sets environment variables for this step. */
@@ -56,6 +72,9 @@ export class ActionsDownloadArtifactV4 extends BaseAction<
   'actions/download-artifact@v4',
   ActionsDownloadArtifactV4Outputs
 > {
+  static readonly sourceVersion = 'v4.3.0'
+  static readonly defaultUses = 'actions/download-artifact@v4'
+
   constructor(props: ActionsDownloadArtifactV4Props = {}) {
     const outputNames = ['download-path'] as const
 
@@ -74,6 +93,8 @@ export class ActionsDownloadArtifactV4 extends BaseAction<
         uses: 'actions/download-artifact@v4'
       },
       outputNames,
+      'v4.3.0',
+      'actions/download-artifact@v4',
     )
   }
 }

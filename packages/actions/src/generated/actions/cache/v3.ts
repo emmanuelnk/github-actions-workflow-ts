@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/actions/cache
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ActionsCacheV3SourceVersion = 'v3.5.0'
+
 export interface ActionsCacheV3Inputs {
   /** A list of files, directories, and wildcard patterns to cache and restore */
   path: string | boolean | number
@@ -19,11 +26,14 @@ export interface ActionsCacheV3Inputs {
   'restore-keys'?: string | boolean | number
   /** The chunk size used to split up large files during upload, in bytes */
   'upload-chunk-size'?: string | boolean | number
-  /** An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms */
+  /** An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms
+   * @default false */
   enableCrossOsArchive?: string | boolean | number
-  /** Fail the workflow if cache entry is not found */
+  /** Fail the workflow if cache entry is not found
+   * @default false */
   'fail-on-cache-miss'?: string | boolean | number
-  /** Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache */
+  /** Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache
+   * @default false */
   'lookup-only'?: string | boolean | number
 }
 
@@ -36,8 +46,16 @@ export interface ActionsCacheV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/cache@v3'. */
-  uses?: 'actions/cache@v3' | (`actions/cache@v3.${string}` & {})
+  /**
+   * The action reference.
+   * - Default: 'actions/cache@v3' (uses latest v3.x.x)
+   * - Pinned: 'actions/cache@v3.5.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
+  uses?:
+    | 'actions/cache@v3'
+    | 'actions/cache@v3.5.0'
+    | (`actions/cache@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsCacheV3Inputs
   /** Sets environment variables for this step. */
@@ -52,6 +70,9 @@ export class ActionsCacheV3 extends BaseAction<
   'actions/cache@v3',
   ActionsCacheV3Outputs
 > {
+  static readonly sourceVersion = 'v3.5.0'
+  static readonly defaultUses = 'actions/cache@v3'
+
   constructor(props: ActionsCacheV3Props = {}) {
     const outputNames = ['cache-hit'] as const
 
@@ -68,6 +89,8 @@ export class ActionsCacheV3 extends BaseAction<
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/cache@v3' },
       outputNames,
+      'v3.5.0',
+      'actions/cache@v3',
     )
   }
 }

@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/softprops/action-gh-release
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const SoftpropsActionGhReleaseV2SourceVersion = 'v2.5.0'
+
 export interface SoftpropsActionGhReleaseV2Inputs {
   /** Note-worthy description of changes in release */
   body?: string | boolean | number
@@ -29,13 +36,15 @@ export interface SoftpropsActionGhReleaseV2Inputs {
   files?: string | boolean | number
   /** Base directory to resolve 'files' globs against (defaults to job working-directory) */
   working_directory?: string | boolean | number
-  /** Overwrite existing files with the same name. Defaults to true */
+  /** Overwrite existing files with the same name. Defaults to true
+   * @default true */
   overwrite_files?: string | boolean | number
   /** Fails if any of the `files` globs match nothing. Defaults to false */
   fail_on_unmatched_files?: string | boolean | number
   /** Repository to make releases against, in <owner>\/<repo> format */
   repository?: string | boolean | number
-  /** Authorized secret GitHub Personal Access Token. Defaults to github.token */
+  /** Authorized secret GitHub Personal Access Token. Defaults to github.token
+   * @default ${{ github.token }} */
   token?: string | boolean | number
   /** Commitish value that determines where the Git tag is created from. Can be any branch or commit SHA. */
   target_commitish?: string | boolean | number
@@ -62,10 +71,16 @@ export interface SoftpropsActionGhReleaseV2Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'softprops/action-gh-release@v2'. */
+  /**
+   * The action reference.
+   * - Default: 'softprops/action-gh-release@v2' (uses latest v2.x.x)
+   * - Pinned: 'softprops/action-gh-release@v2.5.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'softprops/action-gh-release@v2'
-    | (`softprops/action-gh-release@v2.${string}` & {})
+    | 'softprops/action-gh-release@v2.5.0'
+    | (`softprops/action-gh-release@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: SoftpropsActionGhReleaseV2Inputs
   /** Sets environment variables for this step. */
@@ -80,6 +95,9 @@ export class SoftpropsActionGhReleaseV2 extends BaseAction<
   'softprops/action-gh-release@v2',
   SoftpropsActionGhReleaseV2Outputs
 > {
+  static readonly sourceVersion = 'v2.5.0'
+  static readonly defaultUses = 'softprops/action-gh-release@v2'
+
   constructor(props: SoftpropsActionGhReleaseV2Props = {}) {
     const outputNames = ['url', 'id', 'upload_url', 'assets'] as const
 
@@ -98,6 +116,8 @@ export class SoftpropsActionGhReleaseV2 extends BaseAction<
         uses: 'softprops/action-gh-release@v2'
       },
       outputNames,
+      'v2.5.0',
+      'softprops/action-gh-release@v2',
     )
   }
 }

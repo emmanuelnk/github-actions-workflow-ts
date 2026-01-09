@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/aws-actions/amazon-ecs-deploy-task-definition
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const AwsActionsAmazonEcsDeployTaskDefinitionV2SourceVersion = 'v2.5.1'
+
 export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Inputs {
   /** The path to the ECS task definition file to register. */
   'task-definition': string | boolean | number
@@ -83,10 +90,16 @@ export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/amazon-ecs-deploy-task-definition@v2'. */
+  /**
+   * The action reference.
+   * - Default: 'aws-actions/amazon-ecs-deploy-task-definition@v2' (uses latest v2.x.x)
+   * - Pinned: 'aws-actions/amazon-ecs-deploy-task-definition@v2.5.1' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'aws-actions/amazon-ecs-deploy-task-definition@v2'
-    | (`aws-actions/amazon-ecs-deploy-task-definition@v2.${string}` & {})
+    | 'aws-actions/amazon-ecs-deploy-task-definition@v2.5.1'
+    | (`aws-actions/amazon-ecs-deploy-task-definition@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcsDeployTaskDefinitionV2Inputs
   /** Sets environment variables for this step. */
@@ -101,6 +114,10 @@ export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
   'aws-actions/amazon-ecs-deploy-task-definition@v2',
   AwsActionsAmazonEcsDeployTaskDefinitionV2Outputs
 > {
+  static readonly sourceVersion = 'v2.5.1'
+  static readonly defaultUses =
+    'aws-actions/amazon-ecs-deploy-task-definition@v2'
+
   constructor(props: AwsActionsAmazonEcsDeployTaskDefinitionV2Props = {}) {
     const outputNames = [
       'task-definition-arn',
@@ -123,6 +140,8 @@ export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
         uses: 'aws-actions/amazon-ecs-deploy-task-definition@v2'
       },
       outputNames,
+      'v2.5.1',
+      'aws-actions/amazon-ecs-deploy-task-definition@v2',
     )
   }
 }

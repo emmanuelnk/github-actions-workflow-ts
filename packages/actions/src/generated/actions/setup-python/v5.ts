@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/actions/setup-python
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ActionsSetupPythonV5SourceVersion = 'v5.6.0'
+
 export interface ActionsSetupPythonV5Inputs {
   /** Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset. */
   'python-version'?: string | boolean | number
@@ -19,17 +26,22 @@ export interface ActionsSetupPythonV5Inputs {
   cache?: string | boolean | number
   /** The target architecture (x86, x64, arm64) of the Python or PyPy interpreter. */
   architecture?: string | boolean | number
-  /** Set this option if you want the action to check for the latest available version that satisfies the version spec. */
+  /** Set this option if you want the action to check for the latest available version that satisfies the version spec.
+   * @default false */
   'check-latest'?: string | boolean | number
-  /** The token used to authenticate when fetching Python distributions from https:\/\/github.com\/actions\/python-versions. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting. */
+  /** The token used to authenticate when fetching Python distributions from https:\/\/github.com\/actions\/python-versions. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+   * @default ${{ github.server_url == 'https:\/\/github.com' && github.token || '' }} */
   token?: string | boolean | number
   /** Used to specify the path to dependency files. Supports wildcards or a list of file names for caching multiple dependencies. */
   'cache-dependency-path'?: string | boolean | number
-  /** Set this option if you want the action to update environment variables. */
+  /** Set this option if you want the action to update environment variables.
+   * @default true */
   'update-environment'?: string | boolean | number
-  /** When 'true', a version range passed to 'python-version' input will match prerelease versions if no GA versions are found. Only 'x.y' version range is supported for CPython. */
+  /** When 'true', a version range passed to 'python-version' input will match prerelease versions if no GA versions are found. Only 'x.y' version range is supported for CPython.
+   * @default false */
   'allow-prereleases'?: string | boolean | number
-  /** When 'true', use the freethreaded version of Python. */
+  /** When 'true', use the freethreaded version of Python.
+   * @default false */
   freethreaded?: string | boolean | number
 }
 
@@ -45,8 +57,16 @@ export interface ActionsSetupPythonV5Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/setup-python@v5'. */
-  uses?: 'actions/setup-python@v5' | (`actions/setup-python@v5.${string}` & {})
+  /**
+   * The action reference.
+   * - Default: 'actions/setup-python@v5' (uses latest v5.x.x)
+   * - Pinned: 'actions/setup-python@v5.6.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
+  uses?:
+    | 'actions/setup-python@v5'
+    | 'actions/setup-python@v5.6.0'
+    | (`actions/setup-python@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsSetupPythonV5Inputs
   /** Sets environment variables for this step. */
@@ -61,6 +81,9 @@ export class ActionsSetupPythonV5 extends BaseAction<
   'actions/setup-python@v5',
   ActionsSetupPythonV5Outputs
 > {
+  static readonly sourceVersion = 'v5.6.0'
+  static readonly defaultUses = 'actions/setup-python@v5'
+
   constructor(props: ActionsSetupPythonV5Props = {}) {
     const outputNames = ['python-version', 'cache-hit', 'python-path'] as const
 
@@ -77,6 +100,8 @@ export class ActionsSetupPythonV5 extends BaseAction<
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/setup-python@v5' },
       outputNames,
+      'v5.6.0',
+      'actions/setup-python@v5',
     )
   }
 }

@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/actions/cache
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ActionsCacheV4SourceVersion = 'v4.3.0'
+
 export interface ActionsCacheV4Inputs {
   /** A list of files, directories, and wildcard patterns to cache and restore */
   path: string | boolean | number
@@ -19,13 +26,17 @@ export interface ActionsCacheV4Inputs {
   'restore-keys'?: string | boolean | number
   /** The chunk size used to split up large files during upload, in bytes */
   'upload-chunk-size'?: string | boolean | number
-  /** An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms */
+  /** An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms
+   * @default false */
   enableCrossOsArchive?: string | boolean | number
-  /** Fail the workflow if cache entry is not found */
+  /** Fail the workflow if cache entry is not found
+   * @default false */
   'fail-on-cache-miss'?: string | boolean | number
-  /** Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache */
+  /** Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache
+   * @default false */
   'lookup-only'?: string | boolean | number
   /** Run the post step to save the cache even if another step before fails
+   * @default false
    * @deprecated save-always does not work as intended and will be removed in a future release. A separate `actions\/cache\/restore` step should be used instead. See https:\/\/github.com\/actions\/cache\/tree\/main\/save#always-save-cache for more details. */
   'save-always'?: string | boolean | number
 }
@@ -39,8 +50,16 @@ export interface ActionsCacheV4Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/cache@v4'. */
-  uses?: 'actions/cache@v4' | (`actions/cache@v4.${string}` & {})
+  /**
+   * The action reference.
+   * - Default: 'actions/cache@v4' (uses latest v4.x.x)
+   * - Pinned: 'actions/cache@v4.3.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
+  uses?:
+    | 'actions/cache@v4'
+    | 'actions/cache@v4.3.0'
+    | (`actions/cache@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsCacheV4Inputs
   /** Sets environment variables for this step. */
@@ -55,6 +74,9 @@ export class ActionsCacheV4 extends BaseAction<
   'actions/cache@v4',
   ActionsCacheV4Outputs
 > {
+  static readonly sourceVersion = 'v4.3.0'
+  static readonly defaultUses = 'actions/cache@v4'
+
   constructor(props: ActionsCacheV4Props = {}) {
     const outputNames = ['cache-hit'] as const
 
@@ -71,6 +93,8 @@ export class ActionsCacheV4 extends BaseAction<
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/cache@v4' },
       outputNames,
+      'v4.3.0',
+      'actions/cache@v4',
     )
   }
 }

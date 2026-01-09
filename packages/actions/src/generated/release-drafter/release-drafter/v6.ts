@@ -10,8 +10,16 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/release-drafter/release-drafter
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const ReleaseDrafterReleaseDrafterV6SourceVersion = 'v6.1.0'
+
 export interface ReleaseDrafterReleaseDrafterV6Inputs {
-  /** If your workflow requires multiple release-drafter configs it be helpful to override the config-name. The config should still be located inside `.github` as that's where we are looking for config files. */
+  /** If your workflow requires multiple release-drafter configs it be helpful to override the config-name. The config should still be located inside `.github` as that's where we are looking for config files.
+   * @default release-drafter.yml */
   'config-name'?: string | boolean | number
   /** The name that will be used in the GitHub release that's created or updated. This will override any `name-template` specified in your `release-drafter.yml` if defined. */
   name?: string | boolean | number
@@ -58,10 +66,16 @@ export interface ReleaseDrafterReleaseDrafterV6Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'release-drafter/release-drafter@v6'. */
+  /**
+   * The action reference.
+   * - Default: 'release-drafter/release-drafter@v6' (uses latest v6.x.x)
+   * - Pinned: 'release-drafter/release-drafter@v6.1.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'release-drafter/release-drafter@v6'
-    | (`release-drafter/release-drafter@v6.${string}` & {})
+    | 'release-drafter/release-drafter@v6.1.0'
+    | (`release-drafter/release-drafter@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: ReleaseDrafterReleaseDrafterV6Inputs
   /** Sets environment variables for this step. */
@@ -76,6 +90,9 @@ export class ReleaseDrafterReleaseDrafterV6 extends BaseAction<
   'release-drafter/release-drafter@v6',
   ReleaseDrafterReleaseDrafterV6Outputs
 > {
+  static readonly sourceVersion = 'v6.1.0'
+  static readonly defaultUses = 'release-drafter/release-drafter@v6'
+
   constructor(props: ReleaseDrafterReleaseDrafterV6Props = {}) {
     const outputNames = [
       'id',
@@ -105,6 +122,8 @@ export class ReleaseDrafterReleaseDrafterV6 extends BaseAction<
         uses: 'release-drafter/release-drafter@v6'
       },
       outputNames,
+      'v6.1.0',
+      'release-drafter/release-drafter@v6',
     )
   }
 }

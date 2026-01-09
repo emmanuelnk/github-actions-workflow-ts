@@ -6,10 +6,42 @@ import fg from 'fast-glob'
 import { pathToFileURL } from 'url'
 import type { Workflow } from '@github-actions-workflow-ts/lib'
 import type { WacConfig } from './types/index.js'
+import {
+  validateActionVersion,
+  logVersionWarnings,
+  getActionPattern,
+  type VersionWarning,
+  type ActionVersionRegistry,
+} from '../validation/index.js'
+
+/**
+ * Strip internal metadata properties (prefixed with _) from workflow object.
+ * This removes properties like _sourceVersion and _defaultUses that are used
+ * for validation but shouldn't appear in the final YAML.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const stripInternalMetadata = (obj: any): any => {
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(stripInternalMetadata)
+  }
+
+  const result: Record<string, unknown> = {}
+  for (const key in obj) {
+    // Skip properties starting with underscore
+    if (key.startsWith('_')) {
+      continue
+    }
+    result[key] = stripInternalMetadata(obj[key])
+  }
+  return result
+}
 
 /**
  * Comment indicating the file should not be modified.
- * @type {string}
  */
 export const DEFAULT_HEADER_TEXT = [
   '# ------------DO-NOT-MODIFY-THIS-FILE------------',
@@ -124,7 +156,10 @@ export const writeWorkflowJSONToYamlFiles = (
       continue
     }
 
-    const workflowYaml = jsYaml.dump(workflow.workflow, {
+    // Strip internal metadata properties before YAML serialization
+    const cleanedWorkflow = stripInternalMetadata(workflow.workflow)
+
+    const workflowYaml = jsYaml.dump(cleanedWorkflow, {
       noRefs: !config.refs,
       ...(config.dumpOptions || {}),
     })
@@ -149,6 +184,180 @@ export const writeWorkflowJSONToYamlFiles = (
   }
 
   return workflowCount
+}
+
+/**
+ * Information about an action step including its uses string and source version if available.
+ */
+export interface ActionStepInfo {
+  uses: string
+  sourceVersion?: string
+  defaultUses?: string
+}
+
+/**
+ * Extract all 'uses' values from a workflow's steps, along with source version info if available.
+ */
+export const extractUsesFromWorkflow = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  workflow: any,
+): ActionStepInfo[] => {
+  const actions: ActionStepInfo[] = []
+
+  if (!workflow?.jobs) return actions
+
+  for (const jobName in workflow.jobs) {
+    const job = workflow.jobs[jobName]
+    if (!job?.steps || !Array.isArray(job.steps)) continue
+
+    for (const step of job.steps) {
+      if (step?.uses && typeof step.uses === 'string') {
+        actions.push({
+          uses: step.uses,
+          sourceVersion: step._sourceVersion,
+          defaultUses: step._defaultUses,
+        })
+      }
+    }
+  }
+
+  return actions
+}
+
+/**
+ * Build a registry of action source versions from an imported workflow module.
+ * Scans the module for SourceVersion exports that were re-exported from the actions package.
+ * Maps action patterns (e.g., 'actions/checkout@v6') to their source versions (e.g., 'v6.2.0').
+ */
+export const buildActionVersionRegistryFromModule = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  workflowModule: any,
+): ActionVersionRegistry => {
+  const registry: ActionVersionRegistry = new Map()
+
+  // The workflow module may have imported action classes from @github-actions-workflow-ts/actions
+  // We need to find any SourceVersion constants that were imported alongside them
+  // This is tricky because we don't have direct access to the actions package exports
+
+  // Instead, scan for any exported values that look like SourceVersion constants
+  for (const key in workflowModule) {
+    if (key.endsWith('SourceVersion')) {
+      const value = workflowModule[key]
+      if (typeof value === 'string') {
+        const className = key.replace('SourceVersion', '')
+        const actionClass = workflowModule[className]
+        if (typeof actionClass === 'function') {
+          try {
+            const instance = new (actionClass as new () => {
+              step?: { uses?: string }
+            })()
+            if (instance.step?.uses) {
+              registry.set(instance.step.uses, value)
+            }
+          } catch {
+            // Skip if constructor fails
+          }
+        }
+      }
+    }
+  }
+
+  return registry
+}
+
+/**
+ * Build a registry of action source versions from the actions package.
+ * Maps action patterns (e.g., 'actions/checkout@v6') to their source versions (e.g., 'v6.2.0').
+ */
+export const buildActionVersionRegistry =
+  async (): Promise<ActionVersionRegistry> => {
+    const registry: ActionVersionRegistry = new Map()
+
+    try {
+      // Try to import the actions package dynamically
+      // Using a variable to prevent static analysis from failing the build
+      const packageName = '@github-actions-workflow-ts/actions'
+      const actionsModule = (await import(packageName)) as Record<
+        string,
+        unknown
+      >
+
+      // Look for exports ending in 'SourceVersion' and their corresponding action metadata
+      for (const key in actionsModule) {
+        if (key.endsWith('SourceVersion')) {
+          const value = actionsModule[key]
+          if (typeof value === 'string') {
+            // The key format is like 'ActionsCheckoutV6SourceVersion'
+            // We need to map this to 'actions/checkout@v6'
+            const className = key.replace('SourceVersion', '')
+
+            // Try to find the corresponding class and get its default uses value
+            const actionClass = actionsModule[className]
+            if (
+              typeof actionClass === 'function' &&
+              'prototype' in actionClass
+            ) {
+              try {
+                // Create a temporary instance to get the default uses value
+                const instance = new (actionClass as new () => {
+                  step?: { uses?: string }
+                })()
+                if (instance.step?.uses) {
+                  // Extract the action pattern (e.g., 'actions/checkout@v6')
+                  registry.set(instance.step.uses, value)
+                }
+              } catch {
+                // Constructor might require arguments, skip this action
+              }
+            }
+          }
+        }
+      }
+    } catch {
+      // Package not installed or not available, skip version validation
+    }
+
+    return registry
+  }
+
+/**
+ * Validate action versions in a workflow against known source versions.
+ * Uses source version info embedded in the step by typed action classes,
+ * falling back to a registry lookup if not available.
+ */
+export const validateWorkflowVersions = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  workflow: any,
+  registry: ActionVersionRegistry,
+): VersionWarning[] => {
+  const warnings: VersionWarning[] = []
+  const actionSteps = extractUsesFromWorkflow(workflow)
+
+  for (const actionStep of actionSteps) {
+    // Prefer embedded source version from typed action class
+    let sourceVersion = actionStep.sourceVersion
+    const defaultUses = actionStep.defaultUses
+
+    // Fall back to registry lookup if no embedded version
+    if (!sourceVersion && registry.size > 0) {
+      const pattern = getActionPattern(actionStep.uses)
+      sourceVersion = registry.get(pattern)
+    }
+
+    // Also try matching against defaultUses if available
+    if (!sourceVersion && defaultUses && registry.size > 0) {
+      sourceVersion = registry.get(defaultUses)
+    }
+
+    if (sourceVersion) {
+      const warning = validateActionVersion(actionStep.uses, sourceVersion)
+      if (warning) {
+        warnings.push(warning)
+      }
+    }
+  }
+
+  return warnings
 }
 
 /**
@@ -177,11 +386,31 @@ export const generateWorkflowFiles = async (
   const config = getConfig() || {}
   const workflowFilePaths = getWorkflowFilePaths() || []
   let workflowCount = 0
+  const allWarnings: VersionWarning[] = []
+
+  // Build version registry for validation (if warnings are enabled)
+  const versionWarningsEnabled =
+    config.actionsPackageOutdatedVersionWarnings !== false
+  const registry = versionWarningsEnabled
+    ? await buildActionVersionRegistry()
+    : new Map()
 
   createWorkflowDirectory()
 
   for (const filePath of workflowFilePaths) {
     const workflows = await importWorkflowFile(filePath)
+
+    // Validate versions if enabled
+    if (versionWarningsEnabled) {
+      for (const workflowName in workflows) {
+        const workflow = workflows[workflowName]
+        if (workflow?.workflow) {
+          const warnings = validateWorkflowVersions(workflow.workflow, registry)
+          allWarnings.push(...warnings)
+        }
+      }
+    }
+
     workflowCount += writeWorkflowJSONToYamlFiles(
       workflows,
       relativePath(filePath),
@@ -195,4 +424,9 @@ export const generateWorkflowFiles = async (
   console.log(
     `[github-actions-workflow-ts] Successfully generated ${workflowCount} workflow file(s)`,
   )
+
+  // Log version warnings at the end
+  if (versionWarningsEnabled) {
+    logVersionWarnings(allWarnings)
+  }
 }

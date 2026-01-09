@@ -10,10 +10,18 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/docker/setup-buildx-action
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const DockerSetupBuildxActionV3SourceVersion = 'v3.12.0'
+
 export interface DockerSetupBuildxActionV3Inputs {
   /** Buildx version. (eg. v0.3.0) */
   version?: string | boolean | number
-  /** Sets the builder driver to be used */
+  /** Sets the builder driver to be used
+   * @default docker-container */
   driver?: string | boolean | number
   /** List of additional driver-specific options. (eg. image=moby\/buildkit:master) */
   'driver-opts'?: string | boolean | number
@@ -23,7 +31,8 @@ export interface DockerSetupBuildxActionV3Inputs {
   'buildkitd-config'?: string | boolean | number
   /** Inline BuildKit daemon config */
   'buildkitd-config-inline'?: string | boolean | number
-  /** Switch to this builder instance */
+  /** Switch to this builder instance
+   * @default true */
   use?: string | boolean | number
   /** Name of the builder. If not specified, one will be generated or if it already exists, it will be used instead of creating a new one. */
   name?: string | boolean | number
@@ -33,11 +42,14 @@ export interface DockerSetupBuildxActionV3Inputs {
   platforms?: string | boolean | number
   /** Append additional nodes to the builder */
   append?: string | boolean | number
-  /** Keep BuildKit state on cleanup. This is only useful on persistent self-hosted runners. */
+  /** Keep BuildKit state on cleanup. This is only useful on persistent self-hosted runners.
+   * @default false */
   'keep-state'?: string | boolean | number
-  /** Cache buildx binary to GitHub Actions cache backend */
+  /** Cache buildx binary to GitHub Actions cache backend
+   * @default true */
   'cache-binary'?: string | boolean | number
-  /** Cleanup temp files and remove builder at the end of a job */
+  /** Cleanup temp files and remove builder at the end of a job
+   * @default true */
   cleanup?: string | boolean | number
   /** BuildKit daemon config file
    * @deprecated Use buildkitd-config instead */
@@ -46,6 +58,7 @@ export interface DockerSetupBuildxActionV3Inputs {
    * @deprecated Use buildkitd-config-inline instead */
   'config-inline'?: string | boolean | number
   /** Sets up docker build command as an alias to docker buildx build
+   * @default false
    * @deprecated "docker buildx install" command is deprecated and will be removed in a future release, use BUILDX_BUILDER environment variable instead */
   install?: string | boolean | number
 }
@@ -66,10 +79,16 @@ export interface DockerSetupBuildxActionV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'docker/setup-buildx-action@v3'. */
+  /**
+   * The action reference.
+   * - Default: 'docker/setup-buildx-action@v3' (uses latest v3.x.x)
+   * - Pinned: 'docker/setup-buildx-action@v3.12.0' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'docker/setup-buildx-action@v3'
-    | (`docker/setup-buildx-action@v3.${string}` & {})
+    | 'docker/setup-buildx-action@v3.12.0'
+    | (`docker/setup-buildx-action@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerSetupBuildxActionV3Inputs
   /** Sets environment variables for this step. */
@@ -84,6 +103,9 @@ export class DockerSetupBuildxActionV3 extends BaseAction<
   'docker/setup-buildx-action@v3',
   DockerSetupBuildxActionV3Outputs
 > {
+  static readonly sourceVersion = 'v3.12.0'
+  static readonly defaultUses = 'docker/setup-buildx-action@v3'
+
   constructor(props: DockerSetupBuildxActionV3Props = {}) {
     const outputNames = [
       'name',
@@ -110,6 +132,8 @@ export class DockerSetupBuildxActionV3 extends BaseAction<
         uses: 'docker/setup-buildx-action@v3'
       },
       outputNames,
+      'v3.12.0',
+      'docker/setup-buildx-action@v3',
     )
   }
 }

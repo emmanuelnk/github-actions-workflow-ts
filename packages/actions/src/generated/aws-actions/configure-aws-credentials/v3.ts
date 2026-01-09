@@ -10,6 +10,13 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @see https://github.com/aws-actions/configure-aws-credentials
  */
 
+/**
+ * The version of the action from which these types were generated.
+ * Types are guaranteed to be accurate for this version and later.
+ * Using an earlier version may result in type mismatches.
+ */
+export const AwsActionsConfigureAwsCredentialsV3SourceVersion = 'v3.0.2'
+
 export interface AwsActionsConfigureAwsCredentialsV3Inputs {
   /** AWS Region, e.g. us-east-2 */
   'aws-region': string | boolean | number
@@ -25,7 +32,8 @@ export interface AwsActionsConfigureAwsCredentialsV3Inputs {
   'web-identity-token-file'?: string | boolean | number
   /** Use existing credentials from the environment to assume a new role, rather than providing credentials as input. */
   'role-chaining'?: string | boolean | number
-  /** The audience to use for the OIDC provider */
+  /** The audience to use for the OIDC provider
+   * @default sts.amazonaws.com */
   audience?: string | boolean | number
   /** Proxy to use for the AWS SDK agent */
   'http-proxy'?: string | boolean | number
@@ -68,10 +76,16 @@ export interface AwsActionsConfigureAwsCredentialsV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v3'. */
+  /**
+   * The action reference.
+   * - Default: 'aws-actions/configure-aws-credentials@v3' (uses latest v3.x.x)
+   * - Pinned: 'aws-actions/configure-aws-credentials@v3.0.2' (types generated from this version)
+   * - Custom: Any valid ref (commit SHA, branch, tag, or fork)
+   */
   uses?:
     | 'aws-actions/configure-aws-credentials@v3'
-    | (`aws-actions/configure-aws-credentials@v3.${string}` & {})
+    | 'aws-actions/configure-aws-credentials@v3.0.2'
+    | (`aws-actions/configure-aws-credentials@${string}` & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsConfigureAwsCredentialsV3Inputs
   /** Sets environment variables for this step. */
@@ -86,6 +100,9 @@ export class AwsActionsConfigureAwsCredentialsV3 extends BaseAction<
   'aws-actions/configure-aws-credentials@v3',
   AwsActionsConfigureAwsCredentialsV3Outputs
 > {
+  static readonly sourceVersion = 'v3.0.2'
+  static readonly defaultUses = 'aws-actions/configure-aws-credentials@v3'
+
   constructor(props: AwsActionsConfigureAwsCredentialsV3Props = {}) {
     const outputNames = [
       'aws-account-id',
@@ -109,6 +126,8 @@ export class AwsActionsConfigureAwsCredentialsV3 extends BaseAction<
         uses: 'aws-actions/configure-aws-credentials@v3'
       },
       outputNames,
+      'v3.0.2',
+      'aws-actions/configure-aws-credentials@v3',
     )
   }
 }

@@ -74,9 +74,7 @@ export interface AwsActionsConfigureAwsCredentialsV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v4'. */
-  uses?:
-    | 'aws-actions/configure-aws-credentials@v4'
-    | (`aws-actions/configure-aws-credentials@v4.${string}` & {})
+  uses?: 'aws-actions/configure-aws-credentials@v4' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsConfigureAwsCredentialsV4Inputs
   /** Sets environment variables for this step. */
@@ -91,6 +89,15 @@ export class AwsActionsConfigureAwsCredentialsV4 extends BaseAction<
   'aws-actions/configure-aws-credentials@v4',
   AwsActionsConfigureAwsCredentialsV4Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'configure-aws-credentials'
+  protected readonly tag = 'v4'
+  protected readonly resolvedVersion = {
+    major: 4,
+    minor: 3,
+    patch: 1,
+  }
+
   constructor(props: AwsActionsConfigureAwsCredentialsV4Props = {}) {
     const outputNames = [
       'aws-account-id',
@@ -116,5 +123,9 @@ export class AwsActionsConfigureAwsCredentialsV4 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

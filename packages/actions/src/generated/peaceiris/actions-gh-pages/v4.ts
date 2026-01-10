@@ -63,9 +63,7 @@ export interface PeaceirisActionsGhPagesV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'peaceiris/actions-gh-pages@v4'. */
-  uses?:
-    | 'peaceiris/actions-gh-pages@v4'
-    | (`peaceiris/actions-gh-pages@v4.${string}` & {})
+  uses?: 'peaceiris/actions-gh-pages@v4' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: PeaceirisActionsGhPagesV4Inputs
   /** Sets environment variables for this step. */
@@ -80,6 +78,15 @@ export class PeaceirisActionsGhPagesV4 extends BaseAction<
   'peaceiris/actions-gh-pages@v4',
   PeaceirisActionsGhPagesV4Outputs
 > {
+  protected readonly owner = 'peaceiris'
+  protected readonly repo = 'actions-gh-pages'
+  protected readonly tag = 'v4'
+  protected readonly resolvedVersion = {
+    major: 4,
+    minor: 0,
+    patch: 0,
+  }
+
   constructor(props: PeaceirisActionsGhPagesV4Props = {}) {
     const outputNames = [] as const
 
@@ -99,5 +106,9 @@ export class PeaceirisActionsGhPagesV4 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

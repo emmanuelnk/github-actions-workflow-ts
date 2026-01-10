@@ -54,9 +54,7 @@ export interface DockerSetupBuildxActionV2Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'docker/setup-buildx-action@v2'. */
-  uses?:
-    | 'docker/setup-buildx-action@v2'
-    | (`docker/setup-buildx-action@v2.${string}` & {})
+  uses?: 'docker/setup-buildx-action@v2' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerSetupBuildxActionV2Inputs
   /** Sets environment variables for this step. */
@@ -71,6 +69,15 @@ export class DockerSetupBuildxActionV2 extends BaseAction<
   'docker/setup-buildx-action@v2',
   DockerSetupBuildxActionV2Outputs
 > {
+  protected readonly owner = 'docker'
+  protected readonly repo = 'setup-buildx-action'
+  protected readonly tag = 'v2'
+  protected readonly resolvedVersion = {
+    major: 2,
+    minor: 10,
+    patch: 0,
+  }
+
   constructor(props: DockerSetupBuildxActionV2Props = {}) {
     const outputNames = [
       'name',
@@ -98,5 +105,9 @@ export class DockerSetupBuildxActionV2 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

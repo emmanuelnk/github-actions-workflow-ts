@@ -27,9 +27,7 @@ export interface ActionsDownloadArtifactV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/download-artifact@v3'. */
-  uses?:
-    | 'actions/download-artifact@v3'
-    | (`actions/download-artifact@v3.${string}` & {})
+  uses?: 'actions/download-artifact@v3' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsDownloadArtifactV3Inputs
   /** Sets environment variables for this step. */
@@ -44,6 +42,15 @@ export class ActionsDownloadArtifactV3 extends BaseAction<
   'actions/download-artifact@v3',
   ActionsDownloadArtifactV3Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'download-artifact'
+  protected readonly tag = 'v3'
+  protected readonly resolvedVersion = {
+    major: 3,
+    minor: 0,
+    patch: 2,
+  }
+
   constructor(props: ActionsDownloadArtifactV3Props = {}) {
     const outputNames = [] as const
 
@@ -63,5 +70,9 @@ export class ActionsDownloadArtifactV3 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

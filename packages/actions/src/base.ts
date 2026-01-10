@@ -1,5 +1,16 @@
 import { Step } from '@github-actions-workflow-ts/lib'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import {
+  type GeneratedWorkflowTypes,
+  Context,
+  Diagnostics,
+} from '@github-actions-workflow-ts/lib'
+import {
+  isCompatibleVersion,
+  isFullSemver,
+  parsePartialVersion,
+  type PartialSemver,
+  type Semver,
+} from './utils.js'
 
 /**
  * Base class for typed GitHub Actions.
@@ -8,10 +19,15 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  * @typeParam TUses - Literal string type for the action reference (e.g., 'actions/checkout@v4')
  * @typeParam TOutputs - String literal union of output names
  */
-export class BaseAction<
+export abstract class BaseAction<
   TUses extends string,
   TOutputs extends string,
 > extends Step {
+  protected abstract readonly owner: string
+  protected abstract readonly repo: string
+  protected abstract readonly tag: string
+  protected abstract readonly resolvedVersion: PartialSemver
+
   /**
    * The step configuration with strongly-typed `uses` field.
    */
@@ -38,5 +54,70 @@ export class BaseAction<
         ? `\${{ steps.${this.id}.outputs.${outputName} }}`
         : ''
     }
+  }
+
+  protected validateUses(): boolean {
+    const ref = this.extractUsesRef()
+
+    if (!ref) {
+      return false
+    }
+
+    return this.validateUsesRef(ref)
+  }
+
+  private extractUsesRef(): string | null {
+    if (!this.step.uses.startsWith(`${this.owner}/${this.repo}@`)) {
+      Context.getGlobalWacContext()?.diagnostics.emit({
+        severity: Diagnostics.DiagnosticSeverity.WARN,
+        code: 'action-version-unverifiable',
+        message: `Cannot verify the version of action '${this.step.uses}' because the repository specifier does not match '${this.owner}/${this.repo}'.`,
+        stack: this.generateStackTrace(),
+      })
+      return null
+    }
+
+    return this.step.uses.replace(`${this.owner}/${this.repo}@`, '')
+  }
+
+  private validateUsesRef(ref: string): boolean {
+    const version = parsePartialVersion(ref)
+
+    if (version === null) {
+      Context.getGlobalWacContext()?.diagnostics.emit({
+        severity: Diagnostics.DiagnosticSeverity.WARN,
+        code: 'action-version-unverifiable',
+        message: `Cannot verify the version of action '${this.step.uses}' because the git ref is not a valid semver version.`,
+        stack: this.generateStackTrace(),
+      })
+      return false
+    }
+
+    if (isFullSemver(this.resolvedVersion)) {
+      return this.validateUsesSemverConstraint(this.resolvedVersion, version)
+    }
+
+    // If we don't know the exact version used to generate the action, then we can't validate it.
+    return true
+  }
+
+  private validateUsesSemverConstraint(
+    requiredVersion: Semver,
+    actualVersion: PartialSemver,
+  ): boolean {
+    if (!isCompatibleVersion(requiredVersion, actualVersion)) {
+      Context.getGlobalWacContext()?.diagnostics.emit({
+        severity: Diagnostics.DiagnosticSeverity.WARN,
+        code: 'action-version-semver-violation',
+        message: `The version of action '${this.step.uses}' does not satisfy the semver constraint '^${requiredVersion.major}.${requiredVersion.minor ?? 0}.${requiredVersion.patch ?? 0}'.`,
+        stack: this.generateStackTrace(),
+      })
+      return false
+    }
+    return true
+  }
+
+  private generateStackTrace(): string {
+    return Diagnostics.generateStackTrace(this.constructor)
   }
 }

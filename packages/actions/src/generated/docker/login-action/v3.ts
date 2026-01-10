@@ -35,7 +35,7 @@ export interface DockerLoginActionV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'docker/login-action@v3'. */
-  uses?: 'docker/login-action@v3' | (`docker/login-action@v3.${string}` & {})
+  uses?: 'docker/login-action@v3' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerLoginActionV3Inputs
   /** Sets environment variables for this step. */
@@ -50,6 +50,15 @@ export class DockerLoginActionV3 extends BaseAction<
   'docker/login-action@v3',
   DockerLoginActionV3Outputs
 > {
+  protected readonly owner = 'docker'
+  protected readonly repo = 'login-action'
+  protected readonly tag = 'v3'
+  protected readonly resolvedVersion = {
+    major: 3,
+    minor: 6,
+    patch: 0,
+  }
+
   constructor(props: DockerLoginActionV3Props = {}) {
     const outputNames = [] as const
 
@@ -67,5 +76,9 @@ export class DockerLoginActionV3 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'docker/login-action@v3' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

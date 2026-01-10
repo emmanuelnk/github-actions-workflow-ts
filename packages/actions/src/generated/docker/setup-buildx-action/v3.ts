@@ -67,9 +67,7 @@ export interface DockerSetupBuildxActionV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'docker/setup-buildx-action@v3'. */
-  uses?:
-    | 'docker/setup-buildx-action@v3'
-    | (`docker/setup-buildx-action@v3.${string}` & {})
+  uses?: 'docker/setup-buildx-action@v3' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerSetupBuildxActionV3Inputs
   /** Sets environment variables for this step. */
@@ -84,6 +82,15 @@ export class DockerSetupBuildxActionV3 extends BaseAction<
   'docker/setup-buildx-action@v3',
   DockerSetupBuildxActionV3Outputs
 > {
+  protected readonly owner = 'docker'
+  protected readonly repo = 'setup-buildx-action'
+  protected readonly tag = 'v3'
+  protected readonly resolvedVersion = {
+    major: 3,
+    minor: 12,
+    patch: 0,
+  }
+
   constructor(props: DockerSetupBuildxActionV3Props = {}) {
     const outputNames = [
       'name',
@@ -111,5 +118,9 @@ export class DockerSetupBuildxActionV3 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

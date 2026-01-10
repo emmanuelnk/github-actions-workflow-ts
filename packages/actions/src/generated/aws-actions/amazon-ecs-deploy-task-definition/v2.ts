@@ -84,9 +84,7 @@ export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/amazon-ecs-deploy-task-definition@v2'. */
-  uses?:
-    | 'aws-actions/amazon-ecs-deploy-task-definition@v2'
-    | (`aws-actions/amazon-ecs-deploy-task-definition@v2.${string}` & {})
+  uses?: 'aws-actions/amazon-ecs-deploy-task-definition@v2' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcsDeployTaskDefinitionV2Inputs
   /** Sets environment variables for this step. */
@@ -101,6 +99,15 @@ export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
   'aws-actions/amazon-ecs-deploy-task-definition@v2',
   AwsActionsAmazonEcsDeployTaskDefinitionV2Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'amazon-ecs-deploy-task-definition'
+  protected readonly tag = 'v2'
+  protected readonly resolvedVersion = {
+    major: 2,
+    minor: 5,
+    patch: 1,
+  }
+
   constructor(props: AwsActionsAmazonEcsDeployTaskDefinitionV2Props = {}) {
     const outputNames = [
       'task-definition-arn',
@@ -124,5 +131,9 @@ export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

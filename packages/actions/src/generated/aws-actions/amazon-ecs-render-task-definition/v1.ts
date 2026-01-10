@@ -49,9 +49,7 @@ export interface AwsActionsAmazonEcsRenderTaskDefinitionV1Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/amazon-ecs-render-task-definition@v1'. */
-  uses?:
-    | 'aws-actions/amazon-ecs-render-task-definition@v1'
-    | (`aws-actions/amazon-ecs-render-task-definition@v1.${string}` & {})
+  uses?: 'aws-actions/amazon-ecs-render-task-definition@v1' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcsRenderTaskDefinitionV1Inputs
   /** Sets environment variables for this step. */
@@ -66,6 +64,15 @@ export class AwsActionsAmazonEcsRenderTaskDefinitionV1 extends BaseAction<
   'aws-actions/amazon-ecs-render-task-definition@v1',
   AwsActionsAmazonEcsRenderTaskDefinitionV1Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'amazon-ecs-render-task-definition'
+  protected readonly tag = 'v1'
+  protected readonly resolvedVersion = {
+    major: 1,
+    minor: 8,
+    patch: 2,
+  }
+
   constructor(props: AwsActionsAmazonEcsRenderTaskDefinitionV1Props = {}) {
     const outputNames = ['task-definition'] as const
 
@@ -85,5 +92,9 @@ export class AwsActionsAmazonEcsRenderTaskDefinitionV1 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

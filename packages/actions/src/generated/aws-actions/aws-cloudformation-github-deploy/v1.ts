@@ -53,9 +53,7 @@ export interface AwsActionsAwsCloudformationGithubDeployV1Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/aws-cloudformation-github-deploy@v1'. */
-  uses?:
-    | 'aws-actions/aws-cloudformation-github-deploy@v1'
-    | (`aws-actions/aws-cloudformation-github-deploy@v1.${string}` & {})
+  uses?: 'aws-actions/aws-cloudformation-github-deploy@v1' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAwsCloudformationGithubDeployV1Inputs
   /** Sets environment variables for this step. */
@@ -70,6 +68,15 @@ export class AwsActionsAwsCloudformationGithubDeployV1 extends BaseAction<
   'aws-actions/aws-cloudformation-github-deploy@v1',
   AwsActionsAwsCloudformationGithubDeployV1Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'aws-cloudformation-github-deploy'
+  protected readonly tag = 'v1'
+  protected readonly resolvedVersion = {
+    major: 1,
+    minor: 3,
+    patch: 0,
+  }
+
   constructor(props: AwsActionsAwsCloudformationGithubDeployV1Props = {}) {
     const outputNames = ['stack-id'] as const
 
@@ -89,5 +96,9 @@ export class AwsActionsAwsCloudformationGithubDeployV1 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

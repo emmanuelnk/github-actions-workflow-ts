@@ -55,9 +55,7 @@ export interface SoftpropsActionGhReleaseV1Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'softprops/action-gh-release@v1'. */
-  uses?:
-    | 'softprops/action-gh-release@v1'
-    | (`softprops/action-gh-release@v1.${string}` & {})
+  uses?: 'softprops/action-gh-release@v1' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: SoftpropsActionGhReleaseV1Inputs
   /** Sets environment variables for this step. */
@@ -72,6 +70,15 @@ export class SoftpropsActionGhReleaseV1 extends BaseAction<
   'softprops/action-gh-release@v1',
   SoftpropsActionGhReleaseV1Outputs
 > {
+  protected readonly owner = 'softprops'
+  protected readonly repo = 'action-gh-release'
+  protected readonly tag = 'v1'
+  protected readonly resolvedVersion = {
+    major: 1,
+    minor: undefined,
+    patch: undefined,
+  }
+
   constructor(props: SoftpropsActionGhReleaseV1Props = {}) {
     const outputNames = ['url', 'id', 'upload_url', 'assets'] as const
 
@@ -91,5 +98,9 @@ export class SoftpropsActionGhReleaseV1 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

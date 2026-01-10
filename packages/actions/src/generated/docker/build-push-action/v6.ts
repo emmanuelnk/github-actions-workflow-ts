@@ -89,9 +89,7 @@ export interface DockerBuildPushActionV6Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'docker/build-push-action@v6'. */
-  uses?:
-    | 'docker/build-push-action@v6'
-    | (`docker/build-push-action@v6.${string}` & {})
+  uses?: 'docker/build-push-action@v6' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: DockerBuildPushActionV6Inputs
   /** Sets environment variables for this step. */
@@ -106,6 +104,15 @@ export class DockerBuildPushActionV6 extends BaseAction<
   'docker/build-push-action@v6',
   DockerBuildPushActionV6Outputs
 > {
+  protected readonly owner = 'docker'
+  protected readonly repo = 'build-push-action'
+  protected readonly tag = 'v6'
+  protected readonly resolvedVersion = {
+    major: 6,
+    minor: 18,
+    patch: 0,
+  }
+
   constructor(props: DockerBuildPushActionV6Props = {}) {
     const outputNames = ['imageid', 'digest', 'metadata'] as const
 
@@ -125,5 +132,9 @@ export class DockerBuildPushActionV6 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

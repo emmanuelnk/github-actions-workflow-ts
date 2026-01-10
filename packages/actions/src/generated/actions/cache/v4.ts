@@ -40,7 +40,7 @@ export interface ActionsCacheV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/cache@v4'. */
-  uses?: 'actions/cache@v4' | (`actions/cache@v4.${string}` & {})
+  uses?: 'actions/cache@v4' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsCacheV4Inputs
   /** Sets environment variables for this step. */
@@ -55,6 +55,15 @@ export class ActionsCacheV4 extends BaseAction<
   'actions/cache@v4',
   ActionsCacheV4Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'cache'
+  protected readonly tag = 'v4'
+  protected readonly resolvedVersion = {
+    major: 4,
+    minor: 3,
+    patch: 0,
+  }
+
   constructor(props: ActionsCacheV4Props = {}) {
     const outputNames = ['cache-hit'] as const
 
@@ -72,5 +81,9 @@ export class ActionsCacheV4 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/cache@v4' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

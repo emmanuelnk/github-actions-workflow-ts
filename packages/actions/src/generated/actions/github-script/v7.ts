@@ -41,9 +41,7 @@ export interface ActionsGithubScriptV7Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/github-script@v7'. */
-  uses?:
-    | 'actions/github-script@v7'
-    | (`actions/github-script@v7.${string}` & {})
+  uses?: 'actions/github-script@v7' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsGithubScriptV7Inputs
   /** Sets environment variables for this step. */
@@ -58,6 +56,15 @@ export class ActionsGithubScriptV7 extends BaseAction<
   'actions/github-script@v7',
   ActionsGithubScriptV7Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'github-script'
+  protected readonly tag = 'v7'
+  protected readonly resolvedVersion = {
+    major: 7,
+    minor: 1,
+    patch: 0,
+  }
+
   constructor(props: ActionsGithubScriptV7Props = {}) {
     const outputNames = ['result'] as const
 
@@ -75,5 +82,9 @@ export class ActionsGithubScriptV7 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/github-script@v7' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

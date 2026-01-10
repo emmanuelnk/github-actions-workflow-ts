@@ -46,7 +46,7 @@ export interface ActionsSetupPythonV5Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/setup-python@v5'. */
-  uses?: 'actions/setup-python@v5' | (`actions/setup-python@v5.${string}` & {})
+  uses?: 'actions/setup-python@v5' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsSetupPythonV5Inputs
   /** Sets environment variables for this step. */
@@ -61,6 +61,15 @@ export class ActionsSetupPythonV5 extends BaseAction<
   'actions/setup-python@v5',
   ActionsSetupPythonV5Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'setup-python'
+  protected readonly tag = 'v5'
+  protected readonly resolvedVersion = {
+    major: 5,
+    minor: 6,
+    patch: 0,
+  }
+
   constructor(props: ActionsSetupPythonV5Props = {}) {
     const outputNames = ['python-version', 'cache-hit', 'python-path'] as const
 
@@ -78,5 +87,9 @@ export class ActionsSetupPythonV5 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/setup-python@v5' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

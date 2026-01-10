@@ -22,7 +22,7 @@ export interface GithubCodeqlActionV2Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'github/codeql-action@v2'. */
-  uses?: 'github/codeql-action@v2' | (`github/codeql-action@v2.${string}` & {})
+  uses?: 'github/codeql-action@v2' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: GithubCodeqlActionV2Inputs
   /** Sets environment variables for this step. */
@@ -37,6 +37,15 @@ export class GithubCodeqlActionV2 extends BaseAction<
   'github/codeql-action@v2',
   GithubCodeqlActionV2Outputs
 > {
+  protected readonly owner = 'github'
+  protected readonly repo = 'codeql-action'
+  protected readonly tag = 'v2'
+  protected readonly resolvedVersion = {
+    major: 2,
+    minor: 28,
+    patch: 1,
+  }
+
   constructor(props: GithubCodeqlActionV2Props = {}) {
     const outputNames = [] as const
 
@@ -54,5 +63,9 @@ export class GithubCodeqlActionV2 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'github/codeql-action@v2' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

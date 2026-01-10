@@ -33,9 +33,7 @@ export interface AwsActionsAmazonEcrLoginV2Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/amazon-ecr-login@v2'. */
-  uses?:
-    | 'aws-actions/amazon-ecr-login@v2'
-    | (`aws-actions/amazon-ecr-login@v2.${string}` & {})
+  uses?: 'aws-actions/amazon-ecr-login@v2' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcrLoginV2Inputs
   /** Sets environment variables for this step. */
@@ -50,6 +48,15 @@ export class AwsActionsAmazonEcrLoginV2 extends BaseAction<
   'aws-actions/amazon-ecr-login@v2',
   AwsActionsAmazonEcrLoginV2Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'amazon-ecr-login'
+  protected readonly tag = 'v2'
+  protected readonly resolvedVersion = {
+    major: 2,
+    minor: 0,
+    patch: 1,
+  }
+
   constructor(props: AwsActionsAmazonEcrLoginV2Props = {}) {
     const outputNames = ['registry'] as const
 
@@ -69,5 +76,9 @@ export class AwsActionsAmazonEcrLoginV2 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

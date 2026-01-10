@@ -43,7 +43,7 @@ export interface ActionsSetupNodeV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/setup-node@v3'. */
-  uses?: 'actions/setup-node@v3' | (`actions/setup-node@v3.${string}` & {})
+  uses?: 'actions/setup-node@v3' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsSetupNodeV3Inputs
   /** Sets environment variables for this step. */
@@ -58,6 +58,15 @@ export class ActionsSetupNodeV3 extends BaseAction<
   'actions/setup-node@v3',
   ActionsSetupNodeV3Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'setup-node'
+  protected readonly tag = 'v3'
+  protected readonly resolvedVersion = {
+    major: 3,
+    minor: 9,
+    patch: 1,
+  }
+
   constructor(props: ActionsSetupNodeV3Props = {}) {
     const outputNames = ['cache-hit', 'node-version'] as const
 
@@ -75,5 +84,9 @@ export class ActionsSetupNodeV3 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/setup-node@v3' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

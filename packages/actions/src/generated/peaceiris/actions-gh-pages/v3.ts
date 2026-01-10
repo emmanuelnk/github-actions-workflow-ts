@@ -63,9 +63,7 @@ export interface PeaceirisActionsGhPagesV3Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'peaceiris/actions-gh-pages@v3'. */
-  uses?:
-    | 'peaceiris/actions-gh-pages@v3'
-    | (`peaceiris/actions-gh-pages@v3.${string}` & {})
+  uses?: 'peaceiris/actions-gh-pages@v3' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: PeaceirisActionsGhPagesV3Inputs
   /** Sets environment variables for this step. */
@@ -80,6 +78,15 @@ export class PeaceirisActionsGhPagesV3 extends BaseAction<
   'peaceiris/actions-gh-pages@v3',
   PeaceirisActionsGhPagesV3Outputs
 > {
+  protected readonly owner = 'peaceiris'
+  protected readonly repo = 'actions-gh-pages'
+  protected readonly tag = 'v3'
+  protected readonly resolvedVersion = {
+    major: 3,
+    minor: 9,
+    patch: 3,
+  }
+
   constructor(props: PeaceirisActionsGhPagesV3Props = {}) {
     const outputNames = [] as const
 
@@ -99,5 +106,9 @@ export class PeaceirisActionsGhPagesV3 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

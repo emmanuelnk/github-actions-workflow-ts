@@ -63,7 +63,7 @@ export interface ActionsCheckoutV5Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/checkout@v5'. */
-  uses?: 'actions/checkout@v5' | (`actions/checkout@v5.${string}` & {})
+  uses?: 'actions/checkout@v5' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsCheckoutV5Inputs
   /** Sets environment variables for this step. */
@@ -78,6 +78,15 @@ export class ActionsCheckoutV5 extends BaseAction<
   'actions/checkout@v5',
   ActionsCheckoutV5Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'checkout'
+  protected readonly tag = 'v5'
+  protected readonly resolvedVersion = {
+    major: 5,
+    minor: 0,
+    patch: 1,
+  }
+
   constructor(props: ActionsCheckoutV5Props = {}) {
     const outputNames = ['ref', 'commit'] as const
 
@@ -95,5 +104,9 @@ export class ActionsCheckoutV5 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/checkout@v5' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

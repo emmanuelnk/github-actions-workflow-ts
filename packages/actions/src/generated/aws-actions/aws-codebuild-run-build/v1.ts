@@ -57,9 +57,7 @@ export interface AwsActionsAwsCodebuildRunBuildV1Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/aws-codebuild-run-build@v1'. */
-  uses?:
-    | 'aws-actions/aws-codebuild-run-build@v1'
-    | (`aws-actions/aws-codebuild-run-build@v1.${string}` & {})
+  uses?: 'aws-actions/aws-codebuild-run-build@v1' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAwsCodebuildRunBuildV1Inputs
   /** Sets environment variables for this step. */
@@ -74,6 +72,15 @@ export class AwsActionsAwsCodebuildRunBuildV1 extends BaseAction<
   'aws-actions/aws-codebuild-run-build@v1',
   AwsActionsAwsCodebuildRunBuildV1Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'aws-codebuild-run-build'
+  protected readonly tag = 'v1'
+  protected readonly resolvedVersion = {
+    major: 1,
+    minor: 0,
+    patch: 18,
+  }
+
   constructor(props: AwsActionsAwsCodebuildRunBuildV1Props = {}) {
     const outputNames = ['aws-build-id'] as const
 
@@ -93,5 +100,9 @@ export class AwsActionsAwsCodebuildRunBuildV1 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

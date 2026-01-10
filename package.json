@@ -1,4 +1,4 @@
- {
+{
   "name": "github-actions-workflow-ts-monorepo",
   "private": true,
   "description": "Generate GitHub Actions workflow files using TypeScript",

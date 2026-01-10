@@ -40,9 +40,7 @@ export interface ActionsUploadArtifactV4Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'actions/upload-artifact@v4'. */
-  uses?:
-    | 'actions/upload-artifact@v4'
-    | (`actions/upload-artifact@v4.${string}` & {})
+  uses?: 'actions/upload-artifact@v4' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: ActionsUploadArtifactV4Inputs
   /** Sets environment variables for this step. */
@@ -57,6 +55,15 @@ export class ActionsUploadArtifactV4 extends BaseAction<
   'actions/upload-artifact@v4',
   ActionsUploadArtifactV4Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'upload-artifact'
+  protected readonly tag = 'v4'
+  protected readonly resolvedVersion = {
+    major: 4,
+    minor: 6,
+    patch: 2,
+  }
+
   constructor(props: ActionsUploadArtifactV4Props = {}) {
     const outputNames = [
       'artifact-id',
@@ -78,5 +85,9 @@ export class ActionsUploadArtifactV4 extends BaseAction<
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/upload-artifact@v4' },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

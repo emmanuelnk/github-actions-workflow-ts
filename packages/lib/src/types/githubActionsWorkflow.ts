@@ -431,7 +431,7 @@ export type WorkflowDispatchInput = {
   /**
    * A string description of the input parameter.
    */
-  description: string
+  description?: string
   /**
    * A string shown to users using the deprecated input.
    */

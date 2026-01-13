@@ -30,7 +30,7 @@ export const trackedActions: TrackedAction[] = [
   {
     owner: 'aws-actions',
     repo: 'configure-aws-credentials',
-    versions: ['v3', 'v4'],
+    versions: ['v3', 'v4', 'v5'],
   },
   { owner: 'aws-actions', repo: 'amazon-ecr-login', versions: ['v2'] },
   {

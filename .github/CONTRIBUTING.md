@@ -36,6 +36,25 @@ pnpm install
 At this point, you're ready to make your changes! Feel free to ask for help;
 everyone is a beginner at first :smile_cat:
 
+### Contributing New Actions to `@github-actions-workflow-ts/actions`
+
+When contributing new GitHub Actions to the `@github-actions-workflow-ts/actions` package, please ensure the action meets the following inclusion criteria:
+
+#### Popularity
+- The action should have **at least 50 stars** on GitHub, demonstrating community adoption
+
+#### Maintenance
+- The action should have **at least 50 commits**, showing active development history
+- There should be **at least one non-trivial update within the last 3 months**
+- The action should have **at least 2 contributors**
+
+#### Longevity
+- The action should have been **published at least 6 months ago**, ensuring stability
+
+#### Exceptions
+
+Actions that don't meet all of the above criteria may still be considered. If you'd like to contribute an action that falls short of these thresholds, please [open a discussion](https://github.com/emmanuelnk/github-actions-workflow-ts/discussions) first with your justification for inclusion.
+
 ### Make a Pull Request
 
 At this point, you should switch back to your main branch and make sure it's

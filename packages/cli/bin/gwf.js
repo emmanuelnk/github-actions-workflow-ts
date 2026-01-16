@@ -2,6 +2,7 @@
 import { spawn } from 'child_process'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { createRequire } from 'module'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -9,11 +10,12 @@ const __dirname = dirname(__filename)
 // Path to the actual CLI entry point
 const cliPath = join(__dirname, '..', 'dist', 'bin.js')
 
-// Path to tsx in our own node_modules
-const tsxPath = join(__dirname, '..', 'node_modules', '.bin', 'tsx')
+// Use Node's module resolution to find tsx, which handles hoisted dependencies correctly
+const require = createRequire(import.meta.url)
+const tsxPath = require.resolve('tsx/cli')
 
-// Spawn tsx with the CLI script and pass through all arguments
-const child = spawn(tsxPath, [cliPath, ...process.argv.slice(2)], {
+// Spawn node with tsx CLI to run the script and pass through all arguments
+const child = spawn(process.execPath, [tsxPath, cliPath, ...process.argv.slice(2)], {
   stdio: 'inherit',
   shell: process.platform === 'win32',
 })

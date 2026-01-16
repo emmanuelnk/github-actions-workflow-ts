@@ -96,6 +96,7 @@ If you only want to generate workflow JSON objects and handle YAML file generati
 ```bash
 npm install --save-dev @github-actions-workflow-ts/lib
 ```
+The library package has **zero dependencies** and works in both ESM and CommonJS projects.
 
 ### Typed Actions
 
@@ -106,8 +107,6 @@ npm install --save-dev @github-actions-workflow-ts/actions
 ```
 
 See the section on [Typed Actions Package](#typed-actions-package) for more info. If there is an action you think is missing, [request it](https://github.com/emmanuelnk/github-actions-workflow-ts/issues/new) or [contribute it](CONTRIBUTING.md#adding-new-actions)
-
-The library package has **zero dependencies** and works in both ESM and CommonJS projects.
 
 <details><summary>
 	

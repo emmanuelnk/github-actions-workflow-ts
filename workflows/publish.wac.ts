@@ -101,6 +101,7 @@ const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
   'runs-on': 'ubuntu-latest',
   'timeout-minutes': 20,
   needs: [publishJob.name],
+  if: '!github.event.release.prerelease',
   permissions: {
     contents: 'write',
   },

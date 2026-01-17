@@ -63,6 +63,7 @@ jobs:
     timeout-minutes: 20
     needs:
       - PublishPackages
+    if: '!github.event.release.prerelease'
     permissions:
       contents: write
     steps:

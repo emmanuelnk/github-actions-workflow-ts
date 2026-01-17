@@ -9,40 +9,40 @@ template: |
 
 categories:
   - title: "New"
-    label: "type: feature"
+    label: "feature"
   - title: "Chore"
-    label: "type: chore"
+    label: "chore"
   - title: "Refactor"
-    label: "type: refactor"
+    label: "refactor"
   - title: "CI"
-    label: "type: ci"
+    label: "ci"
   - title: "Breaking"
-    label: "type: breaking"
+    label: "breaking"
   - title: "Bug Fixes"
-    label: "type: bug"
+    label: "bug"
   - title: "Documentation"
-    label: "type: docs"
+    label: "docs"
   - title: "Tests"
-    label: "type: test"
+    label: "test"
   - title: "Other"
   - title: "Dependency Updates"
-    label: "type: dependencies"
+    label: "dependencies"
     collapse-after: 5
 
 version-resolver:
   major:
     labels:
-      - "type: breaking"
+      - "breaking"
   minor:
     labels:
-      - "type: feature"
+      - "feature"
   patch:
     labels:
-      - "type: bug"
-      - "type: maintenance"
-      - "type: docs"
-      - "type: dependencies"
-      - "type: security"
+      - "bug"
+      - "maintenance"
+      - "docs"
+      - "dependencies"
+      - "security"
 
 exclude-labels:
   - "skip-changelog"

@@ -5,7 +5,6 @@ export class ConsoleDiagnosticsReporter
   implements Diagnostics.DiagnosticsReporter
 {
   emit(d: Diagnostics.Diagnostic): void {
-    console.log(d)
     let message = `[github-actions-workflow-ts] ${d.severity}: ${d.message} (${d.code})`
     if (d.stack) {
       message += `\n${d.stack}`

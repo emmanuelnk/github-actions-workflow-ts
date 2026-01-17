@@ -25,7 +25,8 @@ export interface AwsActionsConfigureAwsCredentialsV5Inputs {
   'web-identity-token-file'?: string | boolean | number
   /** Use existing credentials from the environment to assume a new role, rather than providing credentials as input. */
   'role-chaining'?: string | boolean | number
-  /** The audience to use for the OIDC provider */
+  /** The audience to use for the OIDC provider
+   * @default sts.amazonaws.com */
   audience?: string | boolean | number
   /** Proxy to use for the AWS SDK agent */
   'http-proxy'?: string | boolean | number
@@ -47,7 +48,8 @@ export interface AwsActionsConfigureAwsCredentialsV5Inputs {
   'managed-session-policies'?: string | boolean | number
   /** Whether to set credentials as step output */
   'output-credentials'?: string | boolean | number
-  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials. */
+  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials.
+   * @default true */
   'output-env-credentials'?: string | boolean | number
   /** Whether to unset the existing credentials in your runner. May be useful if you run this action multiple times in the same job */
   'unset-current-credentials'?: string | boolean | number
@@ -82,9 +84,7 @@ export interface AwsActionsConfigureAwsCredentialsV5Props {
   /** A name for your step to display on GitHub. */
   name?: string
   /** The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v5'. */
-  uses?:
-    | 'aws-actions/configure-aws-credentials@v5'
-    | (`aws-actions/configure-aws-credentials@v5.${string}` & {})
+  uses?: 'aws-actions/configure-aws-credentials@v5' | (string & {})
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsConfigureAwsCredentialsV5Inputs
   /** Sets environment variables for this step. */
@@ -99,6 +99,15 @@ export class AwsActionsConfigureAwsCredentialsV5 extends BaseAction<
   'aws-actions/configure-aws-credentials@v5',
   AwsActionsConfigureAwsCredentialsV5Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'configure-aws-credentials'
+  protected readonly tag = 'v5'
+  protected readonly resolvedVersion = {
+    major: 5,
+    minor: 1,
+    patch: 1,
+  }
+
   constructor(props: AwsActionsConfigureAwsCredentialsV5Props = {}) {
     const outputNames = [
       'aws-account-id',
@@ -124,5 +133,9 @@ export class AwsActionsConfigureAwsCredentialsV5 extends BaseAction<
       },
       outputNames,
     )
+
+    if (uses) {
+      this.validateUses()
+    }
   }
 }

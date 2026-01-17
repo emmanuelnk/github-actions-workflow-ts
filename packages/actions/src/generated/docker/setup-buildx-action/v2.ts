@@ -13,15 +13,19 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
 export interface DockerSetupBuildxActionV2Inputs {
   /** Buildx version. (eg. v0.3.0) */
   version?: string | boolean | number
-  /** Sets the builder driver to be used */
+  /** Sets the builder driver to be used
+   * @default docker-container */
   driver?: string | boolean | number
   /** List of additional driver-specific options. (eg. image=moby\/buildkit:master) */
   'driver-opts'?: string | boolean | number
-  /** Flags for buildkitd daemon */
+  /** Flags for buildkitd daemon
+   * @default --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host */
   'buildkitd-flags'?: string | boolean | number
-  /** Sets up docker build command as an alias to docker buildx build */
+  /** Sets up docker build command as an alias to docker buildx build
+   * @default false */
   install?: string | boolean | number
-  /** Switch to this builder instance */
+  /** Switch to this builder instance
+   * @default true */
   use?: string | boolean | number
   /** Optional address for docker socket or context from `docker context ls` */
   endpoint?: string | boolean | number
@@ -33,7 +37,8 @@ export interface DockerSetupBuildxActionV2Inputs {
   'config-inline'?: string | boolean | number
   /** Append additional nodes to the builder */
   append?: string | boolean | number
-  /** Cleanup temp files and remove builder at the end of a job */
+  /** Cleanup temp files and remove builder at the end of a job
+   * @default true */
   cleanup?: string | boolean | number
 }
 

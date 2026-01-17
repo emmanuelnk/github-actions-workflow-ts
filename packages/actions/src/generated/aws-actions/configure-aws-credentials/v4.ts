@@ -25,7 +25,8 @@ export interface AwsActionsConfigureAwsCredentialsV4Inputs {
   'web-identity-token-file'?: string | boolean | number
   /** Use existing credentials from the environment to assume a new role, rather than providing credentials as input. */
   'role-chaining'?: string | boolean | number
-  /** The audience to use for the OIDC provider */
+  /** The audience to use for the OIDC provider
+   * @default sts.amazonaws.com */
   audience?: string | boolean | number
   /** Proxy to use for the AWS SDK agent */
   'http-proxy'?: string | boolean | number
@@ -45,7 +46,8 @@ export interface AwsActionsConfigureAwsCredentialsV4Inputs {
   'managed-session-policies'?: string | boolean | number
   /** Whether to set credentials as step output */
   'output-credentials'?: string | boolean | number
-  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials. */
+  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials.
+   * @default true */
   'output-env-credentials'?: string | boolean | number
   /** Whether to unset the existing credentials in your runner. May be useful if you run this action multiple times in the same job */
   'unset-current-credentials'?: string | boolean | number

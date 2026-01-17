@@ -43,7 +43,7 @@ export class GithubCodeqlActionV3 extends BaseAction<
   protected readonly resolvedVersion = {
     major: 3,
     minor: 31,
-    patch: 9,
+    patch: 10,
   }
 
   constructor(props: GithubCodeqlActionV3Props = {}) {

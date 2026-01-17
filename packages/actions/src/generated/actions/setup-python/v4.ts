@@ -19,15 +19,19 @@ export interface ActionsSetupPythonV4Inputs {
   cache?: string | boolean | number
   /** The target architecture (x86, x64) of the Python or PyPy interpreter. */
   architecture?: string | boolean | number
-  /** Set this option if you want the action to check for the latest available version that satisfies the version spec. */
+  /** Set this option if you want the action to check for the latest available version that satisfies the version spec.
+   * @default false */
   'check-latest'?: string | boolean | number
-  /** The token used to authenticate when fetching Python distributions from https:\/\/github.com\/actions\/python-versions. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting. */
+  /** The token used to authenticate when fetching Python distributions from https:\/\/github.com\/actions\/python-versions. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+   * @default ${{ github.server_url == 'https:\/\/github.com' && github.token || '' }} */
   token?: string | boolean | number
   /** Used to specify the path to dependency files. Supports wildcards or a list of file names for caching multiple dependencies. */
   'cache-dependency-path'?: string | boolean | number
-  /** Set this option if you want the action to update environment variables. */
+  /** Set this option if you want the action to update environment variables.
+   * @default true */
   'update-environment'?: string | boolean | number
-  /** When 'true', a version range passed to 'python-version' input will match prerelease versions if no GA versions are found. Only 'x.y' version range is supported for CPython. */
+  /** When 'true', a version range passed to 'python-version' input will match prerelease versions if no GA versions are found. Only 'x.y' version range is supported for CPython.
+   * @default false */
   'allow-prereleases'?: string | boolean | number
 }
 

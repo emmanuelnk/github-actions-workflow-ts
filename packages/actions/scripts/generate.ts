@@ -277,13 +277,20 @@ function generateInputsInterface(
     const description = escapeJsDoc(input.description)
     const isRequired = input.required === true || input.required === 'true'
     const isDeprecated = !!input.deprecationMessage
-    const deprecationNote = isDeprecated
+    const hasDefault = input.default !== undefined && input.default !== ''
+
+    // Build JSDoc parts
+    const descPart = description || ''
+    const defaultPart = hasDefault
+      ? `\n   * @default ${escapeJsDoc(String(input.default))}`
+      : ''
+    const deprecationPart = isDeprecated
       ? `\n   * @deprecated ${escapeJsDoc(input.deprecationMessage)}`
       : ''
 
     const jsDoc =
-      description || isDeprecated
-        ? `  /** ${description}${deprecationNote} */\n`
+      descPart || hasDefault || isDeprecated
+        ? `  /** ${descPart}${defaultPart}${deprecationPart} */\n`
         : ''
 
     // Determine property name - quote if contains special chars

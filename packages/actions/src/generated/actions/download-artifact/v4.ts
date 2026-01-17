@@ -19,13 +19,16 @@ export interface ActionsDownloadArtifactV4Inputs {
   path?: string | boolean | number
   /** A glob pattern matching the artifacts that should be downloaded. Ignored if name is specified. */
   pattern?: string | boolean | number
-  /** When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. */
+  /** When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path.
+   * @default false */
   'merge-multiple'?: string | boolean | number
   /** The GitHub token used to authenticate with the GitHub API. This is required when downloading artifacts from a different repository or from a different workflow run. If this is not specified, the action will attempt to download artifacts from the current repository and the current workflow run. */
   'github-token'?: string | boolean | number
-  /** The repository owner and the repository name joined together by "\/". If github-token is specified, this is the repository that artifacts will be downloaded from. */
+  /** The repository owner and the repository name joined together by "\/". If github-token is specified, this is the repository that artifacts will be downloaded from.
+   * @default ${{ github.repository }} */
   repository?: string | boolean | number
-  /** The id of the workflow run where the desired download artifact was uploaded from. If github-token is specified, this is the run that artifacts will be downloaded from. */
+  /** The id of the workflow run where the desired download artifact was uploaded from. If github-token is specified, this is the run that artifacts will be downloaded from.
+   * @default ${{ github.run_id }} */
   'run-id'?: string | boolean | number
 }
 

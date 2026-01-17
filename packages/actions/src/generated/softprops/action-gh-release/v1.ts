@@ -29,7 +29,8 @@ export interface SoftpropsActionGhReleaseV1Inputs {
   fail_on_unmatched_files?: string | boolean | number
   /** Repository to make releases against, in <owner>\/<repo> format */
   repository?: string | boolean | number
-  /** Authorized secret GitHub Personal Access Token. Defaults to github.token */
+  /** Authorized secret GitHub Personal Access Token. Defaults to github.token
+   * @default ${{ github.token }} */
   token?: string | boolean | number
   /** Commitish value that determines where the Git tag is created from. Can be any branch or commit SHA. */
   target_commitish?: string | boolean | number

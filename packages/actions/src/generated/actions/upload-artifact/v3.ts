@@ -11,15 +11,18 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  */
 
 export interface ActionsUploadArtifactV3Inputs {
-  /** Artifact name */
+  /** Artifact name
+   * @default artifact */
   name?: string | boolean | number
   /** A file, directory or wildcard pattern that describes what to upload */
   path: string | boolean | number
-  /** The desired behavior if no files are found using the provided path. Available Options:   warn: Output a warning but do not fail the action   error: Fail the action with an error message   ignore: Do not output any warnings or errors, the action does not fail */
+  /** The desired behavior if no files are found using the provided path. Available Options:   warn: Output a warning but do not fail the action   error: Fail the action with an error message   ignore: Do not output any warnings or errors, the action does not fail
+   * @default warn */
   'if-no-files-found'?: string | boolean | number
   /** Duration after which artifact will expire in days. 0 means using default retention. Minimum 1 day. Maximum 90 days unless changed from the repository settings page. */
   'retention-days'?: string | boolean | number
-  /** If true, hidden files will be included in the uploaded artifact. If false, hidden files will be excluded from the uploaded artifact. */
+  /** If true, hidden files will be included in the uploaded artifact. If false, hidden files will be excluded from the uploaded artifact.
+   * @default false */
   'include-hidden-files'?: string | boolean | number
 }
 

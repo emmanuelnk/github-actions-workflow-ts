@@ -69,6 +69,8 @@ export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Inputs {
   'propagate-tags'?: string | boolean | number
   /** A comma-separated list of keys whose empty values (empty string, array, or object) should be preserved in the task definition. By default, empty values are removed. */
   'keep-null-value-keys'?: string | boolean | number
+  /** The maximum number of retry attempts for AWS API calls. Defaults to 3. */
+  'max-retries'?: string | boolean | number
 }
 
 export type AwsActionsAmazonEcsDeployTaskDefinitionV2Outputs =
@@ -104,8 +106,8 @@ export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
   protected readonly tag = 'v2'
   protected readonly resolvedVersion = {
     major: 2,
-    minor: 5,
-    patch: 1,
+    minor: 6,
+    patch: 0,
   }
 
   constructor(props: AwsActionsAmazonEcsDeployTaskDefinitionV2Props = {}) {

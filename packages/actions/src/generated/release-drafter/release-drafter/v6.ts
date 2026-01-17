@@ -11,7 +11,8 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  */
 
 export interface ReleaseDrafterReleaseDrafterV6Inputs {
-  /** If your workflow requires multiple release-drafter configs it be helpful to override the config-name. The config should still be located inside `.github` as that's where we are looking for config files. */
+  /** If your workflow requires multiple release-drafter configs it be helpful to override the config-name. The config should still be located inside `.github` as that's where we are looking for config files.
+   * @default release-drafter.yml */
   'config-name'?: string | boolean | number
   /** The name that will be used in the GitHub release that's created or updated. This will override any `name-template` specified in your `release-drafter.yml` if defined. */
   name?: string | boolean | number

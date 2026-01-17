@@ -43,7 +43,8 @@ export interface AwsActionsAwsCodebuildRunBuildV1Inputs {
   'disable-github-env-vars'?: string | boolean | number
   /** The type of build output artifact */
   'artifacts-type-override'?: string | boolean | number
-  /** Comma separated list of process signals on which to stop the build. Default is SIGINT. */
+  /** Comma separated list of process signals on which to stop the build. Default is SIGINT.
+   * @default SIGINT */
   'stop-on-signals'?: string | boolean | number
 }
 

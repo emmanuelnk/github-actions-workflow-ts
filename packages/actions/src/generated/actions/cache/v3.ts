@@ -19,11 +19,14 @@ export interface ActionsCacheV3Inputs {
   'restore-keys'?: string | boolean | number
   /** The chunk size used to split up large files during upload, in bytes */
   'upload-chunk-size'?: string | boolean | number
-  /** An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms */
+  /** An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms
+   * @default false */
   enableCrossOsArchive?: string | boolean | number
-  /** Fail the workflow if cache entry is not found */
+  /** Fail the workflow if cache entry is not found
+   * @default false */
   'fail-on-cache-miss'?: string | boolean | number
-  /** Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache */
+  /** Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache
+   * @default false */
   'lookup-only'?: string | boolean | number
 }
 

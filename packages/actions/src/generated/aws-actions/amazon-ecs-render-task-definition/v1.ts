@@ -70,7 +70,7 @@ export class AwsActionsAmazonEcsRenderTaskDefinitionV1 extends BaseAction<
   protected readonly resolvedVersion = {
     major: 1,
     minor: 8,
-    patch: 2,
+    patch: 3,
   }
 
   constructor(props: AwsActionsAmazonEcsRenderTaskDefinitionV1Props = {}) {

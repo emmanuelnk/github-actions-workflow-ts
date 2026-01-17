@@ -25,7 +25,8 @@ export interface AwsActionsConfigureAwsCredentialsV3Inputs {
   'web-identity-token-file'?: string | boolean | number
   /** Use existing credentials from the environment to assume a new role, rather than providing credentials as input. */
   'role-chaining'?: string | boolean | number
-  /** The audience to use for the OIDC provider */
+  /** The audience to use for the OIDC provider
+   * @default sts.amazonaws.com */
   audience?: string | boolean | number
   /** Proxy to use for the AWS SDK agent */
   'http-proxy'?: string | boolean | number

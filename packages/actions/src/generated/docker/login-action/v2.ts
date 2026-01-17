@@ -17,9 +17,11 @@ export interface DockerLoginActionV2Inputs {
   username?: string | boolean | number
   /** Password or personal access token used to log against the Docker registry */
   password?: string | boolean | number
-  /** Specifies whether the given registry is ECR (auto, true or false) */
+  /** Specifies whether the given registry is ECR (auto, true or false)
+   * @default auto */
   ecr?: string | boolean | number
-  /** Log out from the Docker registry at the end of a job */
+  /** Log out from the Docker registry at the end of a job
+   * @default true */
   logout?: string | boolean | number
 }
 

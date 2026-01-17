@@ -37,11 +37,13 @@ export interface DockerBuildPushActionV5Inputs {
   file?: string | boolean | number
   /** List of metadata for an image */
   labels?: string | boolean | number
-  /** Load is a shorthand for --output=type=docker */
+  /** Load is a shorthand for --output=type=docker
+   * @default false */
   load?: string | boolean | number
   /** Set the networking mode for the RUN instructions during build */
   network?: string | boolean | number
-  /** Do not use cache when building the image */
+  /** Do not use cache when building the image
+   * @default false */
   'no-cache'?: string | boolean | number
   /** Do not cache specified stages */
   'no-cache-filters'?: string | boolean | number
@@ -51,9 +53,11 @@ export interface DockerBuildPushActionV5Inputs {
   platforms?: string | boolean | number
   /** Generate provenance attestation for the build (shorthand for --attest=type=provenance) */
   provenance?: string | boolean | number
-  /** Always attempt to pull all referenced images */
+  /** Always attempt to pull all referenced images
+   * @default false */
   pull?: string | boolean | number
-  /** Push is a shorthand for --output=type=registry */
+  /** Push is a shorthand for --output=type=registry
+   * @default false */
   push?: string | boolean | number
   /** Generate SBOM attestation for the build (shorthand for --attest=type=sbom) */
   sbom?: string | boolean | number
@@ -73,7 +77,8 @@ export interface DockerBuildPushActionV5Inputs {
   target?: string | boolean | number
   /** Ulimit options (e.g., nofile=1024:1024) */
   ulimit?: string | boolean | number
-  /** GitHub Token used to authenticate against a repository for Git context */
+  /** GitHub Token used to authenticate against a repository for Git context
+   * @default ${{ github.token }} */
   'github-token'?: string | boolean | number
 }
 

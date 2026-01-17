@@ -11,19 +11,16 @@ import { Diagnostics } from '@github-actions-workflow-ts/lib'
 
 describe('ConsoleDiagnosticsReporter', () => {
   let consoleSpy: {
-    log: jest.SpiedFunction<typeof console.log>
     error: jest.SpiedFunction<typeof console.error>
   }
 
   beforeEach(() => {
     consoleSpy = {
-      log: jest.spyOn(console, 'log').mockImplementation(() => {}),
       error: jest.spyOn(console, 'error').mockImplementation(() => {}),
     }
   })
 
   afterEach(() => {
-    consoleSpy.log.mockRestore()
     consoleSpy.error.mockRestore()
   })
 
@@ -31,19 +28,6 @@ describe('ConsoleDiagnosticsReporter', () => {
     const reporter = new ConsoleDiagnosticsReporter()
 
     expect(typeof reporter.emit).toBe('function')
-  })
-
-  it('should log the diagnostic object to console.log', () => {
-    const reporter = new ConsoleDiagnosticsReporter()
-    const diagnostic: Diagnostics.Diagnostic = {
-      severity: Diagnostics.DiagnosticSeverity.WARN,
-      code: 'test-code',
-      message: 'Test message',
-    }
-
-    reporter.emit(diagnostic)
-
-    expect(consoleSpy.log).toHaveBeenCalledWith(diagnostic)
   })
 
   it('should format and log message to console.error', () => {

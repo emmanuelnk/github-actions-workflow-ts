@@ -1,6 +1,6 @@
 {
   "name": "@github-actions-workflow-ts/actions",
-  "version": "2.1.0",
+  "version": "2.2.0-beta.3",
   "description": "Typed wrappers for popular GitHub Actions",
   "author": "Emmanuel N Kyeyune",
   "license": "MIT",

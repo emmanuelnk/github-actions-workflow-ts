@@ -3,6 +3,11 @@ import { promises as fs } from 'fs'
 import * as path from 'path'
 import * as yaml from 'js-yaml'
 import { trackedActions } from './config.js'
+import {
+  type PartialSemver,
+  parsePartialVersion,
+  compareSemver,
+} from '../src/utils.js'
 
 // Types for action.yml structure
 interface ActionInput {
@@ -35,12 +40,6 @@ interface GeneratedAction {
 interface ResolvedVersion {
   tag: string
   parsed: PartialSemver
-}
-
-interface PartialSemver {
-  major: number
-  minor: number | undefined
-  patch: number | undefined
 }
 
 /**
@@ -81,22 +80,6 @@ interface GitHubTag {
 }
 
 /**
- * Parse a partial semantic version string into its components
- * Returns null if the version doesn't match semver-like patterns
- */
-function parsePartialVersion(version: string): PartialSemver | null {
-  // Match patterns like v1, v1.0, v1.0.0, 1, 1.0, 1.0.0
-  const match = version.match(/^v?(\d+)(?:\.(\d+))?(?:\.(\d+))?$/)
-  if (!match) return null
-
-  return {
-    major: parseInt(match[1], 10),
-    minor: match[2] !== undefined ? parseInt(match[2], 10) : undefined,
-    patch: match[3] !== undefined ? parseInt(match[3], 10) : undefined,
-  }
-}
-
-/**
  * Check if a version tag matches the requested major version
  */
 function matchesMajorVersion(
@@ -109,15 +92,6 @@ function matchesMajorVersion(
   if (!requested || !tag) return false
 
   return tag.major === requested.major
-}
-
-/**
- * Compare two semver versions, returns positive if a > b, negative if a < b, 0 if equal
- */
-function compareSemver(a: PartialSemver, b: PartialSemver): number {
-  if (a.major !== b.major) return a.major - b.major
-  if (a.minor !== b.minor) return (a.minor ?? 0) - (b.minor ?? 0)
-  return (a.patch ?? 0) - (b.patch ?? 0)
 }
 
 /**

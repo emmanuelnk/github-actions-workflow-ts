@@ -34,8 +34,17 @@ export function isCompatibleVersion(
   if (required.major !== actual.major) return false
   if (actual.minor === undefined) return true
   if (required.minor !== actual.minor) return actual.minor > required.minor
-  if (actual.major === undefined) return true
-  return actual.major >= required.major
+  if (actual.patch === undefined) return true
+  return actual.patch >= required.patch
+}
+
+/**
+ * Compare two semver versions, returns positive if a > b, negative if a < b, 0 if equal
+ */
+export function compareSemver(a: PartialSemver, b: PartialSemver): number {
+  if (a.major !== b.major) return a.major - b.major
+  if (a.minor !== b.minor) return (a.minor ?? 0) - (b.minor ?? 0)
+  return (a.patch ?? 0) - (b.patch ?? 0)
 }
 
 /**

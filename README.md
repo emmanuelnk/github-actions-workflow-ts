@@ -34,6 +34,7 @@ Stop writing workflows in YAML and use TypeScript instead!
   - [Installation](#installation)
     - [Full Installation (recommended)](#full-installation-recommended)
     - [Library Only](#library-only)
+    - [Typed Actions](#typed-actions)
   - [Migration from v1](#migration-from-v1)
   - [Overview](#overview)
     - [Getting Started:](#getting-started)
@@ -95,8 +96,17 @@ If you only want to generate workflow JSON objects and handle YAML file generati
 ```bash
 npm install --save-dev @github-actions-workflow-ts/lib
 ```
-
 The library package has **zero dependencies** and works in both ESM and CommonJS projects.
+
+### Typed Actions
+
+If you want typed actions for commonly used actions e.g. `actions/checkout@v6` :
+
+```bash
+npm install --save-dev @github-actions-workflow-ts/actions
+```
+
+See the section on [Typed Actions Package](#typed-actions-package) for more info. If there is an action you think is missing, [request it](https://github.com/emmanuelnk/github-actions-workflow-ts/issues/new) or [contribute it](CONTRIBUTING.md#adding-new-actions)
 
 <details><summary>
 	

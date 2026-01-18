@@ -20,6 +20,10 @@ to correctly update action types.
   ```
 2. After the types have been generated, run tests to ensure tests still pass.
    ```
+   # build the new yaml files
+   pnpm generate-workflow-files build
+
+   # test changes
    pnpm test
    ```
    Ensure Coverage remains at 100%. If not, create the necessary test(s) to keep it at 100%.

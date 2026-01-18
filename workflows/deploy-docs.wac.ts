@@ -1,4 +1,9 @@
-import { Workflow, NormalJob, Step } from '../packages/lib/src/index.js'
+import {
+  Workflow,
+  NormalJob,
+  Step,
+  expressions as ex,
+} from '../packages/lib/src/index.js'
 
 const checkout = new Step({
   name: 'Checkout',
@@ -6,7 +11,7 @@ const checkout = new Step({
 })
 
 const installNode = new Step({
-  name: 'Install Node',
+  name: 'Setup Node.js',
   uses: 'actions/setup-node@v4',
   with: { 'node-version': 20 },
 })
@@ -31,9 +36,9 @@ const deployToGhPages = new Step({
   name: 'Deploy to GitHub Pages',
   uses: 'peaceiris/actions-gh-pages@v4',
   with: {
-    github_token: '${{ secrets.GITHUB_TOKEN }}',
+    github_token: ex.secret('GITHUB_TOKEN'),
     publish_dir: './docs/build',
-    cname: '${{ vars.DOCS_CNAME }}',
+    cname: ex.var('DOCS_CNAME'),
   },
 })
 

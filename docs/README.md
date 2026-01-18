@@ -13,7 +13,7 @@ cd docs
 pnpm start
 ```
 
-The site will be available at `http://localhost:3000/github-actions-workflow-ts/`.
+The site will be available at `http://localhost:3000/`.
 
 ## Project Structure
 
@@ -127,70 +127,7 @@ export function myFunction(paramName: string): string {
 
 ## Deployment
 
-The documentation is automatically deployed to Vercel when changes are pushed to the `main` branch.
-
-### Automatic Deployment
-
-The `deploy-docs.yml` workflow:
-1. Triggers on pushes to `main` that modify `docs/**` or `packages/*/src/**`
-2. Builds the documentation site
-3. Deploys to Vercel production
-
-### Setting Up Vercel
-
-1. **Create a Vercel Account**: Sign up at [vercel.com](https://vercel.com) if you haven't already.
-
-2. **Install Vercel CLI** (optional, for local testing):
-   ```bash
-   npm i -g vercel
-   ```
-
-3. **Create a New Project**:
-   - Go to [vercel.com/new](https://vercel.com/new)
-   - Import your GitHub repository
-   - Configure the project:
-     - **Framework Preset**: Docusaurus 2
-     - **Root Directory**: `docs`
-     - **Build Command**: `pnpm build`
-     - **Output Directory**: `build`
-
-4. **Get Your Vercel Credentials**:
-   - **VERCEL_TOKEN**: Go to [vercel.com/account/tokens](https://vercel.com/account/tokens) and create a new token
-   - **VERCEL_ORG_ID**: Found in your Vercel account settings or in `.vercel/project.json` after linking
-   - **VERCEL_PROJECT_ID**: Found in your project settings or in `.vercel/project.json` after linking
-
-   To get the IDs easily, run in the `docs` directory:
-   ```bash
-   vercel link
-   cat .vercel/project.json
-   ```
-
-5. **Add GitHub Secrets**:
-   Go to your repository Settings > Secrets and variables > Actions > Secrets, and add:
-   - `VERCEL_TOKEN`
-   - `VERCEL_ORG_ID`
-   - `VERCEL_PROJECT_ID`
-
-### Custom Domain
-
-To set up a custom domain:
-
-1. Go to your Vercel project dashboard
-2. Navigate to Settings > Domains
-3. Add your custom domain
-4. Configure DNS as instructed by Vercel
-
-### Manual Deployment
-
-To manually deploy:
-
-```bash
-cd docs
-pnpm build
-vercel --prod
-```
-
-This requires the Vercel CLI to be installed and linked to your project.
+The documentation is automatically deployed to Vercel via the GitHub App integration when changes are pushed to the `main` branch.
 
 ## Troubleshooting
 

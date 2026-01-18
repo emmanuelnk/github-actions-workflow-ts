@@ -5,7 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "generate-api-docs": "typedoc --plugin typedoc-plugin-markdown --entryPoints ../packages/lib/src/index.ts --tsconfig ../packages/lib/tsconfig.json --out docs/api-reference --readme none --indexFormat table --useHTMLEncodedBrackets --sanitizeComments",
+    "build": "pnpm generate-api-docs && node scripts/fix-typedoc-mdx.mjs && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -27,9 +28,11 @@
     "@docusaurus/module-type-aliases": "3.9.2",
     "@docusaurus/tsconfig": "3.9.2",
     "@docusaurus/types": "3.9.2",
-    "docusaurus-plugin-typedoc": "^1.4.0",
+    "docusaurus-plugin-typedoc": "^1.4.2",
     "typedoc": "^0.28.0",
-    "typedoc-plugin-markdown": "^4.6.0",
+    "typedoc-plugin-markdown": "^4.9.0",
+    "typedoc-plugin-remark": "^2.0.1",
+    "remark-mdx": "^3.1.0",
     "typescript": "~5.6.2"
   },
   "browserslist": {

@@ -1,5 +1,20 @@
 import type { GeneratedWorkflowTypes } from '../types/index.js'
 
+/**
+ * Represents a single step within a GitHub Actions job.
+ *
+ * A Step can either run a shell command (`run`) or use a GitHub Action (`uses`).
+ * Steps execute sequentially within a job.
+ *
+ * @example
+ * ```typescript
+ * // Run a shell command
+ * const testStep = new Step({ name: 'Run tests', run: 'npm test' })
+ *
+ * // Use a GitHub Action
+ * const checkoutStep = new Step({ name: 'Checkout', uses: 'actions/checkout@v4' })
+ * ```
+ */
 export class Step {
   public step: GeneratedWorkflowTypes.Step
   public id: string | undefined

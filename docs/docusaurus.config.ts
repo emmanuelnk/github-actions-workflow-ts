@@ -11,13 +11,10 @@ const config: Config = {
     v4: true,
   },
 
-  // Custom domain will be set via CNAME file in static/
-  url: 'https://emmanuelnk.github.io',
-  baseUrl: '/github-actions-workflow-ts/',
+  // URL will be set by Vercel automatically, this is a fallback
+  url: 'https://github-actions-workflow-ts.vercel.app',
+  baseUrl: '/',
 
-  organizationName: 'emmanuelnk',
-  projectName: 'github-actions-workflow-ts',
-  deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
   onBrokenLinks: 'warn',
@@ -27,19 +24,9 @@ const config: Config = {
     locales: ['en'],
   },
 
-  // TypeDoc plugin disabled temporarily - needs MDX compatibility fixes
-  // plugins: [
-  //   [
-  //     'docusaurus-plugin-typedoc',
-  //     {
-  //       entryPoints: ['../packages/lib/src/index.ts'],
-  //       tsconfig: '../packages/lib/tsconfig.json',
-  //       out: 'docs/api-reference',
-  //       readme: 'none',
-  //       indexFormat: 'table',
-  //     },
-  //   ],
-  // ],
+  // TypeDoc is run separately via `pnpm generate-api-docs` before build
+  // to allow fixing MDX compatibility issues with angle brackets in JSDoc comments
+  plugins: [],
 
   presets: [
     [
@@ -65,6 +52,10 @@ const config: Config = {
     },
     navbar: {
       title: 'github-actions-workflow-ts',
+      logo: {
+        alt: 'github-actions-workflow-ts Logo',
+        src: 'img/logo.png',
+      },
       items: [
         {
           type: 'docSidebar',
@@ -72,21 +63,22 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
-        // TODO: Re-enable when TypeDoc MDX compatibility is fixed
-        // {
-        //   to: '/docs/api-reference/',
-        //   label: 'API',
-        //   position: 'left',
-        // },
+        {
+          to: '/docs/api-reference/',
+          label: 'API',
+          position: 'left',
+        },
         {
           href: 'https://github.com/emmanuelnk/github-actions-workflow-ts',
-          label: 'GitHub',
           position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
         {
           href: 'https://www.npmjs.com/package/@github-actions-workflow-ts/lib',
-          label: 'npm',
           position: 'right',
+          className: 'header-npm-link',
+          'aria-label': 'npm package',
         },
       ],
     },
@@ -100,11 +92,10 @@ const config: Config = {
               label: 'Getting Started',
               to: '/docs/getting-started/installation',
             },
-            // TODO: Re-enable when TypeDoc MDX compatibility is fixed
-            // {
-            //   label: 'API Reference',
-            //   to: '/docs/api-reference/',
-            // },
+            {
+              label: 'API Reference',
+              to: '/docs/api-reference/',
+            },
           ],
         },
         {

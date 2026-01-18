@@ -1,6 +1,20 @@
 import type { GeneratedWorkflowTypes } from '../types/index.js'
 import type { Step } from '../step/index.js'
 
+/**
+ * Represents a standard GitHub Actions job that runs on a specified runner.
+ *
+ * A NormalJob contains steps that execute commands or actions on a runner.
+ * Jobs can depend on other jobs using the `needs` method.
+ *
+ * @example
+ * ```typescript
+ * const testJob = new NormalJob('test', {
+ *   'runs-on': 'ubuntu-latest',
+ * })
+ * testJob.addStep(new Step({ name: 'Checkout', uses: 'actions/checkout@v4' }))
+ * ```
+ */
 export class NormalJob {
   public name: string
   public job: GeneratedWorkflowTypes.NormalJob
@@ -52,6 +66,20 @@ export class NormalJob {
   }
 }
 
+/**
+ * Represents a job that calls a reusable workflow.
+ *
+ * A ReusableWorkflowCallJob allows you to call another workflow file,
+ * either from the same repository or an external repository.
+ *
+ * @example
+ * ```typescript
+ * const deployJob = new ReusableWorkflowCallJob('deploy', {
+ *   uses: './.github/workflows/deploy.yml',
+ *   with: { environment: 'production' },
+ * })
+ * ```
+ */
 export class ReusableWorkflowCallJob {
   public name: string
   public job: GeneratedWorkflowTypes.ReusableWorkflowCallJob

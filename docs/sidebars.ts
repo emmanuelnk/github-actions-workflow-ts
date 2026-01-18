@@ -37,6 +37,7 @@ const sidebars: SidebarsConfig = {
       label: 'Contributing',
       items: ['contributing/development-setup', 'contributing/adding-actions'],
     },
+    'credits',
   ],
 }
 

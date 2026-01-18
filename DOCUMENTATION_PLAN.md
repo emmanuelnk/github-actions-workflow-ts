@@ -66,11 +66,24 @@ npx create-docusaurus@latest docs classic --typescript
 pnpm add -D @docusaurus/core @docusaurus/preset-classic
 ```
 
-#### 1.2 Recommended Directory Structure
+#### 1.2 Workspace Configuration
+
+The `docs` folder is a pnpm workspace package at the root level (not under `packages/` since it doesn't go through the npm release cycle).
+
+Update `pnpm-workspace.yaml`:
+
+```yaml
+packages:
+  - 'packages/*'
+  - 'docs'
+```
+
+#### 1.3 Recommended Directory Structure
 
 ```
 github-actions-workflow-ts/
-├── docs/                          # Docusaurus site
+├── docs/                          # Docusaurus site (workspace package, not published)
+│   ├── package.json               # name: "docs", private: true
 │   ├── docs/                      # Documentation content
 │   │   ├── getting-started/
 │   │   │   ├── installation.md
@@ -102,14 +115,52 @@ github-actions-workflow-ts/
 │   ├── static/
 │   │   └── img/
 │   ├── docusaurus.config.ts
-│   ├── sidebars.ts
-│   └── package.json
-├── packages/
+│   └── sidebars.ts
+├── packages/                      # Published packages (go through release cycle)
+│   ├── lib/
+│   ├── cli/
+│   └── actions/
 ├── README.md                      # Simplified - points to docs site
 └── ...
 ```
 
-#### 1.3 Configuration
+#### 1.4 Docs Package.json
+
+```json
+{
+  "name": "docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/preset-classic": "^3.7.0",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.7.0",
+    "@docusaurus/types": "^3.7.0",
+    "docusaurus-plugin-typedoc": "^1.4.0",
+    "typedoc": "^0.28.0",
+    "typedoc-plugin-markdown": "^4.6.0",
+    "typescript": "^5.8.0"
+  },
+  "browserslist": {
+    "production": [">0.5%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  }
+}
+```
+
+#### 1.5 Docusaurus Configuration
 
 ```typescript
 // docs/docusaurus.config.ts

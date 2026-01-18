@@ -5,6 +5,7 @@ Write GitHub Actions workflows in TypeScript instead of YAML!
 <p align="center"><img src="https://github.com/emmanuelnk/github-actions-workflow-ts/assets/19330930/9121bb33-cd51-41f3-830f-9b4bd1117320" alt="github-actions-workflow-ts-logo" width="400"/></p>
 
 <p align="center">
+
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts">
       <img src="https://raw.githubusercontent.com/ellerbrock/open-source-badges/master/badges/open-source-v1/open-source.png" alt="love opensource">
   </a>
@@ -17,8 +18,14 @@ Write GitHub Actions workflows in TypeScript instead of YAML!
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml">
       <img src="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml/badge.svg" alt="Tests">
   </a>
+      <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/schema-change-check.yml">
+      <img src="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/schema-change-check.yml/badge.svg" alt="Schema Change Check">
+  </a>
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions">
-      <img src="https://github-actions-workflow-ts.vercel.app/badges/coverage.svg" alt="coverage">
+      <img src="https://emmanuelnk.github.io/github-actions-workflow-ts/badges/coverage.svg" alt="coverage">
+  </a>
+  <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/issues">
+      <img src="https://img.shields.io/github/issues/emmanuelnk/github-actions-workflow-ts.svg" alt="issues">
   </a>
 </p>
 

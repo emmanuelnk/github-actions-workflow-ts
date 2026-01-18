@@ -183,6 +183,7 @@ export const generateWorkflowFiles = async (
 
   Context.__internalSetGlobalContext({
     diagnostics: new ConsoleDiagnosticsReporter(),
+    diagnosticRules: config.diagnostics?.rules,
   })
 
   for (const filePath of workflowFilePaths) {

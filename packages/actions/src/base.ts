@@ -73,6 +73,7 @@ export abstract class BaseAction<
         code: 'action-version-unverifiable',
         message: `Cannot verify the version of action '${this.step.uses}' because the repository specifier does not match '${this.owner}/${this.repo}'.`,
         stack: this.generateStackTrace(),
+        action: this.step.uses,
       })
       return null
     }
@@ -89,6 +90,7 @@ export abstract class BaseAction<
         code: 'action-version-unverifiable',
         message: `Cannot verify the version of action '${this.step.uses}' because the git ref is not a valid semver version.`,
         stack: this.generateStackTrace(),
+        action: this.step.uses,
       })
       return false
     }
@@ -111,6 +113,7 @@ export abstract class BaseAction<
         code: 'action-version-semver-violation',
         message: `The version of action '${this.step.uses}' does not satisfy the semver constraint '^${requiredVersion.major}.${requiredVersion.minor ?? 0}.${requiredVersion.patch ?? 0}'.`,
         stack: this.generateStackTrace(),
+        action: this.step.uses,
       })
       return false
     }

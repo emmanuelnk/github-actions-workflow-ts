@@ -1,7 +1,9 @@
-import type { DiagnosticsReporter } from './diagnostics'
+import type { DiagnosticsReporter, DiagnosticRules } from './diagnostics'
 
 export interface Context {
   diagnostics: DiagnosticsReporter
+  /** Configured diagnostic rules from wac.config.json */
+  diagnosticRules?: DiagnosticRules
 }
 
 const wacContextSymbol = Symbol.for('[wac-context]')

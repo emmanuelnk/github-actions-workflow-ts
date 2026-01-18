@@ -51,6 +51,91 @@ const job = new NormalJob('build', { 'runs-on': 'ubuntu-latest' })
   .addStep(setupNode)
 ```
 
+## Version Validation & Diagnostics
+
+When using typed actions, the CLI validates that the action version you specify matches the expected version. For example, if you use `ActionsCheckoutV4` but override the `uses` field to `actions/checkout@v3`, a warning will be emitted during build.
+
+### Diagnostic Codes
+
+| Code | Description |
+|------|-------------|
+| `action-version-unverifiable` | The action version cannot be verified because the git ref is not a valid semver (e.g., `@main`, `@feature-branch`) or the repository doesn't match |
+| `action-version-semver-violation` | The action version doesn't satisfy the expected semver constraint (e.g., using `@v3` with a `V4` typed action) |
+
+### Configuring Diagnostics
+
+You can configure how these diagnostics are handled in your `wac.config.json`:
+
+```json
+{
+  "diagnostics": {
+    "rules": {
+      "action-version-unverifiable": "off",
+      "action-version-semver-violation": "error"
+    }
+  }
+}
+```
+
+#### Severity Levels
+
+- `"off"` - Suppress the diagnostic entirely
+- `"warn"` - Emit as a warning (default behavior)
+- `"error"` - Upgrade to an error
+
+#### Advanced: Per-Action Rules
+
+You can suppress diagnostics for specific actions while keeping them enabled for others:
+
+```json
+{
+  "diagnostics": {
+    "rules": {
+      "action-version-semver-violation": {
+        "severity": "error",
+        "exclude": [
+          "actions/checkout@*",
+          "actions/setup-node@v3"
+        ]
+      }
+    }
+  }
+}
+```
+
+The `exclude` array supports patterns:
+- Exact match: `"actions/checkout@v3"`
+- Wildcard version: `"actions/checkout@*"` (matches any version)
+- Wildcard repo: `"actions/*"` (matches all actions from an org)
+
+### Example: Intentionally Using an Older Version
+
+If you need to use an older action version for compatibility reasons:
+
+```typescript
+import { ActionsCheckoutV4 } from '@github-actions-workflow-ts/actions'
+
+// This will emit a warning by default
+const checkout = new ActionsCheckoutV4({
+  name: 'Checkout',
+  uses: 'actions/checkout@v3', // intentionally using v3
+})
+```
+
+To suppress just this warning, add to `wac.config.json`:
+
+```json
+{
+  "diagnostics": {
+    "rules": {
+      "action-version-semver-violation": {
+        "exclude": ["actions/checkout@v3"]
+      }
+    }
+  }
+}
+```
+
 ## Available Actions
 
 <!-- GENERATED-ACTIONS-TABLE:START -->

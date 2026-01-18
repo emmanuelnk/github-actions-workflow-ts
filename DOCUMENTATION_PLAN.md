@@ -397,6 +397,52 @@ Use Vercel or Netlify for PR preview deployments:
 
 ---
 
+## Local Development
+
+### Running Docs Locally
+
+```bash
+# From project root
+cd docs
+
+# Start development server (hot reload)
+pnpm start
+# Opens http://localhost:3000 automatically
+
+# Or build and serve production version
+pnpm build
+pnpm serve
+# Opens http://localhost:3000
+```
+
+### Development Commands
+
+| Command | Description |
+|---------|-------------|
+| `pnpm start` | Start dev server with hot reload |
+| `pnpm build` | Build production static files to `build/` |
+| `pnpm serve` | Serve production build locally |
+| `pnpm clear` | Clear Docusaurus cache (useful for troubleshooting) |
+| `pnpm typecheck` | Run TypeScript type checking |
+
+### From Monorepo Root
+
+```bash
+# Using pnpm workspace filter
+pnpm --filter docs start
+pnpm --filter docs build
+```
+
+### What to Check Locally
+
+- Navigation and sidebar structure
+- Code syntax highlighting
+- Internal links (Docusaurus errors on broken links)
+- Mobile responsiveness
+- Search functionality (local search plugin recommended for dev)
+
+---
+
 ## Maintenance Guide
 
 ### Adding New Documentation

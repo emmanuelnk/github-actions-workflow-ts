@@ -46,3 +46,83 @@ jobs:
             git diff -- packages/lib
             exit 1
           fi
+  CreateSchemaUpdatePR:
+    runs-on: ubuntu-latest
+    needs:
+      - SchemaChangeCheck
+    if: failure() && github.event_name == 'schedule'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install tsx
+        run: npm install -g tsx
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install Dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Generate Workflow Types
+        run: pnpm generate-workflow-types
+      - name: Check for existing schema update PR
+        id: check-pr
+        uses: actions/github-script@v7
+        with:
+          script: |-
+            const { repo, owner } = context.repo;
+            const pulls = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+              head: \`\${owner}:chore/schema-update-\`
+            });
+            const schemaUpdatePRs = pulls.data.filter(pr => pr.head.ref.startsWith('chore/schema-update-'));
+            if (schemaUpdatePRs.length > 0) {
+              console.log(\`Found existing schema update PR: \${schemaUpdatePRs[0].html_url}\`);
+              core.setOutput('exists', 'true');
+              core.setOutput('pr_url', schemaUpdatePRs[0].html_url);
+            } else {
+              console.log('No existing schema update PR found');
+              core.setOutput('exists', 'false');
+            }
+      - name: Get branch name
+        id: branch-name
+        if: steps.check-pr.outputs.exists == 'false'
+        run: echo "branch=chore/schema-update-$(date +%y%m%d)" >> $GITHUB_OUTPUT
+      - name: Configure git
+        if: steps.check-pr.outputs.exists == 'false'
+        run: |-
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Create branch and commit changes
+        if: steps.check-pr.outputs.exists == 'false'
+        run: |-
+          git checkout -b ${{ steps.branch-name.outputs.branch }}
+          git add packages/lib
+          git commit -m "chore: update types"
+      - name: Push branch
+        if: steps.check-pr.outputs.exists == 'false'
+        run: git push origin ${{ steps.branch-name.outputs.branch }}
+      - name: Create Pull Request
+        if: steps.check-pr.outputs.exists == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |-
+            const { repo, owner } = context.repo;
+            const branchName = '${{ steps.branch-name.outputs.branch }}';
+            const result = await github.rest.pulls.create({
+              owner,
+              repo,
+              title: 'chore: update types',
+              head: branchName,
+              base: 'main',
+              body: 'Automated PR to update workflow types due to schema changes.'
+            });
+            console.log(\`PR created: \${result.data.html_url}\`);

@@ -203,5 +203,93 @@ describe('BaseAction', () => {
       expect(emittedDiagnostics[0].stack).toBeDefined()
       expect(typeof emittedDiagnostics[0].stack).toBe('string')
     })
+
+    describe('in-code suppression', () => {
+      it('should suppress warnings with suppressWarnings prop', () => {
+        new ActionsSetupNodeV4({
+          name: 'Setup Node.js',
+          uses: 'actions/setup-node@v3',
+          suppressWarnings: ['action-version-semver-violation'],
+        })
+
+        expect(emittedDiagnostics).toHaveLength(0)
+      })
+
+      it('should suppress warnings with Diagnostics.suppress()', () => {
+        new ActionsSetupNodeV4({
+          name: 'Setup Node.js',
+          uses: Diagnostics.suppress(
+            'actions/setup-node@v3',
+            'action-version-semver-violation',
+          ),
+        })
+
+        expect(emittedDiagnostics).toHaveLength(0)
+      })
+
+      it('should suppress warnings with Diagnostics.suppress() and reason', () => {
+        new ActionsSetupNodeV4({
+          name: 'Setup Node.js',
+          uses: Diagnostics.suppress(
+            'actions/setup-node@v3',
+            'action-version-semver-violation',
+            'Using v3 for legacy compatibility',
+          ),
+        })
+
+        expect(emittedDiagnostics).toHaveLength(0)
+      })
+
+      it('should suppress multiple warning codes', () => {
+        new ActionsSetupNodeV4({
+          name: 'Setup Node.js',
+          uses: 'some-other/action@main',
+          suppressWarnings: ['action-version-unverifiable'],
+        })
+
+        expect(emittedDiagnostics).toHaveLength(0)
+      })
+
+      it('should only suppress specified codes', () => {
+        // Suppressing unverifiable but not semver-violation
+        new ActionsSetupNodeV4({
+          name: 'Setup Node.js',
+          uses: 'actions/setup-node@v3',
+          suppressWarnings: ['action-version-unverifiable'],
+        })
+
+        // Should still emit semver-violation
+        expect(emittedDiagnostics).toHaveLength(1)
+        expect(emittedDiagnostics[0].code).toBe(
+          'action-version-semver-violation',
+        )
+      })
+
+      it('should combine suppressWarnings prop and Diagnostics.suppress()', () => {
+        new ActionsSetupNodeV4({
+          name: 'Setup Node.js',
+          uses: Diagnostics.suppress(
+            'actions/setup-node@v3',
+            'action-version-semver-violation',
+          ),
+          suppressWarnings: ['action-version-unverifiable'],
+        })
+
+        expect(emittedDiagnostics).toHaveLength(0)
+      })
+
+      it('should unwrap Diagnostics.suppress() value in step.uses', () => {
+        const step = new ActionsSetupNodeV4({
+          name: 'Setup Node.js',
+          uses: Diagnostics.suppress(
+            'actions/setup-node@v3',
+            'action-version-semver-violation',
+          ),
+        })
+
+        // The step.uses should have the unwrapped string value
+        expect(step.step.uses).toBe('actions/setup-node@v3')
+      })
+    })
   })
 })

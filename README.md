@@ -359,6 +359,24 @@ Use `exclude` to suppress warnings for specific actions. Supports wildcards:
 - `"actions/checkout@*"` - matches any version of actions/checkout
 - `"actions/*"` - matches all actions from the `actions` org
 
+**In-Code Suppression:**
+You can also suppress warnings directly in code using `suppressWarnings` prop or `Diagnostics.suppress()`:
+
+```typescript
+// Using suppressWarnings prop
+new ActionsCheckoutV4({
+  uses: 'actions/checkout@v3',
+  suppressWarnings: ['action-version-semver-violation'],
+})
+
+// Using Diagnostics.suppress()
+new ActionsCheckoutV4({
+  uses: Diagnostics.suppress('actions/checkout@v3', 'action-version-semver-violation'),
+})
+```
+
+See the [Typed Actions documentation](./packages/actions/README.md) for more details.
+
 </details>
 
 ## Workflow Classes

@@ -225,6 +225,113 @@ describe('Diagnostics', () => {
       expect(typeof stack).toBe('string')
     })
   })
+
+  describe('suppress', () => {
+    it('should wrap a value with suppression metadata (single code)', () => {
+      const result = Diagnostics.suppress('test-value', 'test-code')
+
+      expect(Diagnostics.isSuppressedValue(result)).toBe(true)
+      expect(result.value).toBe('test-value')
+      expect(result.suppressions).toEqual([{ code: 'test-code' }])
+    })
+
+    it('should wrap a value with suppression metadata (multiple codes)', () => {
+      const result = Diagnostics.suppress('test-value', ['code-1', 'code-2'])
+
+      expect(result.suppressions).toEqual([
+        { code: 'code-1' },
+        { code: 'code-2' },
+      ])
+    })
+
+    it('should include reason when provided', () => {
+      const result = Diagnostics.suppress(
+        'test-value',
+        'test-code',
+        'Using old version for compatibility',
+      )
+
+      expect(result.suppressions).toEqual([
+        { code: 'test-code', reason: 'Using old version for compatibility' },
+      ])
+    })
+
+    it('should include same reason for all codes', () => {
+      const result = Diagnostics.suppress(
+        'test-value',
+        ['code-1', 'code-2'],
+        'Legacy support',
+      )
+
+      expect(result.suppressions).toEqual([
+        { code: 'code-1', reason: 'Legacy support' },
+        { code: 'code-2', reason: 'Legacy support' },
+      ])
+    })
+  })
+
+  describe('isSuppressedValue', () => {
+    it('should return true for suppressed values', () => {
+      const suppressed = Diagnostics.suppress('value', 'code')
+
+      expect(Diagnostics.isSuppressedValue(suppressed)).toBe(true)
+    })
+
+    it('should return false for regular values', () => {
+      expect(Diagnostics.isSuppressedValue('string')).toBe(false)
+      expect(Diagnostics.isSuppressedValue(123)).toBe(false)
+      expect(Diagnostics.isSuppressedValue(null)).toBe(false)
+      expect(Diagnostics.isSuppressedValue(undefined)).toBe(false)
+      expect(Diagnostics.isSuppressedValue({ value: 'test' })).toBe(false)
+    })
+  })
+
+  describe('unwrapValue', () => {
+    it('should return the inner value for suppressed values', () => {
+      const suppressed = Diagnostics.suppress('test-value', 'code')
+
+      expect(Diagnostics.unwrapValue(suppressed)).toBe('test-value')
+    })
+
+    it('should return the value as-is for non-suppressed values', () => {
+      expect(Diagnostics.unwrapValue('plain-string')).toBe('plain-string')
+      expect(Diagnostics.unwrapValue(42)).toBe(42)
+    })
+  })
+
+  describe('getSuppressions', () => {
+    it('should return suppressions for suppressed values', () => {
+      const suppressed = Diagnostics.suppress('value', ['code-1', 'code-2'])
+
+      expect(Diagnostics.getSuppressions(suppressed)).toEqual([
+        { code: 'code-1' },
+        { code: 'code-2' },
+      ])
+    })
+
+    it('should return undefined for non-suppressed values', () => {
+      expect(Diagnostics.getSuppressions('plain-value')).toBeUndefined()
+    })
+  })
+
+  describe('isCodeSuppressed', () => {
+    it('should return true when code is in suppressions', () => {
+      const suppressed = Diagnostics.suppress('value', ['code-1', 'code-2'])
+
+      expect(Diagnostics.isCodeSuppressed(suppressed, 'code-1')).toBe(true)
+      expect(Diagnostics.isCodeSuppressed(suppressed, 'code-2')).toBe(true)
+    })
+
+    it('should return false when code is not in suppressions', () => {
+      const suppressed = Diagnostics.suppress('value', 'code-1')
+
+      expect(Diagnostics.isCodeSuppressed(suppressed, 'other-code')).toBe(false)
+    })
+
+    it('should return false for non-suppressed values', () => {
+      expect(Diagnostics.isCodeSuppressed('value', 'any-code')).toBe(false)
+    })
+  })
 })
 
 describe('Context', () => {

@@ -123,3 +123,104 @@ export function generateStackTrace(
   )
   return lines.slice(1, indexOfModuleJobRun).join('\n')
 }
+
+/**
+ * Symbol used to identify suppressed values.
+ */
+const SUPPRESSED_VALUE_SYMBOL = Symbol.for('[wac-suppressed-value]')
+
+/**
+ * A value wrapped with diagnostic suppression metadata.
+ * Created by the `suppress()` function.
+ */
+export interface SuppressedValue<T> {
+  [SUPPRESSED_VALUE_SYMBOL]: true
+  value: T
+  suppressions: Array<{ code: string; reason?: string }>
+}
+
+/**
+ * Wraps a value with diagnostic suppression metadata.
+ * Use this to suppress specific warnings for a value in-code.
+ *
+ * @param value - The value to wrap
+ * @param codes - Diagnostic code(s) to suppress (e.g., 'action-version-semver-violation')
+ * @param reason - Optional reason for suppression (for documentation purposes)
+ * @returns A wrapped value with suppression metadata
+ *
+ * @example
+ * ```typescript
+ * import { Diagnostics } from '@github-actions-workflow-ts/lib'
+ *
+ * new ActionsCheckoutV4({
+ *   uses: Diagnostics.suppress(
+ *     'actions/checkout@v3',
+ *     'action-version-semver-violation',
+ *     'Using v3 for legacy compatibility'
+ *   ),
+ * })
+ * ```
+ */
+export function suppress<T>(
+  value: T,
+  codes: string | string[],
+  reason?: string,
+): SuppressedValue<T> {
+  const codeArray = Array.isArray(codes) ? codes : [codes]
+  return {
+    [SUPPRESSED_VALUE_SYMBOL]: true,
+    value,
+    suppressions: codeArray.map((code) => ({ code, reason })),
+  }
+}
+
+/**
+ * Type guard to check if a value is a SuppressedValue.
+ */
+export function isSuppressedValue<T>(
+  val: T | SuppressedValue<T>,
+): val is SuppressedValue<T> {
+  return (
+    typeof val === 'object' &&
+    val !== null &&
+    SUPPRESSED_VALUE_SYMBOL in val &&
+    (val as SuppressedValue<T>)[SUPPRESSED_VALUE_SYMBOL] === true
+  )
+}
+
+/**
+ * Unwraps a potentially suppressed value, returning the underlying value.
+ */
+export function unwrapValue<T>(val: T | SuppressedValue<T>): T {
+  if (isSuppressedValue(val)) {
+    return val.value
+  }
+  return val
+}
+
+/**
+ * Gets suppression metadata from a value, if present.
+ * Returns undefined if the value is not suppressed.
+ */
+export function getSuppressions<T>(
+  val: T | SuppressedValue<T>,
+): Array<{ code: string; reason?: string }> | undefined {
+  if (isSuppressedValue(val)) {
+    return val.suppressions
+  }
+  return undefined
+}
+
+/**
+ * Checks if a diagnostic code is suppressed for a given value.
+ */
+export function isCodeSuppressed<T>(
+  val: T | SuppressedValue<T>,
+  code: string,
+): boolean {
+  const suppressions = getSuppressions(val)
+  if (!suppressions) {
+    return false
+  }
+  return suppressions.some((s) => s.code === code)
+}

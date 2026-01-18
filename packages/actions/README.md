@@ -110,19 +110,50 @@ The `exclude` array supports patterns:
 
 ### Example: Intentionally Using an Older Version
 
-If you need to use an older action version for compatibility reasons:
+If you need to use an older action version for compatibility reasons, you can suppress the warning in two ways:
+
+#### Option 1: In-Code Suppression with `suppressWarnings` prop
 
 ```typescript
 import { ActionsCheckoutV4 } from '@github-actions-workflow-ts/actions'
 
-// This will emit a warning by default
 const checkout = new ActionsCheckoutV4({
   name: 'Checkout',
-  uses: 'actions/checkout@v3', // intentionally using v3
+  uses: 'actions/checkout@v3',
+  suppressWarnings: ['action-version-semver-violation'],
 })
 ```
 
-To suppress just this warning, add to `wac.config.json`:
+#### Option 2: In-Code Suppression with `Diagnostics.suppress()`
+
+```typescript
+import { ActionsCheckoutV4 } from '@github-actions-workflow-ts/actions'
+import { Diagnostics } from '@github-actions-workflow-ts/lib'
+
+const checkout = new ActionsCheckoutV4({
+  name: 'Checkout',
+  uses: Diagnostics.suppress(
+    'actions/checkout@v3',
+    'action-version-semver-violation',
+    'Using v3 for legacy compatibility' // optional reason
+  ),
+})
+```
+
+You can also suppress multiple codes:
+
+```typescript
+const checkout = new ActionsCheckoutV4({
+  uses: Diagnostics.suppress(
+    'actions/checkout@v3',
+    ['action-version-semver-violation', 'action-version-unverifiable'],
+  ),
+})
+```
+
+#### Option 3: Configuration-based Suppression
+
+Add to `wac.config.json`:
 
 ```json
 {

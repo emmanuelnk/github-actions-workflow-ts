@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Amazon ECR "Login" Action for GitHub Actions
@@ -35,8 +38,14 @@ export interface AwsActionsAmazonEcrLoginV2Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/amazon-ecr-login@v2'. */
-  uses?: 'aws-actions/amazon-ecr-login@v2' | (string & {})
+  /**
+   * The action reference. If provided, must match 'aws-actions/amazon-ecr-login@v2'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
+  uses?:
+    | 'aws-actions/amazon-ecr-login@v2'
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcrLoginV2Inputs
   /** Sets environment variables for this step. */
@@ -45,6 +54,12 @@ export interface AwsActionsAmazonEcrLoginV2Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class AwsActionsAmazonEcrLoginV2 extends BaseAction<
@@ -64,13 +79,25 @@ export class AwsActionsAmazonEcrLoginV2 extends BaseAction<
     const outputNames = ['registry'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'aws-actions/amazon-ecr-login@v2',
+        uses: unwrappedUses ?? 'aws-actions/amazon-ecr-login@v2',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -78,9 +105,12 @@ export class AwsActionsAmazonEcrLoginV2 extends BaseAction<
         uses: 'aws-actions/amazon-ecr-login@v2'
       },
       outputNames,
+      suppressWarnings,
     )
 
-    if (uses) {
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
       this.validateUses()
     }
   }

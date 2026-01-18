@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * GitHub Script
@@ -44,8 +47,14 @@ export interface ActionsGithubScriptV6Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/github-script@v6'. */
-  uses?: 'actions/github-script@v6' | (string & {})
+  /**
+   * The action reference. If provided, must match 'actions/github-script@v6'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
+  uses?:
+    | 'actions/github-script@v6'
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: ActionsGithubScriptV6Inputs
   /** Sets environment variables for this step. */
@@ -54,6 +63,12 @@ export interface ActionsGithubScriptV6Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class ActionsGithubScriptV6 extends BaseAction<
@@ -73,21 +88,36 @@ export class ActionsGithubScriptV6 extends BaseAction<
     const outputNames = ['result'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'actions/github-script@v6',
+        uses: unwrappedUses ?? 'actions/github-script@v6',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/github-script@v6' },
       outputNames,
+      suppressWarnings,
     )
 
-    if (uses) {
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
       this.validateUses()
     }
   }

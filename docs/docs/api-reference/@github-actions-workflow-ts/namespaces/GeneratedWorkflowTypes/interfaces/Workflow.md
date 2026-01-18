@@ -6,7 +6,7 @@
 
 # Interface: Workflow
 
-Defined in: [types/githubActionsWorkflow.ts:659](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L659)
+Defined in: [types/githubActionsWorkflow.ts:519](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L519)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/githubActionsWorkflow.ts:659](https://github.com/emmanuelnk/g
 
 > `optional` **concurrency**: `string` \| [`Concurrency`](Concurrency.md)
 
-Defined in: [types/githubActionsWorkflow.ts:926](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L926)
+Defined in: [types/githubActionsWorkflow.ts:729](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L729)
 
 Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
 You can also specify concurrency at the workflow level.
@@ -26,7 +26,7 @@ When a concurrent job or workflow is queued, if another job or workflow using th
 
 > `optional` **defaults**: [`Defaults`](Defaults.md)
 
-Defined in: [types/githubActionsWorkflow.ts:920](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L920)
+Defined in: [types/githubActionsWorkflow.ts:723](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L723)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [types/githubActionsWorkflow.ts:920](https://github.com/emmanuelnk/g
 
 > `optional` **env**: `string` \| \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \}
 
-Defined in: [types/githubActionsWorkflow.ts:915](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L915)
+Defined in: [types/githubActionsWorkflow.ts:718](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L718)
 
 To set custom environment variables, you need to specify the variables in the workflow file. You can define environment variables for a step, job, or entire workflow using the jobs.\<job_id\>.steps[*].env, jobs.\<job_id\>.env, and env keywords. For more information, see https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepsenv
 
@@ -44,7 +44,7 @@ To set custom environment variables, you need to specify the variables in the wo
 
 > **jobs**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:932](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L932)
+Defined in: [types/githubActionsWorkflow.ts:735](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L735)
 
 A workflow run is made up of one or more jobs. Jobs run in parallel by default. To run jobs sequentially, you can define dependencies on other jobs using the jobs.\<job_id\>.needs keyword.
 Each job runs in a fresh instance of the virtual environment specified by runs-on.
@@ -63,7 +63,7 @@ via the `patternProperty` "^[_a-zA-Z][a-zA-Z0-9_-]*$".
 
 > `optional` **name**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:663](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L663)
+Defined in: [types/githubActionsWorkflow.ts:523](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L523)
 
 The name of your workflow. GitHub displays the names of your workflows on your repository's actions page. If you omit this field, GitHub sets the name to the workflow's filename.
 
@@ -71,9 +71,9 @@ The name of your workflow. GitHub displays the names of your workflows on your r
 
 ### on
 
-> **on**: [`Event`](../type-aliases/Event.md) \| \[[`Event`](../type-aliases/Event.md), `...Event[]`\] \| \{ `branch_protection_rule?`: `object` & `object`; `check_run?`: `object` & `object`; `check_suite?`: `object` & `object`; `create?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `delete?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `deployment?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `deployment_status?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `discussion?`: `object` & `object`; `discussion_comment?`: `object` & `object`; `fork?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `gollum?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `issue_comment?`: `object` & `object`; `issues?`: `object` & `object`; `label?`: `object` & `object`; `merge_group?`: `object` & `object`; `milestone?`: `object` & `object`; `page_build?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `project?`: `object` & `object`; `project_card?`: `object` & `object`; `project_column?`: `object` & `object`; `public?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `pull_request?`: `object` & `object` \| `null`; `pull_request_review?`: `object` & `object`; `pull_request_review_comment?`: `object` & `object`; `pull_request_target?`: `object` & `object` \| `null`; `push?`: `object` & `object` \| `null`; `registry_package?`: `object` & `object`; `release?`: `object` & `object`; `repository_dispatch?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `schedule?`: \[\{ `cron?`: `string`; \}, `...{ cron?: string }[]`\]; `status?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `watch?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `workflow_call?`: \{\[`k`: `string`\]: `unknown`; `inputs?`: \{\[`k`: `string`\]: `object`; \}; `outputs?`: \{\[`k`: `string`\]: `object`; \}; `secrets?`: \{\[`k`: `string`\]: `object`; \}; \}; `workflow_dispatch?`: \{ `inputs?`: \{\[`k`: `string`\]: [`WorkflowDispatchInput`](../type-aliases/WorkflowDispatchInput.md); \}; \}; `workflow_run?`: `object` & `object`; \}
+> **on**: [`Event`](../type-aliases/Event.md) \| \[[`Event`](../type-aliases/Event.md), `...Event[]`\] \| \{ `branch_protection_rule?`: BranchProtectionRuleEvent \| undefined; `check_run?`: CheckRunEvent \| undefined; `check_suite?`: CheckSuiteEvent \| undefined; `create?`: CreateEvent \| undefined; `delete?`: DeleteEvent \| undefined; `deployment?`: DeploymentEvent \| undefined; `deployment_status?`: DeploymentStatusEvent \| undefined; `discussion?`: DiscussionEvent \| undefined; `discussion_comment?`: DiscussionCommentEvent \| undefined; `fork?`: ForkEvent \| undefined; `gollum?`: GollumEvent \| undefined; `issue_comment?`: IssueCommentEvent \| undefined; `issues?`: IssuesEvent \| undefined; `label?`: LabelEvent \| undefined; `merge_group?`: MergeGroupEvent \| undefined; `milestone?`: MilestoneEvent \| undefined; `page_build?`: PageBuildEvent \| undefined; `project?`: ProjectEvent \| undefined; `project_card?`: ProjectCardEvent \| undefined; `project_column?`: ProjectColumnEvent \| undefined; `public?`: PublicEvent \| undefined; `pull_request?`: `object` & `object` \| `null`; `pull_request_review?`: PullRequestReviewEvent \| undefined; `pull_request_review_comment?`: PullRequestReviewCommentEvent \| undefined; `pull_request_target?`: `object` & `object` \| `null`; `push?`: `object` & `object` \| `null`; `registry_package?`: RegistryPackageEvent \| undefined; `release?`: ReleaseEvent \| undefined; `repository_dispatch?`: RepositoryDispatchEvent \| undefined; `schedule?`: \[\{ `cron?`: `string`; \}, `...{ cron?: string }[]`\]; `status?`: StatusEvent \| undefined; `watch?`: WatchEvent \| undefined; `workflow_call?`: \{\[`k`: `string`\]: `unknown`; `inputs?`: \{\[`k`: `string`\]: `object`; \}; `outputs?`: \{\[`k`: `string`\]: `object`; \}; `secrets?`: \{\[`k`: `string`\]: `object`; \}; \}; `workflow_dispatch?`: \{ `inputs?`: \{\[`k`: `string`\]: [`WorkflowDispatchInput`](../type-aliases/WorkflowDispatchInput.md); \}; \}; `workflow_run?`: WorkflowRunEvent \| undefined; \}
 
-Defined in: [types/githubActionsWorkflow.ts:667](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L667)
+Defined in: [types/githubActionsWorkflow.ts:527](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L527)
 
 The name of the GitHub event that triggers the workflow. You can provide a single event string, array of events, array of event types, or an event configuration map that schedules a workflow or restricts the execution of a workflow to specific files, tags, or branch changes. For a list of available events, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows.
 
@@ -83,185 +83,91 @@ The name of the GitHub event that triggers the workflow. You can provide a singl
 
 \[[`Event`](../type-aliases/Event.md), `...Event[]`\]
 
-\{ `branch_protection_rule?`: `object` & `object`; `check_run?`: `object` & `object`; `check_suite?`: `object` & `object`; `create?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `delete?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `deployment?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `deployment_status?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `discussion?`: `object` & `object`; `discussion_comment?`: `object` & `object`; `fork?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `gollum?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `issue_comment?`: `object` & `object`; `issues?`: `object` & `object`; `label?`: `object` & `object`; `merge_group?`: `object` & `object`; `milestone?`: `object` & `object`; `page_build?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `project?`: `object` & `object`; `project_card?`: `object` & `object`; `project_column?`: `object` & `object`; `public?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `pull_request?`: `object` & `object` \| `null`; `pull_request_review?`: `object` & `object`; `pull_request_review_comment?`: `object` & `object`; `pull_request_target?`: `object` & `object` \| `null`; `push?`: `object` & `object` \| `null`; `registry_package?`: `object` & `object`; `release?`: `object` & `object`; `repository_dispatch?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `schedule?`: \[\{ `cron?`: `string`; \}, `...{ cron?: string }[]`\]; `status?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `watch?`: \{\[`k`: `string`\]: `unknown`; \} \| `null`; `workflow_call?`: \{\[`k`: `string`\]: `unknown`; `inputs?`: \{\[`k`: `string`\]: `object`; \}; `outputs?`: \{\[`k`: `string`\]: `object`; \}; `secrets?`: \{\[`k`: `string`\]: `object`; \}; \}; `workflow_dispatch?`: \{ `inputs?`: \{\[`k`: `string`\]: [`WorkflowDispatchInput`](../type-aliases/WorkflowDispatchInput.md); \}; \}; `workflow_run?`: `object` & `object`; \}
+\{ `branch_protection_rule?`: BranchProtectionRuleEvent \| undefined; `check_run?`: CheckRunEvent \| undefined; `check_suite?`: CheckSuiteEvent \| undefined; `create?`: CreateEvent \| undefined; `delete?`: DeleteEvent \| undefined; `deployment?`: DeploymentEvent \| undefined; `deployment_status?`: DeploymentStatusEvent \| undefined; `discussion?`: DiscussionEvent \| undefined; `discussion_comment?`: DiscussionCommentEvent \| undefined; `fork?`: ForkEvent \| undefined; `gollum?`: GollumEvent \| undefined; `issue_comment?`: IssueCommentEvent \| undefined; `issues?`: IssuesEvent \| undefined; `label?`: LabelEvent \| undefined; `merge_group?`: MergeGroupEvent \| undefined; `milestone?`: MilestoneEvent \| undefined; `page_build?`: PageBuildEvent \| undefined; `project?`: ProjectEvent \| undefined; `project_card?`: ProjectCardEvent \| undefined; `project_column?`: ProjectColumnEvent \| undefined; `public?`: PublicEvent \| undefined; `pull_request?`: `object` & `object` \| `null`; `pull_request_review?`: PullRequestReviewEvent \| undefined; `pull_request_review_comment?`: PullRequestReviewCommentEvent \| undefined; `pull_request_target?`: `object` & `object` \| `null`; `push?`: `object` & `object` \| `null`; `registry_package?`: RegistryPackageEvent \| undefined; `release?`: ReleaseEvent \| undefined; `repository_dispatch?`: RepositoryDispatchEvent \| undefined; `schedule?`: \[\{ `cron?`: `string`; \}, `...{ cron?: string }[]`\]; `status?`: StatusEvent \| undefined; `watch?`: WatchEvent \| undefined; `workflow_call?`: \{\[`k`: `string`\]: `unknown`; `inputs?`: \{\[`k`: `string`\]: `object`; \}; `outputs?`: \{\[`k`: `string`\]: `object`; \}; `secrets?`: \{\[`k`: `string`\]: `object`; \}; \}; `workflow_dispatch?`: \{ `inputs?`: \{\[`k`: `string`\]: [`WorkflowDispatchInput`](../type-aliases/WorkflowDispatchInput.md); \}; \}; `workflow_run?`: WorkflowRunEvent \| undefined; \}
 
 #### branch\_protection\_rule?
 
-> `optional` **branch\_protection\_rule**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types \| undefined
+> `optional` **branch\_protection\_rule**: BranchProtectionRuleEvent \| undefined
 
 #### check\_run?
 
-> `optional` **check\_run**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types1 \| undefined
+> `optional` **check\_run**: CheckRunEvent \| undefined
 
 #### check\_suite?
 
-> `optional` **check\_suite**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types2 \| undefined
+> `optional` **check\_suite**: CheckSuiteEvent \| undefined
 
 #### create?
 
-> `optional` **create**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime someone creates a branch or tag, which triggers the create event. For information about the REST API, see https://developer.github.com/v3/git/refs/#create-a-reference.
+> `optional` **create**: CreateEvent \| undefined
 
 #### delete?
 
-> `optional` **delete**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime someone deletes a branch or tag, which triggers the delete event. For information about the REST API, see https://developer.github.com/v3/git/refs/#delete-a-reference.
+> `optional` **delete**: DeleteEvent \| undefined
 
 #### deployment?
 
-> `optional` **deployment**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime someone creates a deployment, which triggers the deployment event. Deployments created with a commit SHA may not have a Git ref. For information about the REST API, see https://developer.github.com/v3/repos/deployments/.
+> `optional` **deployment**: DeploymentEvent \| undefined
 
 #### deployment\_status?
 
-> `optional` **deployment\_status**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime a third party provides a deployment status, which triggers the deployment_status event. Deployments created with a commit SHA may not have a Git ref. For information about the REST API, see https://developer.github.com/v3/repos/deployments/#create-a-deployment-status.
+> `optional` **deployment\_status**: DeploymentStatusEvent \| undefined
 
 #### discussion?
 
-> `optional` **discussion**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types3 \| undefined
+> `optional` **discussion**: DiscussionEvent \| undefined
 
 #### discussion\_comment?
 
-> `optional` **discussion\_comment**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types4 \| undefined
+> `optional` **discussion\_comment**: DiscussionCommentEvent \| undefined
 
 #### fork?
 
-> `optional` **fork**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime when someone forks a repository, which triggers the fork event. For information about the REST API, see https://developer.github.com/v3/repos/forks/#create-a-fork.
+> `optional` **fork**: ForkEvent \| undefined
 
 #### gollum?
 
-> `optional` **gollum**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow when someone creates or updates a Wiki page, which triggers the gollum event.
+> `optional` **gollum**: GollumEvent \| undefined
 
 #### issue\_comment?
 
-> `optional` **issue\_comment**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types5 \| undefined
+> `optional` **issue\_comment**: IssueCommentEvent \| undefined
 
 #### issues?
 
-> `optional` **issues**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types6 \| undefined
+> `optional` **issues**: IssuesEvent \| undefined
 
 #### label?
 
-> `optional` **label**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types7 \| undefined
+> `optional` **label**: LabelEvent \| undefined
 
 #### merge\_group?
 
-> `optional` **merge\_group**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types8 \| undefined
+> `optional` **merge\_group**: MergeGroupEvent \| undefined
 
 #### milestone?
 
-> `optional` **milestone**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types9 \| undefined
+> `optional` **milestone**: MilestoneEvent \| undefined
 
 #### page\_build?
 
-> `optional` **page\_build**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime someone pushes to a GitHub Pages-enabled branch, which triggers the page_build event. For information about the REST API, see https://developer.github.com/v3/repos/pages/.
+> `optional` **page\_build**: PageBuildEvent \| undefined
 
 #### project?
 
-> `optional` **project**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types10 \| undefined
+> `optional` **project**: ProjectEvent \| undefined
 
 #### project\_card?
 
-> `optional` **project\_card**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types11 \| undefined
+> `optional` **project\_card**: ProjectCardEvent \| undefined
 
 #### project\_column?
 
-> `optional` **project\_column**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types12 \| undefined
+> `optional` **project\_column**: ProjectColumnEvent \| undefined
 
 #### public?
 
-> `optional` **public**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime someone makes a private repository public, which triggers the public event. For information about the REST API, see https://developer.github.com/v3/repos/#edit.
+> `optional` **public**: PublicEvent \| undefined
 
 #### pull\_request?
 
@@ -275,23 +181,11 @@ The permissions for the GITHUB_TOKEN in forked repositories is read-only. For mo
 
 #### pull\_request\_review?
 
-> `optional` **pull\_request\_review**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types14 \| undefined
+> `optional` **pull\_request\_review**: PullRequestReviewEvent \| undefined
 
 #### pull\_request\_review\_comment?
 
-> `optional` **pull\_request\_review\_comment**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types15 \| undefined
+> `optional` **pull\_request\_review\_comment**: PullRequestReviewCommentEvent \| undefined
 
 #### pull\_request\_target?
 
@@ -308,30 +202,15 @@ Note: The webhook payload available to GitHub Actions does not include the added
 
 #### registry\_package?
 
-> `optional` **registry\_package**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types17 \| undefined
+> `optional` **registry\_package**: RegistryPackageEvent \| undefined
 
 #### release?
 
-> `optional` **release**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types18 \| undefined
+> `optional` **release**: ReleaseEvent \| undefined
 
 #### repository\_dispatch?
 
-> `optional` **repository\_dispatch**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-You can use the GitHub API to trigger a webhook event called repository_dispatch when you want to trigger a workflow for activity that happens outside of GitHub. For more information, see https://developer.github.com/v3/repos/#create-a-repository-dispatch-event.
-To trigger the custom repository_dispatch webhook event, you must send a POST request to a GitHub API endpoint and provide an event_type name to describe the activity type. To trigger a workflow run, you must also configure your workflow to use the repository_dispatch event.
+> `optional` **repository\_dispatch**: RepositoryDispatchEvent \| undefined
 
 #### schedule?
 
@@ -341,21 +220,13 @@ You can schedule a workflow to run at specific UTC times using POSIX cron syntax
 Note: GitHub Actions does not support the non-standard syntax @yearly, @monthly, @weekly, @daily, @hourly, and @reboot.
 You can use crontab guru (https://crontab.guru/). to help generate your cron syntax and confirm what time it will run. To help you get started, there is also a list of crontab guru examples (https://crontab.guru/examples.html).
 
-##### Min Items
-
-1
-
 #### status?
 
-> `optional` **status**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime the status of a Git commit changes, which triggers the status event. For information about the REST API, see https://developer.github.com/v3/repos/statuses/.
+> `optional` **status**: StatusEvent \| undefined
 
 #### watch?
 
-> `optional` **watch**: \{\[`k`: `string`\]: `unknown`; \} \| `null`
-
-Runs your workflow anytime the watch event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/activity/starring/.
+> `optional` **watch**: WatchEvent \| undefined
 
 #### workflow\_call?
 
@@ -430,21 +301,7 @@ Input parameters allow you to specify data that the action expects to use during
 
 #### workflow\_run?
 
-> `optional` **workflow\_run**: `object` & `object`
-
-##### Type Declaration
-
-###### types?
-
-> `optional` **types**: Types19 \| undefined
-
-###### workflows?
-
-> `optional` **workflows**: \[`string`, `...string[]`\]
-
-###### Min Items
-
-1
+> `optional` **workflow\_run**: WorkflowRunEvent \| undefined
 
 ***
 
@@ -452,7 +309,7 @@ Input parameters allow you to specify data that the action expects to use during
 
 > `optional` **permissions**: [`Permissions`](../type-aliases/Permissions.md)
 
-Defined in: [types/githubActionsWorkflow.ts:943](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L943)
+Defined in: [types/githubActionsWorkflow.ts:746](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L746)
 
 ***
 
@@ -460,6 +317,6 @@ Defined in: [types/githubActionsWorkflow.ts:943](https://github.com/emmanuelnk/g
 
 > `optional` **run-name**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:942](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L942)
+Defined in: [types/githubActionsWorkflow.ts:745](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L745)
 
 The name for workflow runs generated from the workflow. GitHub displays the workflow run name in the list of workflow runs on your repository's 'Actions' tab.

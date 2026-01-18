@@ -6,7 +6,7 @@
 
 # Interface: Context
 
-Defined in: [types/context.ts:3](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/context.ts#L3)
+Defined in: [types/context.ts:3](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/context.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/context.ts:3](https://github.com/emmanuelnk/github-actions-wo
 
 > `optional` **diagnosticRules**: [`DiagnosticRules`](../../Diagnostics/type-aliases/DiagnosticRules.md)
 
-Defined in: [types/context.ts:6](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/context.ts#L6)
+Defined in: [types/context.ts:6](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/context.ts#L6)
 
 Configured diagnostic rules from wac.config.json
 
@@ -24,4 +24,4 @@ Configured diagnostic rules from wac.config.json
 
 > **diagnostics**: [`DiagnosticsReporter`](../../Diagnostics/interfaces/DiagnosticsReporter.md)
 
-Defined in: [types/context.ts:4](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/context.ts#L4)
+Defined in: [types/context.ts:4](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/context.ts#L4)

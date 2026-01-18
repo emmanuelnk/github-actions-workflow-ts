@@ -6,7 +6,7 @@
 
 # Class: Workflow
 
-Defined in: [workflow/index.ts:19](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/workflow/index.ts#L19)
+Defined in: [workflow/index.ts:19](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L19)
 
 Represents a GitHub Actions workflow.
 
@@ -29,7 +29,7 @@ workflow.addJob(testJob)
 
 > **new Workflow**(`filename`, `workflowProps`): `Workflow`
 
-Defined in: [workflow/index.ts:58](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/workflow/index.ts#L58)
+Defined in: [workflow/index.ts:58](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L58)
 
 #### Parameters
 
@@ -51,7 +51,7 @@ Defined in: [workflow/index.ts:58](https://github.com/emmanuelnk/github-actions-
 
 > `optional` **filename**: `string`
 
-Defined in: [workflow/index.ts:25](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/workflow/index.ts#L25)
+Defined in: [workflow/index.ts:25](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L25)
 
 The filename of the workflow e.g. `main.yml`
 
@@ -61,7 +61,7 @@ The filename of the workflow e.g. `main.yml`
 
 > **workflow**: `Partial`&lt;[`Workflow`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/interfaces/Workflow.md)&gt;
 
-Defined in: [workflow/index.ts:20](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/workflow/index.ts#L20)
+Defined in: [workflow/index.ts:20](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L20)
 
 ## Methods
 
@@ -69,7 +69,7 @@ Defined in: [workflow/index.ts:20](https://github.com/emmanuelnk/github-actions-
 
 > **addEnvs**(`envs`): `this`
 
-Defined in: [workflow/index.ts:27](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/workflow/index.ts#L27)
+Defined in: [workflow/index.ts:27](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L27)
 
 #### Parameters
 
@@ -87,7 +87,7 @@ Defined in: [workflow/index.ts:27](https://github.com/emmanuelnk/github-actions-
 
 > **addJob**(`job`): `this`
 
-Defined in: [workflow/index.ts:49](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/workflow/index.ts#L49)
+Defined in: [workflow/index.ts:49](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L49)
 
 #### Parameters
 
@@ -105,7 +105,7 @@ Defined in: [workflow/index.ts:49](https://github.com/emmanuelnk/github-actions-
 
 > **addJobs**(`jobs`): `this`
 
-Defined in: [workflow/index.ts:40](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/workflow/index.ts#L40)
+Defined in: [workflow/index.ts:40](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L40)
 
 #### Parameters
 

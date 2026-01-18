@@ -18,7 +18,7 @@ Write GitHub Actions workflows in TypeScript instead of YAML!
       <img src="https://github.com/emmanuelnk/github-actions-workflow-ts/actions/workflows/test.yml/badge.svg" alt="Tests">
   </a>
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions">
-      <img src="https://emmanuelnk.github.io/github-actions-workflow-ts/badges/coverage.svg" alt="coverage">
+      <img src="https://github-actions-workflow-ts.vercel.app/badges/coverage.svg" alt="coverage">
   </a>
 </p>
 
@@ -62,13 +62,13 @@ npx gwf build
 
 ## Documentation
 
-**[View Full Documentation](https://emmanuelnk.github.io/github-actions-workflow-ts/)**
+**[View Full Documentation](https://github-actions-workflow-ts.vercel.app/)**
 
-- [Installation](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/getting-started/installation)
-- [Quick Start](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/getting-started/quick-start)
-- [Writing Workflows](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/guides/writing-workflows)
-- [Typed Actions](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/guides/typed-actions)
-- [API Reference](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/api-reference)
+- [Installation](https://github-actions-workflow-ts.vercel.app/docs/getting-started/installation)
+- [Quick Start](https://github-actions-workflow-ts.vercel.app/docs/getting-started/quick-start)
+- [Writing Workflows](https://github-actions-workflow-ts.vercel.app/docs/guides/writing-workflows)
+- [Typed Actions](https://github-actions-workflow-ts.vercel.app/docs/guides/typed-actions)
+- [API Reference](https://github-actions-workflow-ts.vercel.app/docs/api-reference)
 
 ## Packages
 
@@ -86,7 +86,7 @@ Explore on CodeSandbox:
 
 ## Contributing
 
-See the [Contributing Guide](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/contributing/development-setup)
+See the [Contributing Guide](https://github-actions-workflow-ts.vercel.app/docs/contributing/development-setup)
 
 ## License
 

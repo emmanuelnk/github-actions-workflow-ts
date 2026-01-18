@@ -297,16 +297,16 @@ export const workflow = new Workflow('ci', {
 
 ## Documentation
 
-**[View Full Documentation →](https://emmanuelnk.github.io/github-actions-workflow-ts/)**
+**[View Full Documentation →](https://github-actions-workflow-ts.vercel.app/)**
 
-- [Installation Guide](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/getting-started/installation)
-- [Writing Workflows](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/guides/writing-workflows)
-- [API Reference](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/api/workflow)
-- [Typed Actions](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/typed-actions/overview)
+- [Installation Guide](https://github-actions-workflow-ts.vercel.app/docs/getting-started/installation)
+- [Writing Workflows](https://github-actions-workflow-ts.vercel.app/docs/guides/writing-workflows)
+- [API Reference](https://github-actions-workflow-ts.vercel.app/docs/api/workflow)
+- [Typed Actions](https://github-actions-workflow-ts.vercel.app/docs/typed-actions/overview)
 
 ## Contributing
 
-See [Contributing Guide](https://emmanuelnk.github.io/github-actions-workflow-ts/docs/contributing/development-setup)
+See [Contributing Guide](https://github-actions-workflow-ts.vercel.app/docs/contributing/development-setup)
 
 ## License
 

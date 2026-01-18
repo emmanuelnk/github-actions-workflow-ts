@@ -8,7 +8,7 @@
 
 > **WorkflowDispatchInput** = `object` & `object`
 
-Defined in: [types/githubActionsWorkflow.ts:428](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L428)
+Defined in: [types/githubActionsWorkflow.ts:295](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L295)
 
 A string identifier to associate with the input. The value of \<input_id\> is a map of the input's metadata. The \<input_id\> must be a unique identifier within the inputs object. The \<input_id\> must start with a letter or _ and contain only alphanumeric characters, -, or _.
 
@@ -44,10 +44,6 @@ A string description of the input parameter.
 > `optional` **options**: \[`string`, `...string[]`\]
 
 The options of the dropdown list, if the type is a choice.
-
-#### Min Items
-
-1
 
 ### required?
 

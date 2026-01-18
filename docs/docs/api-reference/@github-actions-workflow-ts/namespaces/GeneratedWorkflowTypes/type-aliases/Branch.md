@@ -8,7 +8,7 @@
 
 > **Branch** = \[`string`, `...string[]`\]
 
-Defined in: [types/githubActionsWorkflow.ts:311](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L311)
+Defined in: [types/githubActionsWorkflow.ts:211](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L211)
 
 When using the push and pull_request events, you can configure a workflow to run on specific branches or tags. If you only define only tags or only branches, the workflow won't run for events affecting the undefined Git ref.
 The branches, branches-ignore, tags, and tags-ignore keywords accept glob patterns that use the * and ** wildcard characters to match more than one branch or tag name. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet.
@@ -19,7 +19,3 @@ You can use two types of filters to prevent a workflow from running on pushes an
 You can exclude tags and branches using the ! character. The order that you define patterns matters.
 - A matching negative pattern (prefixed with !) after a positive match will exclude the Git ref.
 - A matching positive pattern after a negative match will include the Git ref again.
-
-## Min Items
-
-1

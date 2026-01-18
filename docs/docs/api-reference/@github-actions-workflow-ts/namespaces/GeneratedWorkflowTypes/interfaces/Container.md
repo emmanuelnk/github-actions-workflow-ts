@@ -6,7 +6,7 @@
 
 # Interface: Container
 
-Defined in: [types/githubActionsWorkflow.ts:1102](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1102)
+Defined in: [types/githubActionsWorkflow.ts:904](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L904)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/githubActionsWorkflow.ts:1102](https://github.com/emmanuelnk/
 
 > `optional` **credentials**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:1110](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1110)
+Defined in: [types/githubActionsWorkflow.ts:912](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L912)
 
 If the image's container registry requires authentication to pull the image, you can use credentials to set a map of the username and password. The credentials are the same values that you would provide to the `docker login` command.
 
@@ -36,7 +36,7 @@ If the image's container registry requires authentication to pull the image, you
 
 > `optional` **env**: `string` \| \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \}
 
-Defined in: [types/githubActionsWorkflow.ts:1118](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1118)
+Defined in: [types/githubActionsWorkflow.ts:920](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L920)
 
 Sets an array of environment variables in the container.
 
@@ -46,7 +46,7 @@ Sets an array of environment variables in the container.
 
 > **image**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:1106](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1106)
+Defined in: [types/githubActionsWorkflow.ts:908](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L908)
 
 The Docker image to use as the container to run the action. The value can be the Docker Hub image name or a registry name.
 
@@ -56,7 +56,7 @@ The Docker image to use as the container to run the action. The value can be the
 
 > `optional` **options**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:1140](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1140)
+Defined in: [types/githubActionsWorkflow.ts:940](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L940)
 
 Additional Docker container resource options. For a list of options, see https://docs.docker.com/engine/reference/commandline/create/#options.
 
@@ -66,13 +66,9 @@ Additional Docker container resource options. For a list of options, see https:/
 
 > `optional` **ports**: \[`string` \| `number`, ...(string \| number)\[\]\]
 
-Defined in: [types/githubActionsWorkflow.ts:1128](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1128)
+Defined in: [types/githubActionsWorkflow.ts:929](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L929)
 
 Sets an array of ports to expose on the container.
-
-#### Min Items
-
-1
 
 ***
 
@@ -80,12 +76,8 @@ Sets an array of ports to expose on the container.
 
 > `optional` **volumes**: \[`string`, `...string[]`\]
 
-Defined in: [types/githubActionsWorkflow.ts:1136](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1136)
+Defined in: [types/githubActionsWorkflow.ts:936](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L936)
 
 Sets an array of volumes for the container to use. You can use volumes to share data between services or other steps in a job. You can specify named Docker volumes, anonymous Docker volumes, or bind mounts on the host.
 To specify a volume, you specify the source and destination path: \<source\>:\<destinationPath\>
 The \<source\> is a volume name or an absolute path on the host machine, and \<destinationPath\> is an absolute path in the container.
-
-#### Min Items
-
-1

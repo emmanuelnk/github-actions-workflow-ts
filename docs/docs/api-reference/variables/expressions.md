@@ -8,7 +8,7 @@
 
 > `const` **expressions**: `object`
 
-Defined in: [utils/index.ts:4](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/utils/index.ts#L4)
+Defined in: [utils/index.ts:4](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/utils/index.ts#L4)
 
 Utility methods to generate specific Github Actions workflow expressions.
 
@@ -19,7 +19,7 @@ Utility methods to generate specific Github Actions workflow expressions.
 > **env**(`envName`): `string`
 
 Generates an environment variable expression
-i.e. `${{ env.&lt;envName&gt; }}`
+i.e. `${{ env.<envName> }}`
 
 Ref: https://docs.github.com/en/actions/learn-github-actions/expressions
 
@@ -42,7 +42,7 @@ The formatted environment variable reference.
 > **expn**(`expression`): `string`
 
 Wraps the provided expression inside a special format understood by Github Actions
-i.e. `${{ &lt;expression&gt; }}`
+i.e. `${{ <expression> }}`
 
 Ref: https://docs.github.com/en/actions/learn-github-actions/expressions
 
@@ -65,7 +65,7 @@ The wrapped expression.
 > **secret**(`secretName`): `string`
 
 Generates a secrets expression
-i.e. `${{ secrets.&lt;secretName&gt; }}`
+i.e. `${{ secrets.<secretName> }}`
 
 Ref: https://docs.github.com/en/actions/learn-github-actions/expressions
 
@@ -88,7 +88,7 @@ The formatted secret reference.
 > **ternary**(`condition`, `ifTrue`, `ifFalse`): `string`
 
 Generates a YAML compatible ternary operation
-i.e. `${{ &lt;condition&gt; && &lt;ifTrue&gt; || &lt;ifFalse&gt; }}`
+i.e. `${{ <condition> && <ifTrue> || <ifFalse> }}`
 
 #### Parameters
 
@@ -121,7 +121,7 @@ The formatted ternary operation.
 > **var**(`varName`): `string`
 
 Generates a variables expression
-i.e. `${{ vars.&lt;varName&gt; }}`
+i.e. `${{ vars.<varName> }}`
 
 Ref: https://docs.github.com/en/actions/learn-github-actions/expressions
 

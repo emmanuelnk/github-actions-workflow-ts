@@ -6,7 +6,7 @@
 
 # Interface: PermissionsEvent
 
-Defined in: [types/githubActionsWorkflow.ts:1063](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1063)
+Defined in: [types/githubActionsWorkflow.ts:865](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L865)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/githubActionsWorkflow.ts:1063](https://github.com/emmanuelnk/
 
 > `optional` **actions**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1064](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1064)
+Defined in: [types/githubActionsWorkflow.ts:866](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L866)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [types/githubActionsWorkflow.ts:1064](https://github.com/emmanuelnk/
 
 > `optional` **attestations**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1065](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1065)
+Defined in: [types/githubActionsWorkflow.ts:867](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L867)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [types/githubActionsWorkflow.ts:1065](https://github.com/emmanuelnk/
 
 > `optional` **checks**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1066](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1066)
+Defined in: [types/githubActionsWorkflow.ts:868](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L868)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [types/githubActionsWorkflow.ts:1066](https://github.com/emmanuelnk/
 
 > `optional` **contents**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1067](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1067)
+Defined in: [types/githubActionsWorkflow.ts:869](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L869)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [types/githubActionsWorkflow.ts:1067](https://github.com/emmanuelnk/
 
 > `optional` **deployments**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1068](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1068)
+Defined in: [types/githubActionsWorkflow.ts:870](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L870)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [types/githubActionsWorkflow.ts:1068](https://github.com/emmanuelnk/
 
 > `optional` **discussions**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1069](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1069)
+Defined in: [types/githubActionsWorkflow.ts:871](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L871)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [types/githubActionsWorkflow.ts:1069](https://github.com/emmanuelnk/
 
 > `optional` **id-token**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1070](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1070)
+Defined in: [types/githubActionsWorkflow.ts:872](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L872)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [types/githubActionsWorkflow.ts:1070](https://github.com/emmanuelnk/
 
 > `optional` **issues**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1071](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1071)
+Defined in: [types/githubActionsWorkflow.ts:873](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L873)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [types/githubActionsWorkflow.ts:1071](https://github.com/emmanuelnk/
 
 > `optional` **models**: `"read"` \| `"none"`
 
-Defined in: [types/githubActionsWorkflow.ts:1072](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1072)
+Defined in: [types/githubActionsWorkflow.ts:874](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L874)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [types/githubActionsWorkflow.ts:1072](https://github.com/emmanuelnk/
 
 > `optional` **packages**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1073](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1073)
+Defined in: [types/githubActionsWorkflow.ts:875](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L875)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [types/githubActionsWorkflow.ts:1073](https://github.com/emmanuelnk/
 
 > `optional` **pages**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1074](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1074)
+Defined in: [types/githubActionsWorkflow.ts:876](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L876)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [types/githubActionsWorkflow.ts:1074](https://github.com/emmanuelnk/
 
 > `optional` **pull-requests**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1075](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1075)
+Defined in: [types/githubActionsWorkflow.ts:877](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L877)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [types/githubActionsWorkflow.ts:1075](https://github.com/emmanuelnk/
 
 > `optional` **repository-projects**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1076](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1076)
+Defined in: [types/githubActionsWorkflow.ts:878](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L878)
 
 ***
 
@@ -118,7 +118,7 @@ Defined in: [types/githubActionsWorkflow.ts:1076](https://github.com/emmanuelnk/
 
 > `optional` **security-events**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1077](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1077)
+Defined in: [types/githubActionsWorkflow.ts:879](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L879)
 
 ***
 
@@ -126,4 +126,4 @@ Defined in: [types/githubActionsWorkflow.ts:1077](https://github.com/emmanuelnk/
 
 > `optional` **statuses**: [`PermissionsLevel`](../type-aliases/PermissionsLevel.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1078](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L1078)
+Defined in: [types/githubActionsWorkflow.ts:880](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L880)

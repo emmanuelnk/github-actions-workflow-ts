@@ -6,7 +6,7 @@
 
 # Interface: Concurrency
 
-Defined in: [types/githubActionsWorkflow.ts:954](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L954)
+Defined in: [types/githubActionsWorkflow.ts:757](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L757)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/githubActionsWorkflow.ts:954](https://github.com/emmanuelnk/g
 
 > `optional` **cancel-in-progress**: `string` \| `boolean`
 
-Defined in: [types/githubActionsWorkflow.ts:962](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L962)
+Defined in: [types/githubActionsWorkflow.ts:765](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L765)
 
 To cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
 
@@ -24,6 +24,6 @@ To cancel any currently running job or workflow in the same concurrency group, s
 
 > **group**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:958](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/githubActionsWorkflow.ts#L958)
+Defined in: [types/githubActionsWorkflow.ts:761](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L761)
 
 When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. Any previously pending job or workflow in the concurrency group will be canceled.

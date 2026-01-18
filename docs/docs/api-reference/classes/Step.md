@@ -6,7 +6,7 @@
 
 # Class: Step
 
-Defined in: [step/index.ts:18](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/step/index.ts#L18)
+Defined in: [step/index.ts:18](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/step/index.ts#L18)
 
 Represents a single step within a GitHub Actions job.
 
@@ -29,7 +29,7 @@ const checkoutStep = new Step({ name: 'Checkout', uses: 'actions/checkout@v4' })
 
 > **new Step**(`stepProps`): `Step`
 
-Defined in: [step/index.ts:35](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/step/index.ts#L35)
+Defined in: [step/index.ts:35](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/step/index.ts#L35)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [step/index.ts:35](https://github.com/emmanuelnk/github-actions-work
 
 > **id**: `string` \| `undefined`
 
-Defined in: [step/index.ts:20](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/step/index.ts#L20)
+Defined in: [step/index.ts:20](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/step/index.ts#L20)
 
 ***
 
@@ -55,7 +55,7 @@ Defined in: [step/index.ts:20](https://github.com/emmanuelnk/github-actions-work
 
 > **step**: [`Step`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/type-aliases/Step.md)
 
-Defined in: [step/index.ts:19](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/step/index.ts#L19)
+Defined in: [step/index.ts:19](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/step/index.ts#L19)
 
 ## Methods
 
@@ -63,7 +63,7 @@ Defined in: [step/index.ts:19](https://github.com/emmanuelnk/github-actions-work
 
 > **addEnvs**(`envs`): `this`
 
-Defined in: [step/index.ts:22](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/step/index.ts#L22)
+Defined in: [step/index.ts:22](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/step/index.ts#L22)
 
 #### Parameters
 

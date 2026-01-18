@@ -6,7 +6,7 @@
 
 # Class: NormalJob
 
-Defined in: [job/index.ts:18](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L18)
+Defined in: [job/index.ts:18](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L18)
 
 Represents a standard GitHub Actions job that runs on a specified runner.
 
@@ -28,7 +28,7 @@ testJob.addStep(new Step({ name: 'Checkout', uses: 'actions/checkout@v4' }))
 
 > **new NormalJob**(`name`, `jobProps`): `NormalJob`
 
-Defined in: [job/index.ts:63](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L63)
+Defined in: [job/index.ts:63](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L63)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Defined in: [job/index.ts:63](https://github.com/emmanuelnk/github-actions-workf
 
 > **job**: [`NormalJob`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/interfaces/NormalJob.md)
 
-Defined in: [job/index.ts:20](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L20)
+Defined in: [job/index.ts:20](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L20)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [job/index.ts:20](https://github.com/emmanuelnk/github-actions-workf
 
 > **name**: `string`
 
-Defined in: [job/index.ts:19](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L19)
+Defined in: [job/index.ts:19](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L19)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [job/index.ts:19](https://github.com/emmanuelnk/github-actions-workf
 
 > **steps**: [`Step`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/type-aliases/Step.md)[] = `[]`
 
-Defined in: [job/index.ts:21](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L21)
+Defined in: [job/index.ts:21](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L21)
 
 ## Methods
 
@@ -74,7 +74,7 @@ Defined in: [job/index.ts:21](https://github.com/emmanuelnk/github-actions-workf
 
 > **addEnvs**(`envs`): `this`
 
-Defined in: [job/index.ts:23](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L23)
+Defined in: [job/index.ts:23](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L23)
 
 #### Parameters
 
@@ -92,7 +92,7 @@ Defined in: [job/index.ts:23](https://github.com/emmanuelnk/github-actions-workf
 
 > **addStep**(`step`): `this`
 
-Defined in: [job/index.ts:42](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L42)
+Defined in: [job/index.ts:42](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L42)
 
 #### Parameters
 
@@ -110,7 +110,7 @@ Defined in: [job/index.ts:42](https://github.com/emmanuelnk/github-actions-workf
 
 > **addSteps**(`steps`): `this`
 
-Defined in: [job/index.ts:34](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L34)
+Defined in: [job/index.ts:34](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L34)
 
 #### Parameters
 
@@ -128,7 +128,7 @@ Defined in: [job/index.ts:34](https://github.com/emmanuelnk/github-actions-workf
 
 > **needs**(`jobs`): `this`
 
-Defined in: [job/index.ts:49](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/job/index.ts#L49)
+Defined in: [job/index.ts:49](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/job/index.ts#L49)
 
 #### Parameters
 

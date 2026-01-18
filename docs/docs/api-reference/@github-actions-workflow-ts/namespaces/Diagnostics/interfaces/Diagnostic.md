@@ -6,7 +6,7 @@
 
 # Interface: Diagnostic
 
-Defined in: [types/diagnostics.ts:39](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/diagnostics.ts#L39)
+Defined in: [types/diagnostics.ts:39](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L39)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/diagnostics.ts:39](https://github.com/emmanuelnk/github-actio
 
 > `optional` **action**: `string`
 
-Defined in: [types/diagnostics.ts:46](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/diagnostics.ts#L46)
+Defined in: [types/diagnostics.ts:46](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L46)
 
 Optional action identifier for pattern matching (e.g., "actions/checkout@v4")
 
@@ -24,7 +24,7 @@ Optional action identifier for pattern matching (e.g., "actions/checkout@v4")
 
 > `optional` **cause**: `Error`
 
-Defined in: [types/diagnostics.ts:44](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/diagnostics.ts#L44)
+Defined in: [types/diagnostics.ts:44](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L44)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [types/diagnostics.ts:44](https://github.com/emmanuelnk/github-actio
 
 > **code**: `string`
 
-Defined in: [types/diagnostics.ts:41](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/diagnostics.ts#L41)
+Defined in: [types/diagnostics.ts:41](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L41)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [types/diagnostics.ts:41](https://github.com/emmanuelnk/github-actio
 
 > **message**: `string`
 
-Defined in: [types/diagnostics.ts:42](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/diagnostics.ts#L42)
+Defined in: [types/diagnostics.ts:42](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L42)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [types/diagnostics.ts:42](https://github.com/emmanuelnk/github-actio
 
 > **severity**: [`DiagnosticSeverity`](../type-aliases/DiagnosticSeverity.md)
 
-Defined in: [types/diagnostics.ts:40](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/diagnostics.ts#L40)
+Defined in: [types/diagnostics.ts:40](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L40)
 
 ***
 
@@ -56,4 +56,4 @@ Defined in: [types/diagnostics.ts:40](https://github.com/emmanuelnk/github-actio
 
 > `optional` **stack**: `string`
 
-Defined in: [types/diagnostics.ts:43](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eebca346c5d3851308757dca396950e32e615bc7/packages/lib/src/types/diagnostics.ts#L43)
+Defined in: [types/diagnostics.ts:43](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L43)

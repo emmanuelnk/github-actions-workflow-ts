@@ -1,0 +1,106 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.heroLogo {
+  max-width: 200px;
+  margin-bottom: 1.5rem;
+}
+
+@media screen and (max-width: 996px) {
+  .heroLogo {
+    max-width: 150px;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+/* Step-by-step layout */
+.step {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--ifm-color-primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.stepContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.stepLabel {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--ifm-heading-color);
+}
+
+@media screen and (max-width: 600px) {
+  .step {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .stepNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+}
+
+/* CTA Button - ensure text is visible */
+.ctaButton {
+  color: #ffffff !important;
+  background-color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+}
+
+.ctaButton:hover {
+  color: #ffffff !important;
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}

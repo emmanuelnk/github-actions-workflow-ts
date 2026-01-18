@@ -1,6 +1,21 @@
 import type { GeneratedWorkflowTypes } from '../types/index.js'
 import type * as Jobs from '../job/index.js'
 
+/**
+ * Represents a GitHub Actions workflow.
+ *
+ * The Workflow class is the top-level container for defining a GitHub Actions workflow.
+ * It allows you to configure workflow triggers, add jobs, and set environment variables.
+ *
+ * @example
+ * ```typescript
+ * const workflow = new Workflow('ci', {
+ *   name: 'CI',
+ *   on: { push: { branches: ['main'] } },
+ * })
+ * workflow.addJob(testJob)
+ * ```
+ */
 export class Workflow {
   public workflow: Partial<GeneratedWorkflowTypes.Workflow>
 

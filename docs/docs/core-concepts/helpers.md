@@ -82,10 +82,43 @@ expressions.ternary("github.event_name == 'release'", 'prod', 'dev')
 expressions.ternary('github.event.pull_request', 'PR build', 'Push build')
 // "${{ github.event.pull_request && 'PR build' || 'Push build' }}"
 ```
+## dedentString()
+
+Best method for writing multiline YAML -- Removes leading indentation from template literals.
+
+```typescript
+import { dedentString } from '@github-actions-workflow-ts/lib'
+
+const script = dedentString(`
+  echo "Starting deployment..."
+  if [ -d "./dist" ]; then
+    rsync -avz ./dist/ user@server:/var/www/
+    echo "Deployment complete!"
+  else
+    echo "No dist directory found"
+    exit 1
+  fi
+`)
+```
+
+This removes the leading whitespace, generating clean YAML:
+
+```yaml
+- name: Deploy
+  run: |-
+    echo "Starting deployment..."
+    if [ -d "./dist" ]; then
+      rsync -avz ./dist/ user@server:/var/www/
+      echo "Deployment complete!"
+    else
+      echo "No dist directory found"
+      exit 1
+    fi
+```
 
 ## multilineString()
 
-Join strings with newlines for multiline YAML.
+Legacy method for writing multiline YAML -- Join strings with newlines for multiline YAML.
 
 ```typescript
 import { multilineString } from '@github-actions-workflow-ts/lib'
@@ -122,40 +155,6 @@ Generates:
     if [ ! -d "/tmp/build" ]; then
       mv /tmp/build .
       ls
-    fi
-```
-
-## dedentString()
-
-Remove leading indentation from template literals.
-
-```typescript
-import { dedentString } from '@github-actions-workflow-ts/lib'
-
-const script = dedentString(`
-  echo "Starting deployment..."
-  if [ -d "./dist" ]; then
-    rsync -avz ./dist/ user@server:/var/www/
-    echo "Deployment complete!"
-  else
-    echo "No dist directory found"
-    exit 1
-  fi
-`)
-```
-
-This removes the leading whitespace, generating clean YAML:
-
-```yaml
-- name: Deploy
-  run: |-
-    echo "Starting deployment..."
-    if [ -d "./dist" ]; then
-      rsync -avz ./dist/ user@server:/var/www/
-      echo "Deployment complete!"
-    else
-      echo "No dist directory found"
-      exit 1
     fi
 ```
 

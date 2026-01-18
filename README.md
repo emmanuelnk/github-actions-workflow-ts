@@ -74,6 +74,7 @@ npx gwf build
 - [Installation](https://github-actions-workflow-ts.vercel.app/docs/getting-started/installation)
 - [Quick Start](https://github-actions-workflow-ts.vercel.app/docs/getting-started/quick-start)
 - [Writing Workflows](https://github-actions-workflow-ts.vercel.app/docs/guides/writing-workflows)
+- [Helpers](https://github-actions-workflow-ts.vercel.app/docs/core-concepts/helpers)
 - [Typed Actions](https://github-actions-workflow-ts.vercel.app/docs/guides/typed-actions)
 - [API Reference](https://github-actions-workflow-ts.vercel.app/docs/api-reference)
 

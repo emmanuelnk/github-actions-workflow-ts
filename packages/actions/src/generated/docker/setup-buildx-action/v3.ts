@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Docker Setup Buildx
@@ -13,7 +16,8 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
 export interface DockerSetupBuildxActionV3Inputs {
   /** Buildx version. (eg. v0.3.0) */
   version?: string | boolean | number
-  /** Sets the builder driver to be used */
+  /** Sets the builder driver to be used
+   * @default docker-container */
   driver?: string | boolean | number
   /** List of additional driver-specific options. (eg. image=moby\/buildkit:master) */
   'driver-opts'?: string | boolean | number
@@ -23,7 +27,8 @@ export interface DockerSetupBuildxActionV3Inputs {
   'buildkitd-config'?: string | boolean | number
   /** Inline BuildKit daemon config */
   'buildkitd-config-inline'?: string | boolean | number
-  /** Switch to this builder instance */
+  /** Switch to this builder instance
+   * @default true */
   use?: string | boolean | number
   /** Name of the builder. If not specified, one will be generated or if it already exists, it will be used instead of creating a new one. */
   name?: string | boolean | number
@@ -33,11 +38,14 @@ export interface DockerSetupBuildxActionV3Inputs {
   platforms?: string | boolean | number
   /** Append additional nodes to the builder */
   append?: string | boolean | number
-  /** Keep BuildKit state on cleanup. This is only useful on persistent self-hosted runners. */
+  /** Keep BuildKit state on cleanup. This is only useful on persistent self-hosted runners.
+   * @default false */
   'keep-state'?: string | boolean | number
-  /** Cache buildx binary to GitHub Actions cache backend */
+  /** Cache buildx binary to GitHub Actions cache backend
+   * @default true */
   'cache-binary'?: string | boolean | number
-  /** Cleanup temp files and remove builder at the end of a job */
+  /** Cleanup temp files and remove builder at the end of a job
+   * @default true */
   cleanup?: string | boolean | number
   /** BuildKit daemon config file
    * @deprecated Use buildkitd-config instead */
@@ -46,6 +54,7 @@ export interface DockerSetupBuildxActionV3Inputs {
    * @deprecated Use buildkitd-config-inline instead */
   'config-inline'?: string | boolean | number
   /** Sets up docker build command as an alias to docker buildx build
+   * @default false
    * @deprecated "docker buildx install" command is deprecated and will be removed in a future release, use BUILDX_BUILDER environment variable instead */
   install?: string | boolean | number
 }
@@ -66,10 +75,14 @@ export interface DockerSetupBuildxActionV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'docker/setup-buildx-action@v3'. */
+  /**
+   * The action reference. If provided, must match 'docker/setup-buildx-action@v3'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'docker/setup-buildx-action@v3'
-    | (`docker/setup-buildx-action@v3.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: DockerSetupBuildxActionV3Inputs
   /** Sets environment variables for this step. */
@@ -78,12 +91,27 @@ export interface DockerSetupBuildxActionV3Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class DockerSetupBuildxActionV3 extends BaseAction<
   'docker/setup-buildx-action@v3',
   DockerSetupBuildxActionV3Outputs
 > {
+  protected readonly owner = 'docker'
+  protected readonly repo = 'setup-buildx-action'
+  protected readonly tag = 'v3'
+  protected readonly resolvedVersion = {
+    major: 3,
+    minor: 12,
+    patch: 0,
+  }
+
   constructor(props: DockerSetupBuildxActionV3Props = {}) {
     const outputNames = [
       'name',
@@ -96,13 +124,25 @@ export class DockerSetupBuildxActionV3 extends BaseAction<
     ] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'docker/setup-buildx-action@v3',
+        uses: unwrappedUses ?? 'docker/setup-buildx-action@v3',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -110,6 +150,13 @@ export class DockerSetupBuildxActionV3 extends BaseAction<
         uses: 'docker/setup-buildx-action@v3'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

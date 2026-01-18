@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Setup Python
@@ -19,15 +22,19 @@ export interface ActionsSetupPythonV4Inputs {
   cache?: string | boolean | number
   /** The target architecture (x86, x64) of the Python or PyPy interpreter. */
   architecture?: string | boolean | number
-  /** Set this option if you want the action to check for the latest available version that satisfies the version spec. */
+  /** Set this option if you want the action to check for the latest available version that satisfies the version spec.
+   * @default false */
   'check-latest'?: string | boolean | number
-  /** The token used to authenticate when fetching Python distributions from https:\/\/github.com\/actions\/python-versions. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting. */
+  /** The token used to authenticate when fetching Python distributions from https:\/\/github.com\/actions\/python-versions. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+   * @default ${{ github.server_url == 'https:\/\/github.com' && github.token || '' }} */
   token?: string | boolean | number
   /** Used to specify the path to dependency files. Supports wildcards or a list of file names for caching multiple dependencies. */
   'cache-dependency-path'?: string | boolean | number
-  /** Set this option if you want the action to update environment variables. */
+  /** Set this option if you want the action to update environment variables.
+   * @default true */
   'update-environment'?: string | boolean | number
-  /** When 'true', a version range passed to 'python-version' input will match prerelease versions if no GA versions are found. Only 'x.y' version range is supported for CPython. */
+  /** When 'true', a version range passed to 'python-version' input will match prerelease versions if no GA versions are found. Only 'x.y' version range is supported for CPython.
+   * @default false */
   'allow-prereleases'?: string | boolean | number
 }
 
@@ -43,8 +50,14 @@ export interface ActionsSetupPythonV4Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/setup-python@v4'. */
-  uses?: 'actions/setup-python@v4' | (`actions/setup-python@v4.${string}` & {})
+  /**
+   * The action reference. If provided, must match 'actions/setup-python@v4'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
+  uses?:
+    | 'actions/setup-python@v4'
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: ActionsSetupPythonV4Inputs
   /** Sets environment variables for this step. */
@@ -53,28 +66,62 @@ export interface ActionsSetupPythonV4Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class ActionsSetupPythonV4 extends BaseAction<
   'actions/setup-python@v4',
   ActionsSetupPythonV4Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'setup-python'
+  protected readonly tag = 'v4'
+  protected readonly resolvedVersion = {
+    major: 4,
+    minor: 9,
+    patch: 1,
+  }
+
   constructor(props: ActionsSetupPythonV4Props = {}) {
     const outputNames = ['python-version', 'cache-hit', 'python-path'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'actions/setup-python@v4',
+        uses: unwrappedUses ?? 'actions/setup-python@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/setup-python@v4' },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

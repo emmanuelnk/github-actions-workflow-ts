@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Release Drafter
@@ -11,7 +14,8 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  */
 
 export interface ReleaseDrafterReleaseDrafterV6Inputs {
-  /** If your workflow requires multiple release-drafter configs it be helpful to override the config-name. The config should still be located inside `.github` as that's where we are looking for config files. */
+  /** If your workflow requires multiple release-drafter configs it be helpful to override the config-name. The config should still be located inside `.github` as that's where we are looking for config files.
+   * @default release-drafter.yml */
   'config-name'?: string | boolean | number
   /** The name that will be used in the GitHub release that's created or updated. This will override any `name-template` specified in your `release-drafter.yml` if defined. */
   name?: string | boolean | number
@@ -58,10 +62,14 @@ export interface ReleaseDrafterReleaseDrafterV6Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'release-drafter/release-drafter@v6'. */
+  /**
+   * The action reference. If provided, must match 'release-drafter/release-drafter@v6'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'release-drafter/release-drafter@v6'
-    | (`release-drafter/release-drafter@v6.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: ReleaseDrafterReleaseDrafterV6Inputs
   /** Sets environment variables for this step. */
@@ -70,12 +78,27 @@ export interface ReleaseDrafterReleaseDrafterV6Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class ReleaseDrafterReleaseDrafterV6 extends BaseAction<
   'release-drafter/release-drafter@v6',
   ReleaseDrafterReleaseDrafterV6Outputs
 > {
+  protected readonly owner = 'release-drafter'
+  protected readonly repo = 'release-drafter'
+  protected readonly tag = 'v6'
+  protected readonly resolvedVersion = {
+    major: 6,
+    minor: 1,
+    patch: 0,
+  }
+
   constructor(props: ReleaseDrafterReleaseDrafterV6Props = {}) {
     const outputNames = [
       'id',
@@ -91,13 +114,25 @@ export class ReleaseDrafterReleaseDrafterV6 extends BaseAction<
     ] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'release-drafter/release-drafter@v6',
+        uses: unwrappedUses ?? 'release-drafter/release-drafter@v6',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -105,6 +140,13 @@ export class ReleaseDrafterReleaseDrafterV6 extends BaseAction<
         uses: 'release-drafter/release-drafter@v6'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

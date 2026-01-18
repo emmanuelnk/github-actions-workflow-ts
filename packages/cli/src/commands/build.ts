@@ -4,8 +4,9 @@ import * as path from 'path'
 import * as jsYaml from 'js-yaml'
 import fg from 'fast-glob'
 import { pathToFileURL } from 'url'
-import type { Workflow } from '@github-actions-workflow-ts/lib'
+import { Context, type Workflow } from '@github-actions-workflow-ts/lib'
 import type { WacConfig } from './types/index.js'
+import { ConsoleDiagnosticsReporter } from './diagnostics.js'
 
 /**
  * Comment indicating the file should not be modified.
@@ -179,6 +180,11 @@ export const generateWorkflowFiles = async (
   let workflowCount = 0
 
   createWorkflowDirectory()
+
+  Context.__internalSetGlobalContext({
+    diagnostics: new ConsoleDiagnosticsReporter(),
+    diagnosticRules: config.diagnostics?.rules,
+  })
 
   for (const filePath of workflowFilePaths) {
     const workflows = await importWorkflowFile(filePath)

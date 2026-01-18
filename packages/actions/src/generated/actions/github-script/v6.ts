@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * GitHub Script
@@ -13,19 +16,25 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
 export interface ActionsGithubScriptV6Inputs {
   /** The script to run */
   script: string | boolean | number
-  /** The GitHub token used to create an authenticated client */
+  /** The GitHub token used to create an authenticated client
+   * @default ${{ github.token }} */
   'github-token'?: string | boolean | number
-  /** Whether to tell the GitHub client to log details of its requests. true or false. Default is to run in debug mode when the GitHub Actions step debug logging is turned on. */
+  /** Whether to tell the GitHub client to log details of its requests. true or false. Default is to run in debug mode when the GitHub Actions step debug logging is turned on.
+   * @default ${{ runner.debug == '1' }} */
   debug?: string | boolean | number
-  /** An optional user-agent string */
+  /** An optional user-agent string
+   * @default actions\/github-script */
   'user-agent'?: string | boolean | number
   /** A comma-separated list of API previews to accept */
   previews?: string | boolean | number
-  /** Either "string" or "json" (default "json")—how the result will be encoded */
+  /** Either "string" or "json" (default "json")—how the result will be encoded
+   * @default json */
   'result-encoding'?: string | boolean | number
-  /** The number of times to retry a request */
+  /** The number of times to retry a request
+   * @default 0 */
   retries?: string | boolean | number
-  /** A comma separated list of status codes that will NOT be retried e.g. "400,500". No effect unless `retries` is set */
+  /** A comma separated list of status codes that will NOT be retried e.g. "400,500". No effect unless `retries` is set
+   * @default 400,401,403,404,422 */
   'retry-exempt-status-codes'?: string | boolean | number
 }
 
@@ -38,10 +47,14 @@ export interface ActionsGithubScriptV6Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/github-script@v6'. */
+  /**
+   * The action reference. If provided, must match 'actions/github-script@v6'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'actions/github-script@v6'
-    | (`actions/github-script@v6.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: ActionsGithubScriptV6Inputs
   /** Sets environment variables for this step. */
@@ -50,28 +63,62 @@ export interface ActionsGithubScriptV6Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class ActionsGithubScriptV6 extends BaseAction<
   'actions/github-script@v6',
   ActionsGithubScriptV6Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'github-script'
+  protected readonly tag = 'v6'
+  protected readonly resolvedVersion = {
+    major: 6,
+    minor: 4,
+    patch: 1,
+  }
+
   constructor(props: ActionsGithubScriptV6Props = {}) {
     const outputNames = ['result'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'actions/github-script@v6',
+        uses: unwrappedUses ?? 'actions/github-script@v6',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/github-script@v6' },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

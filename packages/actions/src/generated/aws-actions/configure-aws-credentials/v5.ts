@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * "Configure AWS Credentials" Action for GitHub Actions
@@ -25,7 +28,8 @@ export interface AwsActionsConfigureAwsCredentialsV5Inputs {
   'web-identity-token-file'?: string | boolean | number
   /** Use existing credentials from the environment to assume a new role, rather than providing credentials as input. */
   'role-chaining'?: string | boolean | number
-  /** The audience to use for the OIDC provider */
+  /** The audience to use for the OIDC provider
+   * @default sts.amazonaws.com */
   audience?: string | boolean | number
   /** Proxy to use for the AWS SDK agent */
   'http-proxy'?: string | boolean | number
@@ -47,7 +51,8 @@ export interface AwsActionsConfigureAwsCredentialsV5Inputs {
   'managed-session-policies'?: string | boolean | number
   /** Whether to set credentials as step output */
   'output-credentials'?: string | boolean | number
-  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials. */
+  /** Whether to export credentials as environment variables. If you set this to false, you probably want to use output-credentials.
+   * @default true */
   'output-env-credentials'?: string | boolean | number
   /** Whether to unset the existing credentials in your runner. May be useful if you run this action multiple times in the same job */
   'unset-current-credentials'?: string | boolean | number
@@ -81,10 +86,14 @@ export interface AwsActionsConfigureAwsCredentialsV5Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v5'. */
+  /**
+   * The action reference. If provided, must match 'aws-actions/configure-aws-credentials@v5'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'aws-actions/configure-aws-credentials@v5'
-    | (`aws-actions/configure-aws-credentials@v5.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsConfigureAwsCredentialsV5Inputs
   /** Sets environment variables for this step. */
@@ -93,12 +102,27 @@ export interface AwsActionsConfigureAwsCredentialsV5Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class AwsActionsConfigureAwsCredentialsV5 extends BaseAction<
   'aws-actions/configure-aws-credentials@v5',
   AwsActionsConfigureAwsCredentialsV5Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'configure-aws-credentials'
+  protected readonly tag = 'v5'
+  protected readonly resolvedVersion = {
+    major: 5,
+    minor: 1,
+    patch: 1,
+  }
+
   constructor(props: AwsActionsConfigureAwsCredentialsV5Props = {}) {
     const outputNames = [
       'aws-account-id',
@@ -109,13 +133,25 @@ export class AwsActionsConfigureAwsCredentialsV5 extends BaseAction<
     ] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'aws-actions/configure-aws-credentials@v5',
+        uses: unwrappedUses ?? 'aws-actions/configure-aws-credentials@v5',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -123,6 +159,13 @@ export class AwsActionsConfigureAwsCredentialsV5 extends BaseAction<
         uses: 'aws-actions/configure-aws-credentials@v5'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

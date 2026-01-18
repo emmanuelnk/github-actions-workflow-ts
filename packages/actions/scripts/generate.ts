@@ -3,6 +3,13 @@ import { promises as fs } from 'fs'
 import * as path from 'path'
 import * as yaml from 'js-yaml'
 import { trackedActions } from './config.js'
+import {
+  type PartialSemver,
+  parsePartialVersion,
+  compareSemver,
+} from '../src/utils.js'
+
+// Note: SuppressableDiagnosticCode is imported in generated files from base.ts
 
 // Types for action.yml structure
 interface ActionInput {
@@ -27,9 +34,14 @@ interface ActionYml {
 interface GeneratedAction {
   owner: string
   repo: string
-  version: string
+  version: ResolvedVersion
   className: string
-  relativePath: string
+  fileName: string
+}
+
+interface ResolvedVersion {
+  tag: string
+  parsed: PartialSemver
 }
 
 /**
@@ -49,12 +61,11 @@ function toPascalCase(str: string): string {
 function generateClassName(
   owner: string,
   repo: string,
-  version: string,
+  version: PartialSemver,
 ): string {
   const ownerPart = toPascalCase(owner)
   const repoPart = toPascalCase(repo)
-  const versionPart = version.toUpperCase().replace(/[^A-Z0-9]/g, '')
-  return `${ownerPart}${repoPart}${versionPart}`
+  return `${ownerPart}${repoPart}V${version.major}`
 }
 
 /**
@@ -71,48 +82,18 @@ interface GitHubTag {
 }
 
 /**
- * Parse a version string into its components
- * Returns null if the version doesn't match semver-like patterns
- */
-function parseVersion(
-  version: string,
-): { major: number; minor: number; patch: number } | null {
-  // Match patterns like v1, v1.0, v1.0.0, 1, 1.0, 1.0.0
-  const match = version.match(/^v?(\d+)(?:\.(\d+))?(?:\.(\d+))?$/)
-  if (!match) return null
-
-  return {
-    major: parseInt(match[1], 10),
-    minor: match[2] !== undefined ? parseInt(match[2], 10) : 0,
-    patch: match[3] !== undefined ? parseInt(match[3], 10) : 0,
-  }
-}
-
-/**
  * Check if a version tag matches the requested major version
  */
 function matchesMajorVersion(
   tagVersion: string,
   requestedVersion: string,
 ): boolean {
-  const requested = parseVersion(requestedVersion)
-  const tag = parseVersion(tagVersion)
+  const requested = parsePartialVersion(requestedVersion)
+  const tag = parsePartialVersion(tagVersion)
 
   if (!requested || !tag) return false
 
   return tag.major === requested.major
-}
-
-/**
- * Compare two semver versions, returns positive if a > b, negative if a < b, 0 if equal
- */
-function compareSemver(
-  a: { major: number; minor: number; patch: number },
-  b: { major: number; minor: number; patch: number },
-): number {
-  if (a.major !== b.major) return a.major - b.major
-  if (a.minor !== b.minor) return a.minor - b.minor
-  return a.patch - b.patch
 }
 
 /**
@@ -122,6 +103,9 @@ function getGitHubHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github.v3+json',
     'User-Agent': 'github-actions-workflow-ts',
+    ...(process.env.GH_PAT && {
+      Authorization: `Bearer ${process.env.GH_PAT}`,
+    }),
   }
 
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN
@@ -149,7 +133,7 @@ async function fetchRepoTags(owner: string, repo: string): Promise<string[]> {
 
       if (!response.ok) {
         console.warn(
-          `  ⚠ Failed to fetch tags for ${owner}/${repo}: ${response.status}`,
+          `  ⚠ Failed to fetch tags for ${owner}/${repo}: ${response.status}\n${await response.text()}`,
         )
         break
       }
@@ -177,18 +161,22 @@ async function resolveVersionTag(
   owner: string,
   repo: string,
   version: string,
-): Promise<string> {
-  const requestedParsed = parseVersion(version)
+): Promise<ResolvedVersion | null> {
+  const requestedParsed = parsePartialVersion(version)
+
+  if (requestedParsed == null) {
+    return null
+  }
 
   // If the version is already a full semver (has minor and patch), return as-is
-  if (requestedParsed) {
-    const versionStr = version.replace(/^v?/, '')
-    if (versionStr.includes('.') && versionStr.split('.').length >= 2) {
-      // Check if it has at least minor version specified (e.g., v1.2 or v1.2.3)
-      const parts = versionStr.split('.')
-      if (parts.length >= 3 || (parts.length === 2 && parts[1] !== '0')) {
-        return version
-      }
+  if (
+    requestedParsed &&
+    requestedParsed.minor !== undefined &&
+    requestedParsed.patch !== undefined
+  ) {
+    return {
+      tag: version,
+      parsed: requestedParsed,
     }
   }
 
@@ -197,7 +185,7 @@ async function resolveVersionTag(
 
   const matchingTags = tags
     .filter((tag) => matchesMajorVersion(tag, version))
-    .map((tag) => ({ tag, parsed: parseVersion(tag)! }))
+    .map((tag) => ({ tag, parsed: parsePartialVersion(tag)! }))
     .filter((t) => t.parsed !== null)
     .sort((a, b) => compareSemver(b.parsed, a.parsed)) // Sort descending
 
@@ -206,26 +194,36 @@ async function resolveVersionTag(
     if (resolved !== version) {
       console.log(`    ↳ Resolved ${version} → ${resolved}`)
     }
-    return resolved
+    return matchingTags[0]
   }
 
   // Fallback to original version if no matching tags found
-  return version
+  return {
+    tag: version,
+    parsed: requestedParsed,
+  }
 }
 
 /**
  * Fetch action.yml from GitHub
  */
-async function fetchActionYml(
+async function fetchAction(
   owner: string,
   repo: string,
   version: string,
-): Promise<ActionYml | null> {
+): Promise<{
+  yml: ActionYml
+  version: ResolvedVersion
+} | null> {
   // Resolve the version tag to the latest semver within that major version
   const resolvedVersion = await resolveVersionTag(owner, repo, version)
 
-  const url = `https://raw.githubusercontent.com/${owner}/${repo}/${resolvedVersion}/action.yml`
-  const altUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${resolvedVersion}/action.yaml`
+  if (resolvedVersion === null) {
+    return null
+  }
+
+  const url = `https://raw.githubusercontent.com/${owner}/${repo}/${resolvedVersion.tag}/action.yml`
+  const altUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${resolvedVersion.tag}/action.yaml`
 
   try {
     let response = await fetch(url)
@@ -235,15 +233,18 @@ async function fetchActionYml(
     }
     if (!response.ok) {
       console.warn(
-        `  ⚠ Failed to fetch ${owner}/${repo}@${resolvedVersion}: ${response.status}`,
+        `  ⚠ Failed to fetch ${owner}/${repo}@${resolvedVersion.tag}: ${response.status}`,
       )
       return null
     }
     const text = await response.text()
-    return yaml.load(text) as ActionYml
+    return {
+      yml: yaml.load(text) as ActionYml,
+      version: resolvedVersion,
+    }
   } catch (error) {
     console.warn(
-      `  ⚠ Error fetching ${owner}/${repo}@${resolvedVersion}:`,
+      `  ⚠ Error fetching ${owner}/${repo}@${resolvedVersion.tag}:`,
       error,
     )
     return null
@@ -278,13 +279,20 @@ function generateInputsInterface(
     const description = escapeJsDoc(input.description)
     const isRequired = input.required === true || input.required === 'true'
     const isDeprecated = !!input.deprecationMessage
-    const deprecationNote = isDeprecated
+    const hasDefault = input.default !== undefined && input.default !== ''
+
+    // Build JSDoc parts
+    const descPart = description || ''
+    const defaultPart = hasDefault
+      ? `\n   * @default ${escapeJsDoc(String(input.default))}`
+      : ''
+    const deprecationPart = isDeprecated
       ? `\n   * @deprecated ${escapeJsDoc(input.deprecationMessage)}`
       : ''
 
     const jsDoc =
-      description || isDeprecated
-        ? `  /** ${description}${deprecationNote} */\n`
+      descPart || hasDefault || isDeprecated
+        ? `  /** ${descPart}${defaultPart}${deprecationPart} */\n`
         : ''
 
     // Determine property name - quote if contains special chars
@@ -327,12 +335,13 @@ function generateOutputsType(
 function generateActionFile(
   owner: string,
   repo: string,
-  version: string,
+  tag: string,
+  resolvedVersion: ResolvedVersion,
   actionYml: ActionYml,
 ): string {
-  const className = generateClassName(owner, repo, version)
+  const className = generateClassName(owner, repo, resolvedVersion.parsed)
   const basePath = getRelativeBasePath()
-  const uses = `${owner}/${repo}@${version}`
+  const uses = `${owner}/${repo}@${tag}`
 
   const actionName = escapeJsDoc(actionYml.name) || `${owner}/${repo}`
   const actionDescription = escapeJsDoc(actionYml.description) || ''
@@ -349,8 +358,8 @@ function generateActionFile(
       : '[] as const'
 
   return `// This file is auto-generated. Do not edit manually.
-import { BaseAction } from '${basePath}'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '${basePath}'
+import { Diagnostics, type GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
 
 /**
  * ${actionName}
@@ -371,8 +380,11 @@ export interface ${className}Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match '${uses}'. */
-  uses?: '${uses}' | \`${uses}.\${string}\` & {}
+  /**
+   * The action reference. If provided, must match '${uses}'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
+  uses?: '${uses}' | (string & {}) | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: ${className}Inputs
   /** Sets environment variables for this step. */
@@ -381,26 +393,51 @@ export interface ${className}Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class ${className} extends BaseAction<'${uses}', ${className}Outputs> {
+  protected readonly owner = '${owner}'
+  protected readonly repo = '${repo}'
+  protected readonly tag = '${tag}'
+  protected readonly resolvedVersion = {
+    major: ${resolvedVersion.parsed.major},
+    minor: ${resolvedVersion.parsed.minor ?? 'undefined'},
+    patch: ${resolvedVersion.parsed.patch ?? 'undefined'},
+  }
+
   constructor(props: ${className}Props = {}) {
     const outputNames = ${outputNamesArray}
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const { id, name, with: withProps, env, uses, suppressWarnings, ...rest } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses = uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? '${uses}',
+        uses: unwrappedUses ?? '${uses}',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: '${uses}' },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }
 `
@@ -410,15 +447,14 @@ export class ${className} extends BaseAction<'${uses}', ${className}Outputs> {
  * Generate barrel export file for an owner
  */
 function generateOwnerIndex(
-  owner: string,
-  repos: Map<string, string[]>,
+  _owner: string,
+  repos: Map<string, GeneratedAction[]>,
 ): string {
   const exports: string[] = []
 
-  for (const [repo, versions] of repos) {
-    for (const version of versions) {
-      const versionFile = version.toLowerCase().replace(/[^a-z0-9]/g, '')
-      exports.push(`export * from './${repo}/${versionFile}.js'`)
+  for (const [repo, generatedActions] of repos) {
+    for (const action of generatedActions) {
+      exports.push(`export * from './${repo}/${action.fileName}'`)
     }
   }
 
@@ -434,7 +470,7 @@ function generateMainIndex(owners: Set<string>): string {
     .map((owner) => `export * from './generated/${owner}/index.js'`)
 
   return `// This file is auto-generated. Do not edit manually.
-export { BaseAction } from './base.js'
+export { BaseAction, type SuppressableDiagnosticCode } from './base.js'
 ${exports.join('\n')}
 `
 }
@@ -450,7 +486,7 @@ async function ensureDir(dirPath: string): Promise<void> {
  * Generate the actions table for README
  */
 function generateActionsTable(
-  ownerRepos: Map<string, Map<string, string[]>>,
+  ownerRepos: Map<string, Map<string, GeneratedAction[]>>,
 ): string {
   const rows: string[] = []
 
@@ -462,24 +498,20 @@ function generateActionsTable(
     const sortedRepos = Array.from(repos.keys()).sort()
 
     for (const repo of sortedRepos) {
-      const versions = repos.get(repo)!
+      const generatedActions = repos.get(repo)!
       const actionPath = `${owner}/${repo}`
 
       // Generate version badges/links
-      const versionLinks = versions
-        .map((v) => {
-          const className = generateClassName(owner, repo, v)
-          return `\`${className}\``
+      const versionLinks = generatedActions
+        .map((g) => {
+          return `\`${g.className}\``
         })
         .join(', ')
 
-      // Links column
+      // Links column (GitHub repo only, marketplace links are often incorrect)
       const repoLink = `[GitHub](https://github.com/${actionPath})`
-      const marketplaceLink = `[Marketplace](https://github.com/marketplace/actions/${repo})`
 
-      rows.push(
-        `| ${actionPath} | ${versionLinks} | ${repoLink} · ${marketplaceLink} |`,
-      )
+      rows.push(`| ${actionPath} | ${versionLinks} | ${repoLink} |`)
     }
   }
 
@@ -498,7 +530,7 @@ function getPackageRoot(): string {
  * Update the README.md with the generated actions table
  */
 async function updateReadme(
-  ownerRepos: Map<string, Map<string, string[]>>,
+  ownerRepos: Map<string, Map<string, GeneratedAction[]>>,
 ): Promise<void> {
   const packageRoot = getPackageRoot()
   const readmePath = path.join(packageRoot, 'README.md')
@@ -523,7 +555,7 @@ async function updateReadme(
   }
 
   const tableHeader =
-    '| Action | Versions | Links |\n|--------|----------|-------|'
+    '| Action | Versions | GitHub |\n|--------|----------|--------|'
   const tableContent = generateActionsTable(ownerRepos)
 
   const newContent =
@@ -556,55 +588,69 @@ async function generate(): Promise<void> {
     // Directory doesn't exist, that's fine
   }
 
-  const generatedActions: GeneratedAction[] = []
-  const ownerRepos = new Map<string, Map<string, string[]>>()
+  let generatedActionCount = 0
+  const ownerRepos = new Map<string, Map<string, GeneratedAction[]>>()
 
   // Process each tracked action
-  for (const action of trackedActions) {
-    console.log(`📦 Processing ${action.owner}/${action.repo}...`)
+  for (const actionMeta of trackedActions) {
+    console.log(`📦 Processing ${actionMeta.owner}/${actionMeta.repo}...`)
 
-    for (const version of action.versions) {
+    for (const version of actionMeta.versions) {
       console.log(`  → ${version}`)
 
-      const actionYml = await fetchActionYml(action.owner, action.repo, version)
-      if (!actionYml) continue
+      const action = await fetchAction(
+        actionMeta.owner,
+        actionMeta.repo,
+        version,
+      )
+      if (!action) continue
 
-      const className = generateClassName(action.owner, action.repo, version)
+      const className = generateClassName(
+        actionMeta.owner,
+        actionMeta.repo,
+        action.version.parsed,
+      )
       const versionFile = version.toLowerCase().replace(/[^a-z0-9]/g, '')
 
       // Generate file content
       const fileContent = generateActionFile(
-        action.owner,
-        action.repo,
+        actionMeta.owner,
+        actionMeta.repo,
         version,
-        actionYml,
+        action.version,
+        action.yml,
       )
 
       // Determine output path
-      const actionDir = path.join(generatedDir, action.owner, action.repo)
+      const actionDir = path.join(
+        generatedDir,
+        actionMeta.owner,
+        actionMeta.repo,
+      )
       await ensureDir(actionDir)
 
       const filePath = path.join(actionDir, `${versionFile}.ts`)
       await fs.writeFile(filePath, fileContent)
 
-      // Track for index generation
-      generatedActions.push({
-        owner: action.owner,
-        repo: action.repo,
-        version,
+      const generatedAction: GeneratedAction = {
+        owner: actionMeta.owner,
+        repo: actionMeta.repo,
+        version: action.version,
         className,
-        relativePath: `./${action.owner}/${action.repo}/${versionFile}.js`,
-      })
+        fileName: `${versionFile}.js`,
+      }
+
+      generatedActionCount += 1
 
       // Build owner -> repos -> versions map
-      if (!ownerRepos.has(action.owner)) {
-        ownerRepos.set(action.owner, new Map())
+      if (!ownerRepos.has(actionMeta.owner)) {
+        ownerRepos.set(actionMeta.owner, new Map())
       }
-      const repos = ownerRepos.get(action.owner)!
-      if (!repos.has(action.repo)) {
-        repos.set(action.repo, [])
+      const repos = ownerRepos.get(actionMeta.owner)!
+      if (!repos.has(actionMeta.repo)) {
+        repos.set(actionMeta.repo, [])
       }
-      repos.get(action.repo)!.push(version)
+      repos.get(actionMeta.repo)!.push(generatedAction)
     }
   }
 
@@ -622,7 +668,7 @@ async function generate(): Promise<void> {
   // Update README with actions table
   await updateReadme(ownerRepos)
 
-  console.log(`\n✅ Generated ${generatedActions.length} action classes`)
+  console.log(`\n✅ Generated ${generatedActionCount} action classes`)
   console.log(`📁 Output: ${generatedDir}`)
 }
 

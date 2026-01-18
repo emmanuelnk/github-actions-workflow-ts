@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Amazon ECS "Render Task Definition" Action for GitHub Actions
@@ -48,10 +51,14 @@ export interface AwsActionsAmazonEcsRenderTaskDefinitionV1Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/amazon-ecs-render-task-definition@v1'. */
+  /**
+   * The action reference. If provided, must match 'aws-actions/amazon-ecs-render-task-definition@v1'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'aws-actions/amazon-ecs-render-task-definition@v1'
-    | (`aws-actions/amazon-ecs-render-task-definition@v1.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcsRenderTaskDefinitionV1Inputs
   /** Sets environment variables for this step. */
@@ -60,23 +67,51 @@ export interface AwsActionsAmazonEcsRenderTaskDefinitionV1Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class AwsActionsAmazonEcsRenderTaskDefinitionV1 extends BaseAction<
   'aws-actions/amazon-ecs-render-task-definition@v1',
   AwsActionsAmazonEcsRenderTaskDefinitionV1Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'amazon-ecs-render-task-definition'
+  protected readonly tag = 'v1'
+  protected readonly resolvedVersion = {
+    major: 1,
+    minor: 8,
+    patch: 3,
+  }
+
   constructor(props: AwsActionsAmazonEcsRenderTaskDefinitionV1Props = {}) {
     const outputNames = ['task-definition'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'aws-actions/amazon-ecs-render-task-definition@v1',
+        uses:
+          unwrappedUses ?? 'aws-actions/amazon-ecs-render-task-definition@v1',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -84,6 +119,13 @@ export class AwsActionsAmazonEcsRenderTaskDefinitionV1 extends BaseAction<
         uses: 'aws-actions/amazon-ecs-render-task-definition@v1'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

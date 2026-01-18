@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Docker Login
@@ -19,7 +22,8 @@ export interface DockerLoginActionV3Inputs {
   password?: string | boolean | number
   /** Specifies whether the given registry is ECR (auto, true or false) */
   ecr?: string | boolean | number
-  /** Log out from the Docker registry at the end of a job */
+  /** Log out from the Docker registry at the end of a job
+   * @default true */
   logout?: string | boolean | number
   /** Raw authentication to registries, defined as YAML objects */
   'registry-auth'?: string | boolean | number
@@ -34,8 +38,14 @@ export interface DockerLoginActionV3Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'docker/login-action@v3'. */
-  uses?: 'docker/login-action@v3' | (`docker/login-action@v3.${string}` & {})
+  /**
+   * The action reference. If provided, must match 'docker/login-action@v3'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
+  uses?:
+    | 'docker/login-action@v3'
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: DockerLoginActionV3Inputs
   /** Sets environment variables for this step. */
@@ -44,28 +54,62 @@ export interface DockerLoginActionV3Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class DockerLoginActionV3 extends BaseAction<
   'docker/login-action@v3',
   DockerLoginActionV3Outputs
 > {
+  protected readonly owner = 'docker'
+  protected readonly repo = 'login-action'
+  protected readonly tag = 'v3'
+  protected readonly resolvedVersion = {
+    major: 3,
+    minor: 6,
+    patch: 0,
+  }
+
   constructor(props: DockerLoginActionV3Props = {}) {
     const outputNames = [] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'docker/login-action@v3',
+        uses: unwrappedUses ?? 'docker/login-action@v3',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'docker/login-action@v3' },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

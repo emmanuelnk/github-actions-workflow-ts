@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Amazon ECS "Deploy Task Definition" Action for GitHub Actions
@@ -69,6 +72,8 @@ export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Inputs {
   'propagate-tags'?: string | boolean | number
   /** A comma-separated list of keys whose empty values (empty string, array, or object) should be preserved in the task definition. By default, empty values are removed. */
   'keep-null-value-keys'?: string | boolean | number
+  /** The maximum number of retry attempts for AWS API calls. Defaults to 3. */
+  'max-retries'?: string | boolean | number
 }
 
 export type AwsActionsAmazonEcsDeployTaskDefinitionV2Outputs =
@@ -83,10 +88,14 @@ export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/amazon-ecs-deploy-task-definition@v2'. */
+  /**
+   * The action reference. If provided, must match 'aws-actions/amazon-ecs-deploy-task-definition@v2'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'aws-actions/amazon-ecs-deploy-task-definition@v2'
-    | (`aws-actions/amazon-ecs-deploy-task-definition@v2.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAmazonEcsDeployTaskDefinitionV2Inputs
   /** Sets environment variables for this step. */
@@ -95,12 +104,27 @@ export interface AwsActionsAmazonEcsDeployTaskDefinitionV2Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
   'aws-actions/amazon-ecs-deploy-task-definition@v2',
   AwsActionsAmazonEcsDeployTaskDefinitionV2Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'amazon-ecs-deploy-task-definition'
+  protected readonly tag = 'v2'
+  protected readonly resolvedVersion = {
+    major: 2,
+    minor: 6,
+    patch: 0,
+  }
+
   constructor(props: AwsActionsAmazonEcsDeployTaskDefinitionV2Props = {}) {
     const outputNames = [
       'task-definition-arn',
@@ -109,13 +133,26 @@ export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
     ] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'aws-actions/amazon-ecs-deploy-task-definition@v2',
+        uses:
+          unwrappedUses ?? 'aws-actions/amazon-ecs-deploy-task-definition@v2',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -123,6 +160,13 @@ export class AwsActionsAmazonEcsDeployTaskDefinitionV2 extends BaseAction<
         uses: 'aws-actions/amazon-ecs-deploy-task-definition@v2'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

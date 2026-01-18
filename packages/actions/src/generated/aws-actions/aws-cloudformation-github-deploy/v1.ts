@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * AWS CloudFormation "Deploy CloudFormation Stack" Action for GitHub Actions
@@ -15,17 +18,22 @@ export interface AwsActionsAwsCloudformationGithubDeployV1Inputs {
   name: string | boolean | number
   /** The path or URL to the CloudFormation template */
   template: string | boolean | number
-  /** The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM' */
+  /** The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM'
+   * @default CAPABILITY_IAM */
   capabilities?: string | boolean | number
   /** The parameters to override in the stack inputs. You can pass a comma-delimited list or a file URL. Comma-delimited list has each entry formatted as <ParameterName>=<ParameterValue> or <ParameterName>="<ParameterValue>,<ParameterValue>". A JSON file can be a local file with a "file:\/\/" prefix or remote URL. The file should look like: [ { "ParameterKey": "KeyPairName", "ParameterValue": "MyKey" }] */
   'parameter-overrides'?: string | boolean | number
-  /** Indicates whether to execute to the change set or have it reviewed. Default to '0' (will execute the change set) */
+  /** Indicates whether to execute to the change set or have it reviewed. Default to '0' (will execute the change set)
+   * @default 0 */
   'no-execute-changeset'?: string | boolean | number
-  /** Indicates whether to delete to a failed change set. Default to '0' (will delete the failed changeset) */
+  /** Indicates whether to delete to a failed change set. Default to '0' (will delete the failed changeset)
+   * @default 0 */
   'no-delete-failed-changeset'?: string | boolean | number
-  /** If the CloudFormation change set is empty, do not fail. Defaults to '0' (will fail on empty change set) */
+  /** If the CloudFormation change set is empty, do not fail. Defaults to '0' (will fail on empty change set)
+   * @default 0 */
   'no-fail-on-empty-changeset'?: string | boolean | number
-  /** Disable rollback of the stack if stack creation fails. Defaults to '0' (will rollback if stack creation fails). This input is only used for stack creation, not for stack update */
+  /** Disable rollback of the stack if stack creation fails. Defaults to '0' (will rollback if stack creation fails). This input is only used for stack creation, not for stack update
+   * @default 0 */
   'disable-rollback'?: string | boolean | number
   /** The amount of time that can pass before the stack status becomes CREATE_FAILED. This input is only used for stack creation, not for stack update */
   'timeout-in-minutes'?: string | boolean | number
@@ -35,7 +43,8 @@ export interface AwsActionsAwsCloudformationGithubDeployV1Inputs {
   'role-arn'?: string | boolean | number
   /** Key-value pairs to associate with this stack. This input should be JSON-formatted, for example [ { "Key": "string", "Value": "string" } ] */
   tags?: string | boolean | number
-  /** Whether to enable termination protection on the specified stack. Defaults to '0' (terminated protection will be disabled) This input is only used for stack creation, not for stack update */
+  /** Whether to enable termination protection on the specified stack. Defaults to '0' (terminated protection will be disabled) This input is only used for stack creation, not for stack update
+   * @default 0 */
   'termination-protection'?: string | boolean | number
   /** Proxy to use for the AWS SDK agent */
   'http-proxy'?: string | boolean | number
@@ -52,10 +61,14 @@ export interface AwsActionsAwsCloudformationGithubDeployV1Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'aws-actions/aws-cloudformation-github-deploy@v1'. */
+  /**
+   * The action reference. If provided, must match 'aws-actions/aws-cloudformation-github-deploy@v1'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'aws-actions/aws-cloudformation-github-deploy@v1'
-    | (`aws-actions/aws-cloudformation-github-deploy@v1.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: AwsActionsAwsCloudformationGithubDeployV1Inputs
   /** Sets environment variables for this step. */
@@ -64,23 +77,51 @@ export interface AwsActionsAwsCloudformationGithubDeployV1Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class AwsActionsAwsCloudformationGithubDeployV1 extends BaseAction<
   'aws-actions/aws-cloudformation-github-deploy@v1',
   AwsActionsAwsCloudformationGithubDeployV1Outputs
 > {
+  protected readonly owner = 'aws-actions'
+  protected readonly repo = 'aws-cloudformation-github-deploy'
+  protected readonly tag = 'v1'
+  protected readonly resolvedVersion = {
+    major: 1,
+    minor: 3,
+    patch: 0,
+  }
+
   constructor(props: AwsActionsAwsCloudformationGithubDeployV1Props = {}) {
     const outputNames = ['stack-id'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'aws-actions/aws-cloudformation-github-deploy@v1',
+        uses:
+          unwrappedUses ?? 'aws-actions/aws-cloudformation-github-deploy@v1',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -88,6 +129,13 @@ export class AwsActionsAwsCloudformationGithubDeployV1 extends BaseAction<
         uses: 'aws-actions/aws-cloudformation-github-deploy@v1'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

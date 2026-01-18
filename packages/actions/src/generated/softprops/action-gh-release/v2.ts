@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * GH Release
@@ -29,13 +32,15 @@ export interface SoftpropsActionGhReleaseV2Inputs {
   files?: string | boolean | number
   /** Base directory to resolve 'files' globs against (defaults to job working-directory) */
   working_directory?: string | boolean | number
-  /** Overwrite existing files with the same name. Defaults to true */
+  /** Overwrite existing files with the same name. Defaults to true
+   * @default true */
   overwrite_files?: string | boolean | number
   /** Fails if any of the `files` globs match nothing. Defaults to false */
   fail_on_unmatched_files?: string | boolean | number
   /** Repository to make releases against, in <owner>\/<repo> format */
   repository?: string | boolean | number
-  /** Authorized secret GitHub Personal Access Token. Defaults to github.token */
+  /** Authorized secret GitHub Personal Access Token. Defaults to github.token
+   * @default ${{ github.token }} */
   token?: string | boolean | number
   /** Commitish value that determines where the Git tag is created from. Can be any branch or commit SHA. */
   target_commitish?: string | boolean | number
@@ -62,10 +67,14 @@ export interface SoftpropsActionGhReleaseV2Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'softprops/action-gh-release@v2'. */
+  /**
+   * The action reference. If provided, must match 'softprops/action-gh-release@v2'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'softprops/action-gh-release@v2'
-    | (`softprops/action-gh-release@v2.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: SoftpropsActionGhReleaseV2Inputs
   /** Sets environment variables for this step. */
@@ -74,23 +83,50 @@ export interface SoftpropsActionGhReleaseV2Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class SoftpropsActionGhReleaseV2 extends BaseAction<
   'softprops/action-gh-release@v2',
   SoftpropsActionGhReleaseV2Outputs
 > {
+  protected readonly owner = 'softprops'
+  protected readonly repo = 'action-gh-release'
+  protected readonly tag = 'v2'
+  protected readonly resolvedVersion = {
+    major: 2,
+    minor: 5,
+    patch: 0,
+  }
+
   constructor(props: SoftpropsActionGhReleaseV2Props = {}) {
     const outputNames = ['url', 'id', 'upload_url', 'assets'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'softprops/action-gh-release@v2',
+        uses: unwrappedUses ?? 'softprops/action-gh-release@v2',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -98,6 +134,13 @@ export class SoftpropsActionGhReleaseV2 extends BaseAction<
         uses: 'softprops/action-gh-release@v2'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

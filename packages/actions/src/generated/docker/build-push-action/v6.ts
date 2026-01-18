@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Build and push Docker images
@@ -39,11 +42,13 @@ export interface DockerBuildPushActionV6Inputs {
   file?: string | boolean | number
   /** List of metadata for an image */
   labels?: string | boolean | number
-  /** Load is a shorthand for --output=type=docker */
+  /** Load is a shorthand for --output=type=docker
+   * @default false */
   load?: string | boolean | number
   /** Set the networking mode for the RUN instructions during build */
   network?: string | boolean | number
-  /** Do not use cache when building the image */
+  /** Do not use cache when building the image
+   * @default false */
   'no-cache'?: string | boolean | number
   /** Do not cache specified stages */
   'no-cache-filters'?: string | boolean | number
@@ -53,9 +58,11 @@ export interface DockerBuildPushActionV6Inputs {
   platforms?: string | boolean | number
   /** Generate provenance attestation for the build (shorthand for --attest=type=provenance) */
   provenance?: string | boolean | number
-  /** Always attempt to pull all referenced images */
+  /** Always attempt to pull all referenced images
+   * @default false */
   pull?: string | boolean | number
-  /** Push is a shorthand for --output=type=registry */
+  /** Push is a shorthand for --output=type=registry
+   * @default false */
   push?: string | boolean | number
   /** Generate SBOM attestation for the build (shorthand for --attest=type=sbom) */
   sbom?: string | boolean | number
@@ -75,7 +82,8 @@ export interface DockerBuildPushActionV6Inputs {
   target?: string | boolean | number
   /** Ulimit options (e.g., nofile=1024:1024) */
   ulimit?: string | boolean | number
-  /** GitHub Token used to authenticate against a repository for Git context */
+  /** GitHub Token used to authenticate against a repository for Git context
+   * @default ${{ github.token }} */
   'github-token'?: string | boolean | number
 }
 
@@ -88,10 +96,14 @@ export interface DockerBuildPushActionV6Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'docker/build-push-action@v6'. */
+  /**
+   * The action reference. If provided, must match 'docker/build-push-action@v6'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
   uses?:
     | 'docker/build-push-action@v6'
-    | (`docker/build-push-action@v6.${string}` & {})
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: DockerBuildPushActionV6Inputs
   /** Sets environment variables for this step. */
@@ -100,23 +112,50 @@ export interface DockerBuildPushActionV6Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class DockerBuildPushActionV6 extends BaseAction<
   'docker/build-push-action@v6',
   DockerBuildPushActionV6Outputs
 > {
+  protected readonly owner = 'docker'
+  protected readonly repo = 'build-push-action'
+  protected readonly tag = 'v6'
+  protected readonly resolvedVersion = {
+    major: 6,
+    minor: 18,
+    patch: 0,
+  }
+
   constructor(props: DockerBuildPushActionV6Props = {}) {
     const outputNames = ['imageid', 'digest', 'metadata'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'docker/build-push-action@v6',
+        uses: unwrappedUses ?? 'docker/build-push-action@v6',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
@@ -124,6 +163,13 @@ export class DockerBuildPushActionV6 extends BaseAction<
         uses: 'docker/build-push-action@v6'
       },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

@@ -1,6 +1,9 @@
 // This file is auto-generated. Do not edit manually.
-import { BaseAction } from '../../../base.js'
-import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
+import { BaseAction, type SuppressableDiagnosticCode } from '../../../base.js'
+import {
+  Diagnostics,
+  type GeneratedWorkflowTypes,
+} from '@github-actions-workflow-ts/lib'
 
 /**
  * Setup Node.js environment
@@ -11,7 +14,8 @@ import type { GeneratedWorkflowTypes } from '@github-actions-workflow-ts/lib'
  */
 
 export interface ActionsSetupNodeV4Inputs {
-  /** Set always-auth in npmrc. */
+  /** Set always-auth in npmrc.
+   * @default false */
   'always-auth'?: string | boolean | number
   /** Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0. */
   'node-version'?: string | boolean | number
@@ -19,13 +23,15 @@ export interface ActionsSetupNodeV4Inputs {
   'node-version-file'?: string | boolean | number
   /** Target architecture for Node to use. Examples: x86, x64. Will use system architecture by default. */
   architecture?: string | boolean | number
-  /** Set this option if you want the action to check for the latest available version that satisfies the version spec. */
+  /** Set this option if you want the action to check for the latest available version that satisfies the version spec.
+   * @default false */
   'check-latest'?: string | boolean | number
   /** Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN. */
   'registry-url'?: string | boolean | number
   /** Optional scope for authenticating against scoped registries. Will fall back to the repository owner when using the GitHub Packages registry (https:\/\/npm.pkg.github.com\/). */
   scope?: string | boolean | number
-  /** Used to pull node distributions from node-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting. */
+  /** Used to pull node distributions from node-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
+   * @default ${{ github.server_url == 'https:\/\/github.com' && github.token || '' }} */
   token?: string | boolean | number
   /** Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm. */
   cache?: string | boolean | number
@@ -46,8 +52,14 @@ export interface ActionsSetupNodeV4Props {
   if?: boolean | number | string
   /** A name for your step to display on GitHub. */
   name?: string
-  /** The action reference. If provided, must match 'actions/setup-node@v4'. */
-  uses?: 'actions/setup-node@v4' | (`actions/setup-node@v4.${string}` & {})
+  /**
+   * The action reference. If provided, must match 'actions/setup-node@v4'.
+   * Can be wrapped with Diagnostics.suppress() to suppress specific warnings.
+   */
+  uses?:
+    | 'actions/setup-node@v4'
+    | (string & {})
+    | Diagnostics.SuppressedValue<string>
   /** A map of the input parameters defined by the action. */
   with?: ActionsSetupNodeV4Inputs
   /** Sets environment variables for this step. */
@@ -56,28 +68,62 @@ export interface ActionsSetupNodeV4Props {
   'continue-on-error'?: boolean | string
   /** The maximum number of minutes to run the step before killing the process. */
   'timeout-minutes'?: number | string
+  /**
+   * Diagnostic codes to suppress for this action instance.
+   * Use this to suppress version validation warnings in-code.
+   * @example ['action-version-semver-violation']
+   */
+  suppressWarnings?: SuppressableDiagnosticCode[]
 }
 
 export class ActionsSetupNodeV4 extends BaseAction<
   'actions/setup-node@v4',
   ActionsSetupNodeV4Outputs
 > {
+  protected readonly owner = 'actions'
+  protected readonly repo = 'setup-node'
+  protected readonly tag = 'v4'
+  protected readonly resolvedVersion = {
+    major: 4,
+    minor: 4,
+    patch: 0,
+  }
+
   constructor(props: ActionsSetupNodeV4Props = {}) {
     const outputNames = ['cache-hit', 'node-version'] as const
 
     // Destructure to control property order in output
-    const { id, name, with: withProps, env, uses, ...rest } = props
+    const {
+      id,
+      name,
+      with: withProps,
+      env,
+      uses,
+      suppressWarnings,
+      ...rest
+    } = props
+
+    // Unwrap the uses value if it's wrapped with Diagnostics.suppress()
+    const unwrappedUses =
+      uses !== undefined ? Diagnostics.unwrapValue(uses) : undefined
 
     super(
       {
         ...(name !== undefined && { name }),
         ...(id !== undefined && { id }),
-        uses: uses ?? 'actions/setup-node@v4',
+        uses: unwrappedUses ?? 'actions/setup-node@v4',
         ...(withProps !== undefined && { with: withProps }),
         ...(env !== undefined && { env }),
         ...rest,
       } as GeneratedWorkflowTypes.Step & { uses: 'actions/setup-node@v4' },
       outputNames,
+      suppressWarnings,
     )
+
+    // Extract suppressions from the uses value if it was wrapped
+    if (uses !== undefined) {
+      this.addSuppressionsFromValue(uses)
+      this.validateUses()
+    }
   }
 }

@@ -15,10 +15,14 @@ const require = createRequire(import.meta.url)
 const tsxPath = require.resolve('tsx/cli')
 
 // Spawn node with tsx CLI to run the script and pass through all arguments
-const child = spawn(process.execPath, [tsxPath, cliPath, ...process.argv.slice(2)], {
-  stdio: 'inherit',
-  shell: process.platform === 'win32',
-})
+const child = spawn(
+  process.execPath,
+  [tsxPath, cliPath, ...process.argv.slice(2)],
+  {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+  },
+)
 
 child.on('close', (code) => {
   process.exit(code ?? 0)

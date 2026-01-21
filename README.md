@@ -67,7 +67,7 @@ Generate the YAML:
 npx gwf build
 ```
 
-See more examples in the [./examples](./examples) folder and their respective output in [./github/workflows](./github/workflows).
+See more examples in the [./examples](./examples) folder and their respective output in [./.github/workflows](./.github/workflows).
 
 ## Documentation
 

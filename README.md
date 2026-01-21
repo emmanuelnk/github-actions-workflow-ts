@@ -67,6 +67,8 @@ Generate the YAML:
 npx gwf build
 ```
 
+See more examples in the [./examples](./examples) folder and their respective output in [./github/workflows](./github/workflows).
+
 ## Documentation
 
 **[View Full Documentation](https://github-actions-workflow-ts.vercel.app/)**

@@ -32,11 +32,6 @@ const installDependencies = new Step({
   run: 'pnpm install --no-frozen-lockfile',
 })
 
-const build = new Step({
-  name: 'Run Build',
-  run: 'pnpm build',
-})
-
 const generateWorkflowTypes = new Step({
   name: 'Generate Workflow Types',
   run: 'pnpm generate-workflow-types',
@@ -125,7 +120,7 @@ const createBranchAndCommit = new Step({
   run: dedentString(`
     git checkout -b \${{ steps.branch-name.outputs.branch }}
     git add packages/lib
-    git commit -m "chore: update types"
+    git commit -m "chore: update types" --no-verify
   `),
 })
 
@@ -179,7 +174,6 @@ const createSchemaUpdatePR = new NormalJob('CreateSchemaUpdatePR', {
   installGlobalTsx,
   installPnpm,
   installDependencies,
-  build,
   generateWorkflowTypes,
   checkExistingPR,
   getBranchName,

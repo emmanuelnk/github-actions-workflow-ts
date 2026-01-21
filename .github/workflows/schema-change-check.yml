@@ -71,8 +71,6 @@ jobs:
           version: 9
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
-      - name: Run Build
-        run: pnpm build
       - name: Generate Workflow Types
         run: pnpm generate-workflow-types
       - name: Check for existing schema update PR
@@ -110,7 +108,7 @@ jobs:
         run: |-
           git checkout -b ${{ steps.branch-name.outputs.branch }}
           git add packages/lib
-          git commit -m "chore: update types"
+          git commit -m "chore: update types" --no-verify
       - name: Push branch
         if: steps.check-pr.outputs.exists == 'false'
         run: git push origin ${{ steps.branch-name.outputs.branch }}

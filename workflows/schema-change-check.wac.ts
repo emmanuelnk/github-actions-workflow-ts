@@ -32,6 +32,11 @@ const installDependencies = new Step({
   run: 'pnpm install --no-frozen-lockfile',
 })
 
+const build = new Step({
+  name: 'Run Build',
+  run: 'pnpm build',
+})
+
 const generateWorkflowTypes = new Step({
   name: 'Generate Workflow Types',
   run: 'pnpm generate-workflow-types',
@@ -165,6 +170,7 @@ const createSchemaUpdatePR = new NormalJob('CreateSchemaUpdatePR', {
   installGlobalTsx,
   installPnpm,
   installDependencies,
+  build,
   generateWorkflowTypes,
   checkExistingPR,
   getBranchName,

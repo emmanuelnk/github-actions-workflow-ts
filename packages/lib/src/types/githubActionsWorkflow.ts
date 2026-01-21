@@ -864,6 +864,7 @@ export interface NormalJob {
 }
 export interface PermissionsEvent {
   actions?: PermissionsLevel
+  'artifact-metadata'?: PermissionsLevel
   attestations?: PermissionsLevel
   checks?: PermissionsLevel
   contents?: PermissionsLevel

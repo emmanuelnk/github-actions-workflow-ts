@@ -83,11 +83,11 @@ const checkExistingPR = new Step({
         owner,
         repo,
         state: 'open',
-        head: \\\`\\\${owner}:chore/schema-update-\\\`
+        head: \`\${owner}:chore/schema-update-\`
       });
       const schemaUpdatePRs = pulls.data.filter(pr => pr.head.ref.startsWith('chore/schema-update-'));
       if (schemaUpdatePRs.length > 0) {
-        console.log(\\\`Found existing schema update PR: \\\${schemaUpdatePRs[0].html_url}\\\`);
+        console.log(\`Found existing schema update PR: \${schemaUpdatePRs[0].html_url}\`);
         core.setOutput('exists', 'true');
         core.setOutput('pr_url', schemaUpdatePRs[0].html_url);
       } else {
@@ -146,7 +146,7 @@ const createPullRequest = new Step({
         base: 'main',
         body: 'Automated PR to update workflow types due to schema changes.'
       });
-      console.log(\\\`PR created: \\\${result.data.html_url}\\\`);
+      console.log(\`PR created: \${result.data.html_url}\`);
     `),
   },
 })
@@ -181,5 +181,6 @@ export const schemaChangeCheckWorkflow = new Workflow('schema-change-check', {
       types: ['opened', 'reopened', 'synchronize'],
     },
     schedule: [{ cron: '0 0 * * *' }],
+    workflow_dispatch: {},
   },
 }).addJobs([schemaChangeCheck, createSchemaUpdatePR])

@@ -154,7 +154,7 @@ const createPullRequest = new Step({
 const createSchemaUpdatePR = new NormalJob('CreateSchemaUpdatePR', {
   'runs-on': 'ubuntu-latest',
   needs: ['SchemaChangeCheck'],
-  if: "failure() && github.event_name == 'schedule'",
+  if: "failure() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')",
   permissions: {
     contents: 'write',
     'pull-requests': 'write',

@@ -32,11 +32,6 @@ const installDependencies = new Step({
   run: 'pnpm install --no-frozen-lockfile',
 })
 
-const build = new Step({
-  name: 'Run Build',
-  run: 'pnpm build',
-})
-
 const generateWorkflowTypes = new Step({
   name: 'Generate Workflow Types',
   run: 'pnpm generate-workflow-types',
@@ -125,7 +120,7 @@ const createBranchAndCommit = new Step({
   run: dedentString(`
     git checkout -b \${{ steps.branch-name.outputs.branch }}
     git add packages/lib
-    git commit -m "chore: update types"
+    git commit -m "chore: update types" --no-verify
   `),
 })
 
@@ -152,6 +147,14 @@ const createPullRequest = new Step({
         body: 'Automated PR to update workflow types due to schema changes.'
       });
       console.log(\`PR created: \${result.data.html_url}\`);
+
+      await github.rest.pulls.requestReviewers({
+        owner,
+        repo,
+        pull_number: result.data.number,
+        reviewers: ['emmanuelnk', 'copilot-pull-request-reviewer[bot]'],
+      });
+      console.log('Reviewers requested');
     `),
   },
 })
@@ -159,10 +162,11 @@ const createPullRequest = new Step({
 const createSchemaUpdatePR = new NormalJob('CreateSchemaUpdatePR', {
   'runs-on': 'ubuntu-latest',
   needs: ['SchemaChangeCheck'],
-  if: "failure() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')",
+  if: "${{ failure() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}",
   permissions: {
     contents: 'write',
     'pull-requests': 'write',
+    actions: 'write',
   },
 }).addSteps([
   checkout,
@@ -170,7 +174,6 @@ const createSchemaUpdatePR = new NormalJob('CreateSchemaUpdatePR', {
   installGlobalTsx,
   installPnpm,
   installDependencies,
-  build,
   generateWorkflowTypes,
   checkExistingPR,
   getBranchName,

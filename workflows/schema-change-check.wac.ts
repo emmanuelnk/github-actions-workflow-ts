@@ -181,5 +181,6 @@ export const schemaChangeCheckWorkflow = new Workflow('schema-change-check', {
       types: ['opened', 'reopened', 'synchronize'],
     },
     schedule: [{ cron: '0 0 * * *' }],
+    workflow_dispatch: {},
   },
 }).addJobs([schemaChangeCheck, createSchemaUpdatePR])

@@ -72,6 +72,71 @@ export const buildWorkflow = new Workflow('build', {
 
 This generates two files: `.github/workflows/test.yml` and `.github/workflows/build.yml`.
 
+## Custom Output Paths
+
+For monorepos or special project structures, you can customize where workflow files are written.
+
+### Per-Workflow Output Path
+
+Set a custom output directory for individual workflows:
+
+```typescript
+// workflows/apps.wac.ts
+import { Workflow, NormalJob } from '@github-actions-workflow-ts/lib'
+
+// Output to: packages/app-a/.github/workflows/deploy.yml
+export const appADeploy = new Workflow(
+  'deploy',
+  {
+    name: 'Deploy App A',
+    on: { push: { branches: ['main'] } },
+  },
+  { outputPath: 'packages/app-a/.github/workflows' }
+)
+
+// Output to: packages/app-b/.github/workflows/deploy.yml
+export const appBDeploy = new Workflow(
+  'deploy',
+  {
+    name: 'Deploy App B',
+    on: { push: { branches: ['main'] } },
+  },
+  { outputPath: 'packages/app-b/.github/workflows' }
+)
+```
+
+### Config-Based Output Paths
+
+For more control, use `wac.config.json` to define output paths based on filename or path patterns:
+
+```json
+{
+  "outputPaths": {
+    "workflows": {
+      "default": ".github/workflows",
+      "overrides": [
+        {
+          "match": "packages/app-a/**/*.wac.ts",
+          "path": "packages/app-a/.github/workflows"
+        },
+        {
+          "match": "packages/app-b/**/*.wac.ts",
+          "path": "packages/app-b/.github/workflows"
+        },
+        {
+          "match": "*-shared.wac.ts",
+          "path": ".github/workflows"
+        }
+      ]
+    }
+  }
+}
+```
+
+The `match` pattern supports both filename patterns (e.g., `*-deploy.wac.ts`) and full path patterns (e.g., `packages/app-a/**/*.wac.ts`).
+
+See the [Configuration guide](/docs/guides/configuration#outputpaths) for more details on output path options.
+
 ## Reusing Components
 
 One of the main benefits of using TypeScript is the ability to reuse components:

@@ -2,6 +2,19 @@ import type { GeneratedWorkflowTypes } from '../types/index.js'
 import type * as Jobs from '../job/index.js'
 
 /**
+ * Options for configuring a Workflow instance.
+ */
+export type WorkflowOptions = {
+  /**
+   * Custom output path for this workflow.
+   * If specified, takes precedence over config file settings.
+   * Can be a relative or absolute path to the output directory.
+   * @example "packages/app-a/.github/workflows"
+   */
+  outputPath?: string
+}
+
+/**
  * Represents a GitHub Actions workflow.
  *
  * The Workflow class is the top-level container for defining a GitHub Actions workflow.
@@ -15,6 +28,15 @@ import type * as Jobs from '../job/index.js'
  * })
  * workflow.addJob(testJob)
  * ```
+ *
+ * @example
+ * ```typescript
+ * // With custom output path
+ * const workflow = new Workflow('deploy', {
+ *   name: 'Deploy',
+ *   on: { push: { branches: ['main'] } },
+ * }, { outputPath: 'packages/app-a/.github/workflows' })
+ * ```
  */
 export class Workflow {
   public workflow: Partial<GeneratedWorkflowTypes.Workflow>
@@ -23,6 +45,12 @@ export class Workflow {
    * The filename of the workflow e.g. `main.yml`
    */
   public filename?: string
+
+  /**
+   * Custom output path for this workflow.
+   * If set, overrides any config file settings.
+   */
+  public outputPath?: string
 
   addEnvs(envs: GeneratedWorkflowTypes.Workflow['env']): this {
     if (this.workflow.env && typeof this.workflow.env === 'object')
@@ -58,10 +86,12 @@ export class Workflow {
   constructor(
     filename: string,
     workflowProps: Partial<GeneratedWorkflowTypes.Workflow>,
+    options?: WorkflowOptions,
   ) {
     this.filename = filename
     this.workflow = {
       ...workflowProps,
     }
+    this.outputPath = options?.outputPath
   }
 }

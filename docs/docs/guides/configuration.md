@@ -76,6 +76,62 @@ Options passed to [js-yaml's dump function](https://github.com/nodeca/js-yaml#du
 }
 ```
 
+### outputPaths
+
+Configure custom output directories for generated workflow files. Useful for monorepos where workflows need to be placed in different locations.
+
+| Type | Default |
+|------|---------|
+| `object` | `undefined` |
+
+```json
+{
+  "outputPaths": {
+    "workflows": {
+      "default": ".github/workflows",
+      "overrides": [
+        {
+          "match": "app-a-deploy.wac.ts",
+          "path": "packages/app-a/.github/workflows"
+        },
+        {
+          "match": "*-release.wac.ts",
+          "path": "packages/releases/.github/workflows"
+        },
+        {
+          "match": "packages/app-b/**/*.wac.ts",
+          "path": "packages/app-b/.github/workflows"
+        }
+      ]
+    }
+  }
+}
+```
+
+#### workflows.default
+
+The default output directory for all workflow files. If not specified, defaults to `.github/workflows`.
+
+#### workflows.overrides
+
+An array of override rules. Each rule has:
+- `match` - Pattern to match against the source `.wac.ts` file. Supports:
+  - Filename patterns: `deploy.wac.ts`, `*-release.wac.ts`
+  - Full path patterns: `packages/app-a/**/*.wac.ts`, `src/workflows/*.wac.ts`
+- `path` - Output directory for matching workflows
+
+Patterns are matched against both the full relative path and the filename, so `deploy.wac.ts` will match files at any depth.
+
+Overrides are checked in order; the first matching pattern wins.
+
+#### Path Resolution Priority
+
+Output paths are resolved in this order (highest priority first):
+1. Workflow-level `outputPath` option (set in the Workflow constructor)
+2. Config `outputPaths.workflows.overrides` (first matching pattern)
+3. Config `outputPaths.workflows.default`
+4. Default `.github/workflows`
+
 ### diagnostics
 
 Configure diagnostic warnings emitted during build when using `@github-actions-workflow-ts/actions`.
@@ -129,6 +185,17 @@ A complete example with all options:
   ],
   "dumpOptions": {
     "lineWidth": 100
+  },
+  "outputPaths": {
+    "workflows": {
+      "default": ".github/workflows",
+      "overrides": [
+        {
+          "match": "app-*-deploy.wac.ts",
+          "path": "packages/deployments/.github/workflows"
+        }
+      ]
+    }
   },
   "diagnostics": {
     "rules": {

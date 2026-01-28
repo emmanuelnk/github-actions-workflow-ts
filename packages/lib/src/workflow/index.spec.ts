@@ -287,5 +287,47 @@ describe('Workflow', () => {
         },
       })
     })
+
+    it('should set outputPath when provided in options', () => {
+      const workflow = new Workflow(
+        'testWorkflow',
+        {
+          name: 'testWorkflow',
+          on: {
+            workflow_dispatch: {},
+          },
+        },
+        { outputPath: 'packages/app-a/.github/workflows' },
+      )
+
+      expect(workflow.filename).toBe('testWorkflow')
+      expect(workflow.outputPath).toBe('packages/app-a/.github/workflows')
+    })
+
+    it('should have undefined outputPath when options not provided', () => {
+      const workflow = new Workflow('testWorkflow', {
+        name: 'testWorkflow',
+        on: {
+          workflow_dispatch: {},
+        },
+      })
+
+      expect(workflow.outputPath).toBeUndefined()
+    })
+
+    it('should have undefined outputPath when options provided without outputPath', () => {
+      const workflow = new Workflow(
+        'testWorkflow',
+        {
+          name: 'testWorkflow',
+          on: {
+            workflow_dispatch: {},
+          },
+        },
+        {},
+      )
+
+      expect(workflow.outputPath).toBeUndefined()
+    })
   })
 })

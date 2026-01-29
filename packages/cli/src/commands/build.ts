@@ -84,13 +84,20 @@ export const resolveOutputPath = (
 }
 
 /**
- * Returns the config file
- * @returns { Record<string, any> | undefined} - The config file as an object
+ * Supported config file names in order of priority.
+ * TypeScript config takes precedence over JSON config.
+ */
+export const CONFIG_FILE_NAMES = ['wac.config.ts', 'wac.config.json'] as const
+
+/**
+ * Returns the config file (synchronous version for JSON only)
+ * @returns {WacConfig | undefined} - The config file as an object
+ * @deprecated Use getConfigAsync for TypeScript config support
  */
 export const getConfig = (): WacConfig | undefined => {
-  const configFilePath = path.join(process.cwd(), 'wac.config.json')
+  const jsonConfigPath = path.join(process.cwd(), 'wac.config.json')
 
-  if (!fs.existsSync(configFilePath)) {
+  if (!fs.existsSync(jsonConfigPath)) {
     console.log(
       '[github-actions-workflow-ts] No config (wac.config.json) file found in root dir. Using default config.',
     )
@@ -102,7 +109,48 @@ export const getConfig = (): WacConfig | undefined => {
     '[github-actions-workflow-ts] wac.config.json config file found in root dir',
   )
 
-  return JSON.parse(fs.readFileSync(configFilePath, 'utf-8'))
+  return JSON.parse(fs.readFileSync(jsonConfigPath, 'utf-8'))
+}
+
+/**
+ * Returns the config file, supporting both TypeScript and JSON formats.
+ * Priority: wac.config.ts > wac.config.json
+ *
+ * @returns {Promise<WacConfig | undefined>} - The config file as an object
+ */
+export const getConfigAsync = async (): Promise<WacConfig | undefined> => {
+  const cwd = process.cwd()
+
+  // Check for TypeScript config first (higher priority)
+  const tsConfigPath = path.join(cwd, 'wac.config.ts')
+  if (fs.existsSync(tsConfigPath)) {
+    console.log(
+      '[github-actions-workflow-ts] wac.config.ts config file found in root dir',
+    )
+
+    const absolutePath = path.resolve(tsConfigPath)
+    const fileUrl = pathToFileURL(absolutePath).href
+    const module = await import(fileUrl)
+
+    // Support both default export and named 'config' export
+    return module.default || module.config
+  }
+
+  // Fall back to JSON config
+  const jsonConfigPath = path.join(cwd, 'wac.config.json')
+  if (fs.existsSync(jsonConfigPath)) {
+    console.log(
+      '[github-actions-workflow-ts] wac.config.json config file found in root dir',
+    )
+
+    return JSON.parse(fs.readFileSync(jsonConfigPath, 'utf-8'))
+  }
+
+  console.log(
+    '[github-actions-workflow-ts] No config file found in root dir. Using default config.',
+  )
+
+  return undefined
 }
 
 /**
@@ -241,7 +289,7 @@ export const createWorkflowDirectory = (
 export const generateWorkflowFiles = async (
   argv: Record<string, unknown>,
 ): Promise<void> => {
-  const config = getConfig() || {}
+  const config = (await getConfigAsync()) || {}
   const workflowFilePaths = getWorkflowFilePaths() || []
   let workflowCount = 0
 

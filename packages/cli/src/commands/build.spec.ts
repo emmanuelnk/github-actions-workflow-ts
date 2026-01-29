@@ -306,6 +306,53 @@ describe('build', () => {
     })
   })
 
+  describe('getConfigAsync', () => {
+    it('should return undefined if no config file exists', async () => {
+      mockFs.existsSync.mockReturnValue(false)
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+
+      const result = await build.getConfigAsync()
+
+      expect(result).toBeUndefined()
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        '[github-actions-workflow-ts] No config file found in root dir. Using default config.',
+      )
+    })
+
+    it('should return config from wac.config.json if it exists and no TS config', async () => {
+      const mockConfig = JSON.stringify({ refs: false })
+      mockFs.existsSync
+        .mockReturnValueOnce(false) // wac.config.ts doesn't exist
+        .mockReturnValueOnce(true) // wac.config.json exists
+      mockFs.readFileSync.mockReturnValue(mockConfig)
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+
+      const result = await build.getConfigAsync()
+
+      expect(result).toEqual({ refs: false })
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        '[github-actions-workflow-ts] wac.config.json config file found in root dir',
+      )
+    })
+
+    it('should throw an error if JSON config contains invalid JSON', async () => {
+      mockFs.existsSync
+        .mockReturnValueOnce(false) // wac.config.ts doesn't exist
+        .mockReturnValueOnce(true) // wac.config.json exists
+      mockFs.readFileSync.mockReturnValue('invalid JSON')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+
+      await expect(build.getConfigAsync()).rejects.toThrow()
+    })
+  })
+
+  describe('CONFIG_FILE_NAMES', () => {
+    it('should list TypeScript config before JSON config', () => {
+      expect(build.CONFIG_FILE_NAMES[0]).toBe('wac.config.ts')
+      expect(build.CONFIG_FILE_NAMES[1]).toBe('wac.config.json')
+    })
+  })
+
   describe('getWorkflowFilePaths', () => {
     it('should return undefined and log message if no workflow files are found', () => {
       mockFg.sync.mockReturnValue([])
@@ -678,10 +725,10 @@ describe('build', () => {
 
   describe('generateWorkflowFiles', () => {
     it('should generate no files if no .wac.ts files are found', async () => {
-      // Mock existsSync to return false for config, true for workflows dir
+      // Mock existsSync to return false for config files
       mockFs.existsSync.mockReturnValue(false)
       mockFg.sync.mockReturnValue([])
-      mockPath.join.mockReturnValue('.github/workflows')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
       mockPath.relative.mockReturnValue('.github/workflows')
 
       await build.generateWorkflowFiles({ refs: true })
@@ -692,18 +739,21 @@ describe('build', () => {
     })
 
     it('should use config from wac.config.json if found', async () => {
-      // First call to existsSync is for config file, return true
-      // Second call is for workflows directory
+      // getConfigAsync checks: wac.config.ts (false), wac.config.json (true)
       mockFs.existsSync
-        .mockReturnValueOnce(true) // config exists
-        .mockReturnValue(true) // workflows dir exists
+        .mockReturnValueOnce(false) // wac.config.ts doesn't exist
+        .mockReturnValueOnce(true) // wac.config.json exists
+        .mockReturnValue(true) // other checks (workflows dir, etc.)
       mockFs.readFileSync.mockReturnValue(JSON.stringify({ refs: false }))
       mockFg.sync.mockReturnValue([])
-      mockPath.join.mockReturnValue('.github/workflows')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
       mockPath.relative.mockReturnValue('.github/workflows')
 
       await build.generateWorkflowFiles({ refs: true })
 
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        '[github-actions-workflow-ts] wac.config.json config file found in root dir',
+      )
       expect(consoleLogSpy).toHaveBeenCalledWith(
         '[github-actions-workflow-ts] Successfully generated 0 workflow file(s)',
       )

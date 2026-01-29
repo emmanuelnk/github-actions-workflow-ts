@@ -164,6 +164,7 @@ export const getWorkflowFilePaths = (): string[] | undefined => {
     {
       onlyFiles: true,
       dot: true,
+      ignore: ['**/node_modules/**'],
     },
   )
 

@@ -85,4 +85,16 @@ export type WacConfig = {
    * Allows workflows to be written to different directories based on filename patterns.
    */
   outputPaths?: OutputPathsConfig
+  /**
+   * Root directory for resolving output paths.
+   * If not specified, automatically detected by finding the nearest .git directory
+   * or package.json with workspaces.
+   *
+   * This is useful when running gwf from a subdirectory (e.g., scripts/) but
+   * wanting output paths to be relative to the project root.
+   *
+   * @example "../../" - Go up two directories from cwd
+   * @example "/absolute/path/to/project" - Use an absolute path
+   */
+  rootDir?: string
 }

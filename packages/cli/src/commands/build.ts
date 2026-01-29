@@ -15,6 +15,47 @@ import { ConsoleDiagnosticsReporter } from './diagnostics.js'
 export const DEFAULT_OUTPUT_PATH = path.join('.github', 'workflows')
 
 /**
+ * Finds the project root directory by looking for markers like .git or package.json.
+ * Walks up the directory tree from the current working directory.
+ *
+ * @param {string} [startDir] - The directory to start searching from. Defaults to cwd.
+ * @returns {string} - The project root directory, or cwd if no markers found.
+ */
+export const findProjectRoot = (startDir?: string): string => {
+  let currentDir = startDir || process.cwd()
+  const root = path.parse(currentDir).root
+
+  while (currentDir !== root) {
+    // Check for .git directory (most reliable indicator of project root)
+    if (fs.existsSync(path.join(currentDir, '.git'))) {
+      return currentDir
+    }
+
+    // Check for package.json as fallback (could be in a workspace package)
+    // Only use if it has workspaces defined (indicating it's the root)
+    const packageJsonPath = path.join(currentDir, 'package.json')
+    if (fs.existsSync(packageJsonPath)) {
+      try {
+        const packageJson = JSON.parse(
+          fs.readFileSync(packageJsonPath, 'utf-8'),
+        )
+        // If it has workspaces, it's likely the monorepo root
+        if (packageJson.workspaces) {
+          return currentDir
+        }
+      } catch {
+        // Ignore parse errors
+      }
+    }
+
+    currentDir = path.dirname(currentDir)
+  }
+
+  // No project root found, return cwd
+  return process.cwd()
+}
+
+/**
  * Comment indicating the file should not be modified.
  * @type {string}
  */
@@ -35,6 +76,23 @@ export const relativePath = (p: string): string =>
   path.relative(process.cwd(), p)
 
 /**
+ * Resolves the root directory for output paths.
+ * Priority: config.rootDir > auto-detected project root > cwd
+ *
+ * @param {WacConfig} config - The configuration object.
+ * @returns {string} - The resolved root directory (absolute path).
+ */
+export const resolveRootDir = (config: WacConfig): string => {
+  if (config.rootDir) {
+    // If rootDir is relative, resolve it from cwd
+    return path.resolve(process.cwd(), config.rootDir)
+  }
+
+  // Auto-detect project root
+  return findProjectRoot()
+}
+
+/**
  * Resolves the output path for a workflow file.
  *
  * Priority order:
@@ -43,44 +101,59 @@ export const relativePath = (p: string): string =>
  * 3. config.outputPaths.workflows.default
  * 4. DEFAULT_OUTPUT_PATH (.github/workflows)
  *
+ * Output paths are resolved relative to the root directory (see resolveRootDir).
+ *
  * @param {Workflow} workflow - The workflow instance.
  * @param {string} workflowFilePath - The source file path (e.g., "my-workflow.wac.ts").
  * @param {WacConfig} config - The configuration object.
- * @returns {string} - The resolved output directory path.
+ * @param {string} rootDir - The root directory for resolving output paths.
+ * @returns {string} - The resolved output directory path (absolute).
  */
 export const resolveOutputPath = (
   workflow: Workflow,
   workflowFilePath: string,
   config: WacConfig,
+  rootDir: string,
 ): string => {
+  let outputPath: string
+
   // 1. Check workflow-level outputPath (highest priority)
   if (workflow.outputPath) {
-    return workflow.outputPath
+    outputPath = workflow.outputPath
   }
-
   // 2. Check config overrides
-  const outputPathsConfig = config.outputPaths?.workflows
-  if (outputPathsConfig?.overrides) {
-    const filename = path.basename(workflowFilePath)
-    for (const override of outputPathsConfig.overrides) {
-      // Match against both the full relative path and just the filename
-      // This allows patterns like "packages/app-a/**/*.wac.ts" or "deploy.wac.ts"
-      if (
-        micromatch.isMatch(workflowFilePath, override.match) ||
-        micromatch.isMatch(filename, override.match)
-      ) {
-        return override.path
+  else {
+    const outputPathsConfig = config.outputPaths?.workflows
+    if (outputPathsConfig?.overrides) {
+      const filename = path.basename(workflowFilePath)
+      let matched = false
+      for (const override of outputPathsConfig.overrides) {
+        // Match against both the full relative path and just the filename
+        // This allows patterns like "packages/app-a/**/*.wac.ts" or "deploy.wac.ts"
+        if (
+          micromatch.isMatch(workflowFilePath, override.match) ||
+          micromatch.isMatch(filename, override.match)
+        ) {
+          outputPath = override.path
+          matched = true
+          break
+        }
       }
+      if (!matched) {
+        // 3. Check config default
+        outputPath = outputPathsConfig?.default || DEFAULT_OUTPUT_PATH
+      }
+    } else {
+      // 3. Check config default
+      outputPath = outputPathsConfig?.default || DEFAULT_OUTPUT_PATH
     }
   }
 
-  // 3. Check config default
-  if (outputPathsConfig?.default) {
-    return outputPathsConfig.default
+  // Resolve relative paths from rootDir, absolute paths stay as-is
+  if (path.isAbsolute(outputPath!)) {
+    return outputPath!
   }
-
-  // 4. Fall back to hardcoded default
-  return DEFAULT_OUTPUT_PATH
+  return path.join(rootDir, outputPath!)
 }
 
 /**
@@ -212,6 +285,7 @@ export const importWorkflowFile = async (
  * @param {Record<string, Workflow>} workflowJSON - The workflow data in JSON format.
  * @param {string} workflowFilePath - The path to the workflow file.
  * @param {WacConfig} config - Command line arguments.
+ * @param {string} rootDir - The root directory for resolving output paths.
  * @param {Set<string>} [createdDirectories] - Optional set to track directories that have been created.
  * @returns {number} - The number of workflows written.
  */
@@ -219,6 +293,7 @@ export const writeWorkflowJSONToYamlFiles = (
   workflowJSON: Record<string, Workflow>,
   workflowFilePath: string,
   config: WacConfig,
+  rootDir: string,
   createdDirectories?: Set<string>,
 ): number => {
   let workflowCount: number = 0
@@ -237,7 +312,12 @@ export const writeWorkflowJSONToYamlFiles = (
     })
 
     // Resolve the output path for this workflow
-    const outputDir = resolveOutputPath(workflow, workflowFilePath, config)
+    const outputDir = resolveOutputPath(
+      workflow,
+      workflowFilePath,
+      config,
+      rootDir,
+    )
 
     // Create directory if not already created
     if (createdDirectories && !createdDirectories.has(outputDir)) {
@@ -294,6 +374,14 @@ export const generateWorkflowFiles = async (
   const workflowFilePaths = getWorkflowFilePaths() || []
   let workflowCount = 0
 
+  // Resolve the root directory for output paths
+  const rootDir = resolveRootDir(config)
+  const cwd = process.cwd()
+
+  if (rootDir !== cwd) {
+    console.log(`[github-actions-workflow-ts] Using project root: ${rootDir}`)
+  }
+
   // Track created directories to avoid duplicate creation attempts
   const createdDirectories = new Set<string>()
 
@@ -311,6 +399,7 @@ export const generateWorkflowFiles = async (
         ...argv,
         ...config,
       } as WacConfig,
+      rootDir,
       createdDirectories,
     )
   }

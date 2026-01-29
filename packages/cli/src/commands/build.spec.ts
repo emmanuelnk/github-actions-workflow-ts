@@ -18,8 +18,10 @@ const mockFs = {
 
 const mockPath = {
   relative: jest.fn(),
-  join: jest.fn(),
+  // Default implementation for join - used at module load time for DEFAULT_OUTPUT_PATH
+  join: jest.fn((...parts: string[]) => parts.join('/')),
   resolve: jest.fn(),
+  basename: jest.fn((p: string) => p.split('/').pop() || ''),
 }
 
 const mockJsYaml = {
@@ -31,11 +33,18 @@ const mockFg = {
   convertPathToPattern: jest.fn((p: string) => p),
 }
 
+const mockMicromatch = {
+  isMatch: jest.fn(),
+}
+
 jest.unstable_mockModule('fs', () => mockFs)
 jest.unstable_mockModule('path', () => mockPath)
 jest.unstable_mockModule('js-yaml', () => mockJsYaml)
 jest.unstable_mockModule('fast-glob', () => ({
   default: mockFg,
+}))
+jest.unstable_mockModule('micromatch', () => ({
+  default: mockMicromatch,
 }))
 
 // Import the module under test after mocking
@@ -57,6 +66,192 @@ describe('build', () => {
     it('should be defined', () => {
       expect(build.DEFAULT_HEADER_TEXT).toBeDefined()
       expect(Array.isArray(build.DEFAULT_HEADER_TEXT)).toBe(true)
+    })
+  })
+
+  describe('DEFAULT_OUTPUT_PATH', () => {
+    it('should be defined', () => {
+      expect(build.DEFAULT_OUTPUT_PATH).toBeDefined()
+      expect(typeof build.DEFAULT_OUTPUT_PATH).toBe('string')
+    })
+  })
+
+  describe('resolveOutputPath', () => {
+    beforeEach(() => {
+      mockPath.basename.mockImplementation((p: string) => p.split('/').pop())
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+    })
+
+    it('should return workflow.outputPath if set (highest priority)', () => {
+      const workflow = new Workflow(
+        'test',
+        { on: 'push' },
+        { outputPath: 'custom/path' },
+      )
+      const config = {
+        outputPaths: {
+          workflows: {
+            default: 'config/default/path',
+            overrides: [{ match: 'test.wac.ts', path: 'override/path' }],
+          },
+        },
+      }
+
+      const result = build.resolveOutputPath(workflow, 'test.wac.ts', config)
+
+      expect(result).toBe('custom/path')
+    })
+
+    it('should return matching override path if no workflow.outputPath (filename match)', () => {
+      const workflow = new Workflow('test', { on: 'push' })
+      const config = {
+        outputPaths: {
+          workflows: {
+            default: 'config/default/path',
+            overrides: [
+              { match: 'other.wac.ts', path: 'other/path' },
+              { match: 'test.wac.ts', path: 'override/path' },
+            ],
+          },
+        },
+      }
+
+      mockMicromatch.isMatch
+        .mockReturnValueOnce(false) // full path doesn't match 'other.wac.ts'
+        .mockReturnValueOnce(false) // filename doesn't match 'other.wac.ts'
+        .mockReturnValueOnce(false) // full path doesn't match 'test.wac.ts'
+        .mockReturnValueOnce(true) // filename matches 'test.wac.ts'
+
+      const result = build.resolveOutputPath(
+        workflow,
+        'src/test.wac.ts',
+        config,
+      )
+
+      expect(result).toBe('override/path')
+    })
+
+    it('should support full path matching in overrides', () => {
+      const workflow = new Workflow('deploy', { on: 'push' })
+      const config = {
+        outputPaths: {
+          workflows: {
+            overrides: [
+              {
+                match: 'packages/app-a/**/*.wac.ts',
+                path: 'packages/app-a/.github/workflows',
+              },
+            ],
+          },
+        },
+      }
+
+      mockMicromatch.isMatch.mockReturnValueOnce(true) // full path matches
+
+      const result = build.resolveOutputPath(
+        workflow,
+        'packages/app-a/workflows/deploy.wac.ts',
+        config,
+      )
+
+      expect(result).toBe('packages/app-a/.github/workflows')
+      expect(mockMicromatch.isMatch).toHaveBeenCalledWith(
+        'packages/app-a/workflows/deploy.wac.ts',
+        'packages/app-a/**/*.wac.ts',
+      )
+    })
+
+    it('should support glob patterns in overrides (filename)', () => {
+      const workflow = new Workflow('deploy', { on: 'push' })
+      const config = {
+        outputPaths: {
+          workflows: {
+            overrides: [
+              { match: '*-release.wac.ts', path: 'releases/workflows' },
+            ],
+          },
+        },
+      }
+
+      mockMicromatch.isMatch
+        .mockReturnValueOnce(false) // full path doesn't match
+        .mockReturnValueOnce(true) // filename matches
+
+      const result = build.resolveOutputPath(
+        workflow,
+        'app-release.wac.ts',
+        config,
+      )
+
+      expect(result).toBe('releases/workflows')
+    })
+
+    it('should return config default if no override matches', () => {
+      const workflow = new Workflow('test', { on: 'push' })
+      const config = {
+        outputPaths: {
+          workflows: {
+            default: 'custom/default/path',
+            overrides: [{ match: 'other.wac.ts', path: 'other/path' }],
+          },
+        },
+      }
+
+      mockMicromatch.isMatch
+        .mockReturnValueOnce(false) // full path doesn't match
+        .mockReturnValueOnce(false) // filename doesn't match
+
+      const result = build.resolveOutputPath(workflow, 'test.wac.ts', config)
+
+      expect(result).toBe('custom/default/path')
+    })
+
+    it('should return DEFAULT_OUTPUT_PATH if no config outputPaths', () => {
+      const workflow = new Workflow('test', { on: 'push' })
+      const config = {}
+
+      const result = build.resolveOutputPath(workflow, 'test.wac.ts', config)
+
+      expect(result).toBe(build.DEFAULT_OUTPUT_PATH)
+    })
+
+    it('should return DEFAULT_OUTPUT_PATH if outputPaths.workflows is undefined', () => {
+      const workflow = new Workflow('test', { on: 'push' })
+      const config = { outputPaths: {} }
+
+      const result = build.resolveOutputPath(workflow, 'test.wac.ts', config)
+
+      expect(result).toBe(build.DEFAULT_OUTPUT_PATH)
+    })
+
+    it('should return DEFAULT_OUTPUT_PATH if no overrides and no default', () => {
+      const workflow = new Workflow('test', { on: 'push' })
+      const config = { outputPaths: { workflows: {} } }
+
+      const result = build.resolveOutputPath(workflow, 'test.wac.ts', config)
+
+      expect(result).toBe(build.DEFAULT_OUTPUT_PATH)
+    })
+
+    it('should check overrides in order and return first match', () => {
+      const workflow = new Workflow('test', { on: 'push' })
+      const config = {
+        outputPaths: {
+          workflows: {
+            overrides: [
+              { match: '*.wac.ts', path: 'first/match' },
+              { match: 'test.wac.ts', path: 'second/match' },
+            ],
+          },
+        },
+      }
+
+      mockMicromatch.isMatch.mockReturnValueOnce(true) // first pattern matches
+
+      const result = build.resolveOutputPath(workflow, 'test.wac.ts', config)
+
+      expect(result).toBe('first/match')
+      expect(mockMicromatch.isMatch).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -111,6 +306,53 @@ describe('build', () => {
     })
   })
 
+  describe('getConfigAsync', () => {
+    it('should return undefined if no config file exists', async () => {
+      mockFs.existsSync.mockReturnValue(false)
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+
+      const result = await build.getConfigAsync()
+
+      expect(result).toBeUndefined()
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        '[github-actions-workflow-ts] No config file found in root dir. Using default config.',
+      )
+    })
+
+    it('should return config from wac.config.json if it exists and no TS config', async () => {
+      const mockConfig = JSON.stringify({ refs: false })
+      mockFs.existsSync
+        .mockReturnValueOnce(false) // wac.config.ts doesn't exist
+        .mockReturnValueOnce(true) // wac.config.json exists
+      mockFs.readFileSync.mockReturnValue(mockConfig)
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+
+      const result = await build.getConfigAsync()
+
+      expect(result).toEqual({ refs: false })
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        '[github-actions-workflow-ts] wac.config.json config file found in root dir',
+      )
+    })
+
+    it('should throw an error if JSON config contains invalid JSON', async () => {
+      mockFs.existsSync
+        .mockReturnValueOnce(false) // wac.config.ts doesn't exist
+        .mockReturnValueOnce(true) // wac.config.json exists
+      mockFs.readFileSync.mockReturnValue('invalid JSON')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+
+      await expect(build.getConfigAsync()).rejects.toThrow()
+    })
+  })
+
+  describe('CONFIG_FILE_NAMES', () => {
+    it('should list TypeScript config before JSON config', () => {
+      expect(build.CONFIG_FILE_NAMES[0]).toBe('wac.config.ts')
+      expect(build.CONFIG_FILE_NAMES[1]).toBe('wac.config.json')
+    })
+  })
+
   describe('getWorkflowFilePaths', () => {
     it('should return undefined and log message if no workflow files are found', () => {
       mockFg.sync.mockReturnValue([])
@@ -137,10 +379,10 @@ describe('build', () => {
   })
 
   describe('createWorkflowDirectory', () => {
-    it('should create .github/workflows directory if it does not exist', () => {
+    it('should create directory if it does not exist (default path)', () => {
       mockFs.existsSync.mockReturnValue(false)
-      mockPath.join.mockReturnValue('some/fake/path')
-      mockPath.relative.mockReturnValue('some/fake/path')
+      mockPath.join.mockReturnValue('.github/workflows')
+      mockPath.relative.mockReturnValue('.github/workflows')
 
       build.createWorkflowDirectory()
 
@@ -152,10 +394,24 @@ describe('build', () => {
       )
     })
 
-    it('should not create .github/workflows directory if it already exists', () => {
+    it('should create directory with custom path if provided', () => {
+      mockFs.existsSync.mockReturnValue(false)
+      mockPath.relative.mockReturnValue('custom/output/path')
+
+      build.createWorkflowDirectory('custom/output/path')
+
+      expect(mockFs.mkdirSync).toHaveBeenCalledWith('custom/output/path', {
+        recursive: true,
+      })
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        '[github-actions-workflow-ts] custom/output/path directory not found. Creating it.',
+      )
+    })
+
+    it('should not create directory if it already exists', () => {
       mockFs.existsSync.mockReturnValue(true)
-      mockPath.join.mockReturnValue('some/fake/path')
-      mockPath.relative.mockReturnValue('some/fake/path')
+      mockPath.join.mockReturnValue('.github/workflows')
+      mockPath.relative.mockReturnValue('.github/workflows')
 
       build.createWorkflowDirectory()
 
@@ -306,14 +562,173 @@ describe('build', () => {
         expect.stringContaining('# Custom Header'),
       )
     })
+
+    it('should use workflow.outputPath when set', () => {
+      const mockWorkflow = new Workflow(
+        'sample-filename',
+        { name: 'Sample Workflow', on: 'push' },
+        { outputPath: 'packages/app-a/.github/workflows' },
+      )
+
+      mockJsYaml.dump.mockReturnValue('yaml content')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+      mockPath.relative.mockImplementation((p: string) => p)
+      mockPath.basename.mockReturnValue('test.wac.ts')
+      mockFs.existsSync.mockReturnValue(true) // directory exists
+      mockFs.writeFileSync.mockClear()
+
+      const createdDirectories = new Set<string>()
+
+      build.writeWorkflowJSONToYamlFiles(
+        { workflow: mockWorkflow },
+        'test.wac.ts',
+        {},
+        createdDirectories,
+      )
+
+      expect(mockFs.writeFileSync).toHaveBeenCalledWith(
+        'packages/app-a/.github/workflows/sample-filename.yml',
+        expect.any(String),
+      )
+    })
+
+    it('should create directory and track it in createdDirectories set', () => {
+      const mockWorkflow = new Workflow(
+        'sample-filename',
+        { name: 'Sample Workflow', on: 'push' },
+        { outputPath: 'custom/output/path' },
+      )
+
+      mockJsYaml.dump.mockReturnValue('yaml content')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+      // path.relative takes (from, to) and returns the relative path
+      mockPath.relative.mockImplementation((_from: string, to: string) => to)
+      mockPath.basename.mockReturnValue('test.wac.ts')
+      mockFs.existsSync.mockReturnValue(false) // directory doesn't exist
+      mockFs.writeFileSync.mockClear()
+      mockFs.mkdirSync.mockClear()
+
+      const createdDirectories = new Set<string>()
+
+      build.writeWorkflowJSONToYamlFiles(
+        { workflow: mockWorkflow },
+        'test.wac.ts',
+        {},
+        createdDirectories,
+      )
+
+      expect(mockFs.mkdirSync).toHaveBeenCalledWith('custom/output/path', {
+        recursive: true,
+      })
+      expect(createdDirectories.has('custom/output/path')).toBe(true)
+    })
+
+    it('should not recreate directory if already in createdDirectories set', () => {
+      const mockWorkflow = new Workflow(
+        'sample-filename',
+        { name: 'Sample Workflow', on: 'push' },
+        { outputPath: 'custom/output/path' },
+      )
+
+      mockJsYaml.dump.mockReturnValue('yaml content')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+      mockPath.relative.mockImplementation((p: string) => p)
+      mockPath.basename.mockReturnValue('test.wac.ts')
+      mockFs.writeFileSync.mockClear()
+      mockFs.mkdirSync.mockClear()
+
+      const createdDirectories = new Set<string>(['custom/output/path'])
+
+      build.writeWorkflowJSONToYamlFiles(
+        { workflow: mockWorkflow },
+        'test.wac.ts',
+        {},
+        createdDirectories,
+      )
+
+      expect(mockFs.mkdirSync).not.toHaveBeenCalled()
+    })
+
+    it('should use config outputPaths.workflows.default', () => {
+      const mockWorkflow = new Workflow('sample-filename', {
+        name: 'Sample Workflow',
+        on: 'push',
+      })
+
+      mockJsYaml.dump.mockReturnValue('yaml content')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+      mockPath.relative.mockImplementation((p: string) => p)
+      mockPath.basename.mockReturnValue('test.wac.ts')
+      mockFs.existsSync.mockReturnValue(true)
+      mockFs.writeFileSync.mockClear()
+
+      const config = {
+        outputPaths: {
+          workflows: {
+            default: 'custom/default/workflows',
+          },
+        },
+      }
+
+      build.writeWorkflowJSONToYamlFiles(
+        { workflow: mockWorkflow },
+        'test.wac.ts',
+        config,
+      )
+
+      expect(mockFs.writeFileSync).toHaveBeenCalledWith(
+        'custom/default/workflows/sample-filename.yml',
+        expect.any(String),
+      )
+    })
+
+    it('should use config outputPaths.workflows.overrides when match found', () => {
+      const mockWorkflow = new Workflow('deploy', {
+        name: 'Deploy Workflow',
+        on: 'push',
+      })
+
+      mockJsYaml.dump.mockReturnValue('yaml content')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
+      mockPath.relative.mockImplementation((p: string) => p)
+      mockPath.basename.mockReturnValue('app-deploy.wac.ts')
+      mockFs.existsSync.mockReturnValue(true)
+      mockFs.writeFileSync.mockClear()
+      mockMicromatch.isMatch.mockReturnValueOnce(true)
+
+      const config = {
+        outputPaths: {
+          workflows: {
+            default: '.github/workflows',
+            overrides: [
+              {
+                match: '*-deploy.wac.ts',
+                path: 'packages/app/.github/workflows',
+              },
+            ],
+          },
+        },
+      }
+
+      build.writeWorkflowJSONToYamlFiles(
+        { workflow: mockWorkflow },
+        'app-deploy.wac.ts',
+        config,
+      )
+
+      expect(mockFs.writeFileSync).toHaveBeenCalledWith(
+        'packages/app/.github/workflows/deploy.yml',
+        expect.any(String),
+      )
+    })
   })
 
   describe('generateWorkflowFiles', () => {
     it('should generate no files if no .wac.ts files are found', async () => {
-      // Mock existsSync to return false for config, true for workflows dir
+      // Mock existsSync to return false for config files
       mockFs.existsSync.mockReturnValue(false)
       mockFg.sync.mockReturnValue([])
-      mockPath.join.mockReturnValue('.github/workflows')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
       mockPath.relative.mockReturnValue('.github/workflows')
 
       await build.generateWorkflowFiles({ refs: true })
@@ -324,18 +739,21 @@ describe('build', () => {
     })
 
     it('should use config from wac.config.json if found', async () => {
-      // First call to existsSync is for config file, return true
-      // Second call is for workflows directory
+      // getConfigAsync checks: wac.config.ts (false), wac.config.json (true)
       mockFs.existsSync
-        .mockReturnValueOnce(true) // config exists
-        .mockReturnValue(true) // workflows dir exists
+        .mockReturnValueOnce(false) // wac.config.ts doesn't exist
+        .mockReturnValueOnce(true) // wac.config.json exists
+        .mockReturnValue(true) // other checks (workflows dir, etc.)
       mockFs.readFileSync.mockReturnValue(JSON.stringify({ refs: false }))
       mockFg.sync.mockReturnValue([])
-      mockPath.join.mockReturnValue('.github/workflows')
+      mockPath.join.mockImplementation((...parts: string[]) => parts.join('/'))
       mockPath.relative.mockReturnValue('.github/workflows')
 
       await build.generateWorkflowFiles({ refs: true })
 
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        '[github-actions-workflow-ts] wac.config.json config file found in root dir',
+      )
       expect(consoleLogSpy).toHaveBeenCalledWith(
         '[github-actions-workflow-ts] Successfully generated 0 workflow file(s)',
       )

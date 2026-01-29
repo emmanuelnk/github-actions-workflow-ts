@@ -3,10 +3,16 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as jsYaml from 'js-yaml'
 import fg from 'fast-glob'
+import micromatch from 'micromatch'
 import { pathToFileURL } from 'url'
 import { Context, type Workflow } from '@github-actions-workflow-ts/lib'
 import type { WacConfig } from './types/index.js'
 import { ConsoleDiagnosticsReporter } from './diagnostics.js'
+
+/**
+ * Default output path for workflow files.
+ */
+export const DEFAULT_OUTPUT_PATH = path.join('.github', 'workflows')
 
 /**
  * Comment indicating the file should not be modified.
@@ -29,13 +35,69 @@ export const relativePath = (p: string): string =>
   path.relative(process.cwd(), p)
 
 /**
- * Returns the config file
- * @returns { Record<string, any> | undefined} - The config file as an object
+ * Resolves the output path for a workflow file.
+ *
+ * Priority order:
+ * 1. workflow.outputPath (if set on the Workflow instance)
+ * 2. config.outputPaths.workflows.overrides (first matching pattern)
+ * 3. config.outputPaths.workflows.default
+ * 4. DEFAULT_OUTPUT_PATH (.github/workflows)
+ *
+ * @param {Workflow} workflow - The workflow instance.
+ * @param {string} workflowFilePath - The source file path (e.g., "my-workflow.wac.ts").
+ * @param {WacConfig} config - The configuration object.
+ * @returns {string} - The resolved output directory path.
+ */
+export const resolveOutputPath = (
+  workflow: Workflow,
+  workflowFilePath: string,
+  config: WacConfig,
+): string => {
+  // 1. Check workflow-level outputPath (highest priority)
+  if (workflow.outputPath) {
+    return workflow.outputPath
+  }
+
+  // 2. Check config overrides
+  const outputPathsConfig = config.outputPaths?.workflows
+  if (outputPathsConfig?.overrides) {
+    const filename = path.basename(workflowFilePath)
+    for (const override of outputPathsConfig.overrides) {
+      // Match against both the full relative path and just the filename
+      // This allows patterns like "packages/app-a/**/*.wac.ts" or "deploy.wac.ts"
+      if (
+        micromatch.isMatch(workflowFilePath, override.match) ||
+        micromatch.isMatch(filename, override.match)
+      ) {
+        return override.path
+      }
+    }
+  }
+
+  // 3. Check config default
+  if (outputPathsConfig?.default) {
+    return outputPathsConfig.default
+  }
+
+  // 4. Fall back to hardcoded default
+  return DEFAULT_OUTPUT_PATH
+}
+
+/**
+ * Supported config file names in order of priority.
+ * TypeScript config takes precedence over JSON config.
+ */
+export const CONFIG_FILE_NAMES = ['wac.config.ts', 'wac.config.json'] as const
+
+/**
+ * Returns the config file (synchronous version for JSON only)
+ * @returns {WacConfig | undefined} - The config file as an object
+ * @deprecated Use getConfigAsync for TypeScript config support
  */
 export const getConfig = (): WacConfig | undefined => {
-  const configFilePath = path.join(process.cwd(), 'wac.config.json')
+  const jsonConfigPath = path.join(process.cwd(), 'wac.config.json')
 
-  if (!fs.existsSync(configFilePath)) {
+  if (!fs.existsSync(jsonConfigPath)) {
     console.log(
       '[github-actions-workflow-ts] No config (wac.config.json) file found in root dir. Using default config.',
     )
@@ -47,7 +109,48 @@ export const getConfig = (): WacConfig | undefined => {
     '[github-actions-workflow-ts] wac.config.json config file found in root dir',
   )
 
-  return JSON.parse(fs.readFileSync(configFilePath, 'utf-8'))
+  return JSON.parse(fs.readFileSync(jsonConfigPath, 'utf-8'))
+}
+
+/**
+ * Returns the config file, supporting both TypeScript and JSON formats.
+ * Priority: wac.config.ts > wac.config.json
+ *
+ * @returns {Promise<WacConfig | undefined>} - The config file as an object
+ */
+export const getConfigAsync = async (): Promise<WacConfig | undefined> => {
+  const cwd = process.cwd()
+
+  // Check for TypeScript config first (higher priority)
+  const tsConfigPath = path.join(cwd, 'wac.config.ts')
+  if (fs.existsSync(tsConfigPath)) {
+    console.log(
+      '[github-actions-workflow-ts] wac.config.ts config file found in root dir',
+    )
+
+    const absolutePath = path.resolve(tsConfigPath)
+    const fileUrl = pathToFileURL(absolutePath).href
+    const module = await import(fileUrl)
+
+    // Support both default export and named 'config' export
+    return module.default || module.config
+  }
+
+  // Fall back to JSON config
+  const jsonConfigPath = path.join(cwd, 'wac.config.json')
+  if (fs.existsSync(jsonConfigPath)) {
+    console.log(
+      '[github-actions-workflow-ts] wac.config.json config file found in root dir',
+    )
+
+    return JSON.parse(fs.readFileSync(jsonConfigPath, 'utf-8'))
+  }
+
+  console.log(
+    '[github-actions-workflow-ts] No config file found in root dir. Using default config.',
+  )
+
+  return undefined
 }
 
 /**
@@ -61,6 +164,7 @@ export const getWorkflowFilePaths = (): string[] | undefined => {
     {
       onlyFiles: true,
       dot: true,
+      ignore: ['**/node_modules/**'],
     },
   )
 
@@ -108,12 +212,14 @@ export const importWorkflowFile = async (
  * @param {Record<string, Workflow>} workflowJSON - The workflow data in JSON format.
  * @param {string} workflowFilePath - The path to the workflow file.
  * @param {WacConfig} config - Command line arguments.
+ * @param {Set<string>} [createdDirectories] - Optional set to track directories that have been created.
  * @returns {number} - The number of workflows written.
  */
 export const writeWorkflowJSONToYamlFiles = (
   workflowJSON: Record<string, Workflow>,
   workflowFilePath: string,
   config: WacConfig,
+  createdDirectories?: Set<string>,
 ): number => {
   let workflowCount: number = 0
 
@@ -130,11 +236,16 @@ export const writeWorkflowJSONToYamlFiles = (
       ...(config.dumpOptions || {}),
     })
 
-    const yamlWorkflowPath = path.join(
-      '.github',
-      'workflows',
-      `${workflow.filename}.yml`,
-    )
+    // Resolve the output path for this workflow
+    const outputDir = resolveOutputPath(workflow, workflowFilePath, config)
+
+    // Create directory if not already created
+    if (createdDirectories && !createdDirectories.has(outputDir)) {
+      createWorkflowDirectory(outputDir)
+      createdDirectories.add(outputDir)
+    }
+
+    const yamlWorkflowPath = path.join(outputDir, `${workflow.filename}.yml`)
 
     console.log(
       `[github-actions-workflow-ts] Writing to ${relativePath(yamlWorkflowPath)}:`,
@@ -153,14 +264,18 @@ export const writeWorkflowJSONToYamlFiles = (
 }
 
 /**
- * Creates the .github/workflows directory if it doesn't exist.
+ * Creates the workflow output directory if it doesn't exist.
+ *
+ * @param {string} [outputPath] - Optional output path. Defaults to DEFAULT_OUTPUT_PATH.
  */
-export const createWorkflowDirectory = (): void => {
-  const workflowsDir = relativePath(path.join('.github', 'workflows'))
+export const createWorkflowDirectory = (
+  outputPath: string = DEFAULT_OUTPUT_PATH,
+): void => {
+  const workflowsDir = relativePath(outputPath)
 
   if (!fs.existsSync(workflowsDir)) {
     console.log(
-      '[github-actions-workflow-ts] .github/workflows directory not found. Creating it.',
+      `[github-actions-workflow-ts] ${workflowsDir} directory not found. Creating it.`,
     )
     fs.mkdirSync(workflowsDir, { recursive: true })
   }
@@ -175,11 +290,12 @@ export const createWorkflowDirectory = (): void => {
 export const generateWorkflowFiles = async (
   argv: Record<string, unknown>,
 ): Promise<void> => {
-  const config = getConfig() || {}
+  const config = (await getConfigAsync()) || {}
   const workflowFilePaths = getWorkflowFilePaths() || []
   let workflowCount = 0
 
-  createWorkflowDirectory()
+  // Track created directories to avoid duplicate creation attempts
+  const createdDirectories = new Set<string>()
 
   Context.__internalSetGlobalContext({
     diagnostics: new ConsoleDiagnosticsReporter(),
@@ -195,6 +311,7 @@ export const generateWorkflowFiles = async (
         ...argv,
         ...config,
       } as WacConfig,
+      createdDirectories,
     )
   }
 

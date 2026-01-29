@@ -9,13 +9,20 @@ The `Workflow` class represents a GitHub Actions workflow.
 ## Constructor
 
 ```typescript
-new Workflow(filename: string, workflow: WorkflowDefinition)
+new Workflow(filename: string, workflow: WorkflowDefinition, options?: WorkflowOptions)
 ```
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `filename` | `string` | The name of the generated YAML file (without `.yml` extension) |
 | `workflow` | `object` | The workflow definition |
+| `options` | `object` | Optional configuration for this workflow |
+
+### Options
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `outputPath` | `string` | Custom output directory for this workflow. Overrides config file settings. |
 
 ```typescript
 import { Workflow } from '@github-actions-workflow-ts/lib'
@@ -32,6 +39,26 @@ export const myWorkflow = new Workflow('ci', {
   },
 })
 ```
+
+### Custom Output Path
+
+You can specify a custom output directory for individual workflows:
+
+```typescript
+import { Workflow } from '@github-actions-workflow-ts/lib'
+
+// This workflow will be written to packages/app-a/.github/workflows/deploy.yml
+export const deployWorkflow = new Workflow(
+  'deploy',
+  {
+    name: 'Deploy App A',
+    on: { push: { branches: ['main'] } },
+  },
+  { outputPath: 'packages/app-a/.github/workflows' }
+)
+```
+
+The workflow-level `outputPath` takes precedence over any configuration in `wac.config.json`. See [Configuration](/docs/guides/configuration#outputpaths) for more options.
 
 ## Methods
 
@@ -98,6 +125,21 @@ const workflow = new Workflow('ci', {
 
 console.log(workflow.workflow)
 // { name: 'CI', on: { push: {} }, jobs: {} }
+```
+
+### .outputPath
+
+The custom output directory for this workflow, if set via the constructor options.
+
+```typescript
+const workflow = new Workflow(
+  'deploy',
+  { name: 'Deploy', on: { push: {} } },
+  { outputPath: 'packages/app/.github/workflows' }
+)
+
+console.log(workflow.outputPath)
+// 'packages/app/.github/workflows'
 ```
 
 ## Workflow Triggers

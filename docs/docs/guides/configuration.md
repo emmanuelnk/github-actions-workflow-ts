@@ -162,6 +162,47 @@ Output paths are resolved in this order (highest priority first):
 3. Config `outputPaths.workflows.default`
 4. Default `.github/workflows`
 
+All relative paths are resolved from the **project root** (not the current working directory). See [rootDir](#rootdir) for details.
+
+### rootDir
+
+The root directory for resolving output paths. By default, the project root is auto-detected by looking for a `.git` directory or a `package.json` with `workspaces` defined.
+
+| Type | Default |
+|------|---------|
+| `string` | Auto-detected project root |
+
+This is useful when running `gwf` from a subdirectory but wanting output paths relative to the project root.
+
+```typescript
+// wac.config.ts - running from scripts/githubactions/
+const config: WacConfig = {
+  rootDir: '../..', // Go up to project root
+  outputPaths: {
+    workflows: {
+      default: '.github/workflows', // Resolves to <project-root>/.github/workflows
+    },
+  },
+}
+```
+
+**Example structure:**
+```
+my-project/                          # Project root (has .git/)
+├── .github/workflows/               # Shared workflows go here
+├── scripts/
+│   └── githubactions/
+│       ├── ci.wac.ts
+│       ├── deploy.wac.ts
+│       ├── wac.config.ts            # Config with rootDir: '../..'
+│       └── package.json             # Has "gwf build" script
+└── packages/
+    └── app-a/
+        └── .github/workflows/       # App-specific workflows
+```
+
+Without `rootDir`, paths would resolve relative to `scripts/githubactions/`. With `rootDir: '../..'`, paths resolve from `my-project/`.
+
 ### diagnostics
 
 Configure diagnostic warnings emitted during build when using `@github-actions-workflow-ts/actions`.

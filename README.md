@@ -41,15 +41,22 @@ npm install --save-dev @github-actions-workflow-ts/lib @github-actions-workflow-
 // workflows/ci.wac.ts
 import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
 
+const checkout = new Step({
+    name: 'Checkout',
+    uses: 'actions/checkout@v4',
+  })
+
+const test = new Step({
+    name: 'Run tests',
+    run: 'npm test',
+  })
+
 const testJob = new NormalJob('test', {
   'runs-on': 'ubuntu-latest',
-}).addStep(new Step({
-  name: 'Checkout',
-  uses: 'actions/checkout@v4',
-})).addStep(new Step({
-  name: 'Run tests',
-  run: 'npm test',
-}))
+}).addSteps([
+  checkout,
+  test
+])
 
 // Every Workflow instance MUST be exported
 export const ci = new Workflow('ci', {
@@ -58,12 +65,15 @@ export const ci = new Workflow('ci', {
     push: { branches: ['main'] },
     pull_request: { branches: ['main'] },
   },
-}).addJob(testJob)
+}).addJobs([
+  testJob
+])
 ```
 
 Generate the YAML:
 
 ```bash
+# creates .github/workflows/ci.yml
 npx gwf build
 ```
 

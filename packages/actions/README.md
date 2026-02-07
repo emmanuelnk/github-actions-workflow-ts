@@ -203,6 +203,32 @@ To regenerate types after updating the tracked actions:
 pnpm run generate-action-types
 ```
 
+## Diagnostics
+
+### `action-version-unverifiable`
+
+**severity:** ⚠️ warning
+
+The action version provided cannot be verified. This may be for any of the following reasons:
+
+- The repository specifier is different to the expected specifier. This may be due to a mistake in your workflow, or you may be using a fork of the repository. In the latter case, the semver version cannot be validated because the fork may not follow the same versioning as the upstream repository.
+
+- The git reference is not a valid semver version. This may be due to a mistake in your workflow, or you may be using a commit SHA, branch name, or other git reference which is not a semver specifier.
+
+If you see this warning then there is no guarantee that the TypeScript types for the actions inputs and outputs are valid for the action version you are using.
+
+### `action-version-semver-violation`
+
+**severity:** ⚠️ warning
+
+The version of the action you are using does not satisfy the semver constraints required by the action. You may be seeing this warning for any of the following reasons:
+
+- You have mistakenly specified the wrong semantic version tag.
+- You have intentionally specified a different semantic version tag.
+- You have recently updated `@github-actions-workflow-ts/actions` to a new version, and a new version of the action was published to GitHub.
+
+If you see this warning then there is no guarantee that the TypeScript types for the actions inputs and outputs are valid for the action version you are using.
+
 ## Adding New Actions
 
 Edit `packages/actions/scripts/config.ts` to add new actions to track, then run the generate command.

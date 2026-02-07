@@ -194,15 +194,6 @@ Add to `wac.config.json`:
 | softprops/action-gh-release | `SoftpropsActionGhReleaseV1`, `SoftpropsActionGhReleaseV2` | [GitHub](https://github.com/softprops/action-gh-release) |
 <!-- GENERATED-ACTIONS-TABLE:END -->
 
-# Development
-## Regenerating Types
-
-To regenerate types after updating the tracked actions:
-
-```bash
-pnpm run generate-action-types
-```
-
 ## Diagnostics
 
 ### `action-version-unverifiable`
@@ -228,6 +219,15 @@ The version of the action you are using does not satisfy the semver constraints 
 - You have recently updated `@github-actions-workflow-ts/actions` to a new version, and a new version of the action was published to GitHub.
 
 If you see this warning then there is no guarantee that the TypeScript types for the actions inputs and outputs are valid for the action version you are using.
+
+# Development
+## Regenerating Types
+
+To regenerate types after updating the tracked actions:
+
+```bash
+pnpm run generate-action-types
+```
 
 ## Adding New Actions
 

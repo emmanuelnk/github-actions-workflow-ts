@@ -37,12 +37,58 @@ export type DiagnosticRuleConfig =
 export type DiagnosticRules = Record<string, DiagnosticRuleConfig>
 
 export interface Diagnostic {
+  /**
+   * The severity of the diagnostic event.
+   */
   severity: DiagnosticSeverity
+  /**
+   * The unique code for the diagnostic rule. This should be a unique kebab-case
+   * string. It will be displayed to the user alongside the diagnostic message,
+   * and can be used by end users to override the severity of the diagnostic
+   * event.
+   *
+   * @example "my-custom-diagnostic-code"
+   */
   code: string
+  /**
+   * A short message explaining the error.
+   */
   message: string
+  /**
+   * The stack trace for the diagnostic event. This can be produced using the
+   * `Diagnostics.generateStackTrace` helper:
+   *
+   * ```ts
+   * import { Diagnostics } from '@github-actions-workflow-ts/lib'
+   *
+   * export class MyCustomAction {
+   *   constructor(...) {
+   *     Diagnostics.generateStackTrace(this.constructor)
+   *   }
+   * }
+   * ```
+   *
+   * Note that `Diagnostics.generateStackTrace` accepts an optional function
+   * argument. If provided, the top frame of the stack trace will be the call
+   * site of that function.
+   */
   stack?: string
+  /**
+   * An optional cause for the diagnostic event. If provided, the default
+   * diagnostics reporter implementation will log this below the diagnostic
+   * message.
+   */
   cause?: Error
-  /** Optional action identifier for pattern matching (e.g., "actions/checkout@v4") */
+  /**
+   * Optional action identifier for pattern matching (e.g., "actions/checkout@v4").
+   *
+   * End users may specify an exclude pattern for a diagnostic code. This is
+   * checked against the diagnostics "action" property, and if it matches, the
+   * diagnostic will be supressed.
+   *
+   * This value should be provided if the diagnostic event relates to a specific
+   * action. Otherwise, it can be omitted.
+   */
   action?: string
 }
 

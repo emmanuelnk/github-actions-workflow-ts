@@ -19,9 +19,9 @@ If both files exist, `wac.config.ts` takes precedence.
 
 ```typescript
 // wac.config.ts
-import type { WacConfig } from '@github-actions-workflow-ts/cli'
+import { defineConfig } from '@github-actions-workflow-ts/cli'
 
-const config: WacConfig = {
+export default defineConfig({
   refs: false,
   headerText: [
     '# ----DO-NOT-MODIFY-THIS-FILE----',
@@ -33,9 +33,7 @@ const config: WacConfig = {
   diagnostics: {
     rules: {},
   },
-}
-
-export default config
+})
 ```
 
 ### JSON Config
@@ -176,14 +174,14 @@ This is useful when running `gwf` from a subdirectory but wanting output paths r
 
 ```typescript
 // wac.config.ts - running from scripts/githubactions/
-const config: WacConfig = {
+export default defineConfig({
   rootDir: '../..', // Go up to project root
   outputPaths: {
     workflows: {
       default: '.github/workflows', // Resolves to <project-root>/.github/workflows
     },
   },
-}
+})
 ```
 
 **Example structure:**
@@ -249,9 +247,9 @@ A complete example with all options:
 
 ```typescript
 // wac.config.ts
-import type { WacConfig } from '@github-actions-workflow-ts/cli'
+import { defineConfig } from '@github-actions-workflow-ts/cli'
 
-const config: WacConfig = {
+export default defineConfig({
   refs: false,
   headerText: [
     '# ============================================',
@@ -282,9 +280,7 @@ const config: WacConfig = {
       },
     },
   },
-}
-
-export default config
+})
 ```
 
 ### JSON

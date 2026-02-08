@@ -98,3 +98,7 @@ export type WacConfig = {
    */
   rootDir?: string
 }
+
+export function defineConfig(config: WacConfig): WacConfig {
+  return config
+}

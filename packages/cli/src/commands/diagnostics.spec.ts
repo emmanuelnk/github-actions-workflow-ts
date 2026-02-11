@@ -25,13 +25,13 @@ describe('ConsoleDiagnosticsReporter', () => {
   })
 
   it('should implement DiagnosticsReporter interface', () => {
-    const reporter = new ConsoleDiagnosticsReporter()
+    const reporter = new ConsoleDiagnosticsReporter({ color: false })
 
     expect(typeof reporter.emit).toBe('function')
   })
 
   it('should format and log message to console.error', () => {
-    const reporter = new ConsoleDiagnosticsReporter()
+    const reporter = new ConsoleDiagnosticsReporter({ color: false })
     const diagnostic: Diagnostics.Diagnostic = {
       severity: Diagnostics.DiagnosticSeverity.ERROR,
       code: 'error-code',
@@ -46,7 +46,7 @@ describe('ConsoleDiagnosticsReporter', () => {
   })
 
   it('should include stack trace in output when present', () => {
-    const reporter = new ConsoleDiagnosticsReporter()
+    const reporter = new ConsoleDiagnosticsReporter({ color: false })
     const diagnostic: Diagnostics.Diagnostic = {
       severity: Diagnostics.DiagnosticSeverity.WARN,
       code: 'stack-code',
@@ -66,7 +66,7 @@ describe('ConsoleDiagnosticsReporter', () => {
   })
 
   it('should include cause in output when present', () => {
-    const reporter = new ConsoleDiagnosticsReporter()
+    const reporter = new ConsoleDiagnosticsReporter({ color: false })
     const cause = new Error('Root cause error')
     const diagnostic: Diagnostics.Diagnostic = {
       severity: Diagnostics.DiagnosticSeverity.FATAL,
@@ -83,7 +83,7 @@ describe('ConsoleDiagnosticsReporter', () => {
   })
 
   it('should handle diagnostic with both stack and cause', () => {
-    const reporter = new ConsoleDiagnosticsReporter()
+    const reporter = new ConsoleDiagnosticsReporter({ color: false })
     const cause = new Error('Underlying issue')
     const diagnostic: Diagnostics.Diagnostic = {
       severity: Diagnostics.DiagnosticSeverity.ERROR,
@@ -102,7 +102,7 @@ describe('ConsoleDiagnosticsReporter', () => {
   })
 
   it('should work with all severity levels', () => {
-    const reporter = new ConsoleDiagnosticsReporter()
+    const reporter = new ConsoleDiagnosticsReporter({ color: false })
     const severities = [
       Diagnostics.DiagnosticSeverity.TRACE,
       Diagnostics.DiagnosticSeverity.DEBUG,
@@ -127,6 +127,164 @@ describe('ConsoleDiagnosticsReporter', () => {
     }
   })
 
+  describe('color option', () => {
+    let originalIsTTY: boolean | undefined
+
+    beforeEach(() => {
+      originalIsTTY = process.stdout.isTTY
+    })
+
+    afterEach(() => {
+      Object.defineProperty(process.stdout, 'isTTY', {
+        value: originalIsTTY,
+        writable: true,
+        configurable: true,
+      })
+    })
+
+    it('should not colorize severity when color is false', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.ERROR,
+        code: 'test',
+        message: 'test message',
+      })
+
+      const output = consoleSpy.error.mock.calls[0][0] as string
+      expect(output).not.toContain('\x1b[')
+      expect(output).toContain('error: test message')
+    })
+
+    it('should colorize severity when color is true', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: true })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.ERROR,
+        code: 'test',
+        message: 'test message',
+      })
+
+      const output = consoleSpy.error.mock.calls[0][0] as string
+      expect(output).toContain('\x1b[31merror\x1b[0m')
+    })
+
+    it('should colorize severity when color is true even when not a TTY', () => {
+      Object.defineProperty(process.stdout, 'isTTY', {
+        value: false,
+        writable: true,
+        configurable: true,
+      })
+      const reporter = new ConsoleDiagnosticsReporter({ color: true })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.WARN,
+        code: 'test',
+        message: 'test message',
+      })
+
+      const output = consoleSpy.error.mock.calls[0][0] as string
+      expect(output).toContain('\x1b[33mwarning\x1b[0m')
+    })
+
+    it('should colorize severity when color is auto and stdout is a TTY', () => {
+      Object.defineProperty(process.stdout, 'isTTY', {
+        value: true,
+        writable: true,
+        configurable: true,
+      })
+      const reporter = new ConsoleDiagnosticsReporter({ color: 'auto' })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.INFO,
+        code: 'test',
+        message: 'test message',
+      })
+
+      const output = consoleSpy.error.mock.calls[0][0] as string
+      expect(output).toContain('\x1b[32minfo\x1b[0m')
+    })
+
+    it('should not colorize severity when color is auto and stdout is not a TTY', () => {
+      Object.defineProperty(process.stdout, 'isTTY', {
+        value: false,
+        writable: true,
+        configurable: true,
+      })
+      const reporter = new ConsoleDiagnosticsReporter({ color: 'auto' })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.INFO,
+        code: 'test',
+        message: 'test message',
+      })
+
+      const output = consoleSpy.error.mock.calls[0][0] as string
+      expect(output).not.toContain('\x1b[')
+      expect(output).toContain('info: test message')
+    })
+
+    it('should default to auto when no color option is provided', () => {
+      Object.defineProperty(process.stdout, 'isTTY', {
+        value: false,
+        writable: true,
+        configurable: true,
+      })
+      const reporter = new ConsoleDiagnosticsReporter()
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.ERROR,
+        code: 'test',
+        message: 'test message',
+      })
+
+      const output = consoleSpy.error.mock.calls[0][0] as string
+      expect(output).not.toContain('\x1b[')
+      expect(output).toContain('error: test message')
+    })
+
+    it.each([
+      [Diagnostics.DiagnosticSeverity.TRACE, '\x1b[90m', 'trace'],
+      [Diagnostics.DiagnosticSeverity.DEBUG, '\x1b[36m', 'debug'],
+      [Diagnostics.DiagnosticSeverity.INFO, '\x1b[32m', 'info'],
+      [Diagnostics.DiagnosticSeverity.WARN, '\x1b[33m', 'warning'],
+      [Diagnostics.DiagnosticSeverity.ERROR, '\x1b[31m', 'error'],
+      [Diagnostics.DiagnosticSeverity.FATAL, '\x1b[35m', 'fatal'],
+    ])(
+      'should apply correct ANSI color codes for "%s" severity',
+      (severity, expectedColor, expectedDisplayName) => {
+        const reporter = new ConsoleDiagnosticsReporter({ color: true })
+
+        consoleSpy.error.mockClear()
+
+        reporter.emit({
+          severity,
+          code: 'test',
+          message: 'test message',
+        })
+
+        const output = consoleSpy.error.mock.calls[0][0] as string
+        expect(output).toContain(
+          `${expectedColor}${expectedDisplayName}\x1b[0m`,
+        )
+      },
+    )
+
+    it('should not colorize severity an unknown severity is used', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+
+      reporter.emit({
+        severity: 'unknown' as Diagnostics.DiagnosticSeverity,
+        code: 'test',
+        message: 'test message',
+      })
+
+      const output = consoleSpy.error.mock.calls[0][0] as string
+      expect(output).not.toContain('\x1b[')
+      expect(output).toContain('unknown: test message')
+    })
+  })
+
   describe('diagnostic suppression', () => {
     afterEach(() => {
       // Clean up context after each test
@@ -134,7 +292,7 @@ describe('ConsoleDiagnosticsReporter', () => {
     })
 
     it('should suppress diagnostics when rule is set to off', () => {
-      const reporter = new ConsoleDiagnosticsReporter()
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
       Context.__internalSetGlobalContext({
         diagnostics: reporter,
         diagnosticRules: {
@@ -152,7 +310,7 @@ describe('ConsoleDiagnosticsReporter', () => {
     })
 
     it('should upgrade severity when rule is set to error', () => {
-      const reporter = new ConsoleDiagnosticsReporter()
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
       Context.__internalSetGlobalContext({
         diagnostics: reporter,
         diagnosticRules: {
@@ -172,7 +330,7 @@ describe('ConsoleDiagnosticsReporter', () => {
     })
 
     it('should suppress diagnostics for excluded actions', () => {
-      const reporter = new ConsoleDiagnosticsReporter()
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
       Context.__internalSetGlobalContext({
         diagnostics: reporter,
         diagnosticRules: {
@@ -193,7 +351,7 @@ describe('ConsoleDiagnosticsReporter', () => {
     })
 
     it('should not suppress diagnostics for non-excluded actions', () => {
-      const reporter = new ConsoleDiagnosticsReporter()
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
       Context.__internalSetGlobalContext({
         diagnostics: reporter,
         diagnosticRules: {
@@ -214,7 +372,7 @@ describe('ConsoleDiagnosticsReporter', () => {
     })
 
     it('should emit diagnostics normally when no rules configured', () => {
-      const reporter = new ConsoleDiagnosticsReporter()
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
       Context.__internalSetGlobalContext({
         diagnostics: reporter,
         // No diagnosticRules

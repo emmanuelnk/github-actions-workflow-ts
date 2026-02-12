@@ -39,17 +39,50 @@ npm install --save-dev @github-actions-workflow-ts/lib @github-actions-workflow-
 
 ```typescript
 // workflows/ci.wac.ts
-import { Workflow, NormalJob, Step } from '@github-actions-workflow-ts/lib'
+import { Workflow, NormalJob, Step, expressions as ex, dedentString as ds } from '@github-actions-workflow-ts/lib'
+import { ActionsCheckoutV4, ActionsSetupNodeV4 } from '@github-actions-workflow-ts/actions'
+
+// Typed actions give you autocomplete on `with` inputs and typed `outputs`
+const checkout = new ActionsCheckoutV4({
+  name: 'Checkout',
+})
+
+const setupNode = new ActionsSetupNodeV4({
+  id: 'setup-node',
+  name: 'Setup Node.js',
+  with: {
+    'node-version': '20.x',  // ← autocomplete for all valid inputs
+    cache: 'npm',
+  },
+})
+
+// Plain steps work too — use whichever style fits
+const script = new Step({
+  name: 'Simple script',
+  run: ds(`
+    for i in {1..5}; do
+      if [ $i -eq 3 ]; then
+        echo "This is number three!"
+      else
+        echo "Number: $i"
+      fi
+    done
+  `)
+})
+
+const test = new Step({
+  name: 'Run tests',
+  run: 'npm test',
+  env: {
+    CI: 'true',
+    NODE_AUTH_TOKEN: ex.secret('NPM_TOKEN'),  // ← expression helpers -> ${{ secrets.NPM_TOKEN }}
+  },
+})
+
 
 const testJob = new NormalJob('test', {
   'runs-on': 'ubuntu-latest',
-}).addStep(new Step({
-  name: 'Checkout',
-  uses: 'actions/checkout@v4',
-})).addStep(new Step({
-  name: 'Run tests',
-  run: 'npm test',
-}))
+}).addSteps([checkout, setupNode, script, test])
 
 // Every Workflow instance MUST be exported
 export const ci = new Workflow('ci', {
@@ -58,12 +91,13 @@ export const ci = new Workflow('ci', {
     push: { branches: ['main'] },
     pull_request: { branches: ['main'] },
   },
-}).addJob(testJob)
+}).addJobs([testJob])
 ```
 
 Generate the YAML:
 
 ```bash
+# creates .github/workflows/ci.yml
 npx gwf build
 ```
 
@@ -84,7 +118,7 @@ See more examples in the [./examples](./examples) folder and their respective ou
 
 | Package | Description |
 |---------|-------------|
-| [@github-actions-workflow-ts/lib](https://www.npmjs.com/package/@github-actions-workflow-ts/lib) | Core library (zero dependencies) |
+| [@github-actions-workflow-ts/lib](https://www.npmjs.com/package/@github-actions-workflow-ts/lib) | Core lib for generating workflow JSON objects |
 | [@github-actions-workflow-ts/cli](https://www.npmjs.com/package/@github-actions-workflow-ts/cli) | CLI for generating YAML files |
 | [@github-actions-workflow-ts/actions](https://www.npmjs.com/package/@github-actions-workflow-ts/actions) | Typed wrappers for popular actions |
 

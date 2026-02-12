@@ -32,15 +32,27 @@ Write GitHub Actions workflows in TypeScript instead of YAML!
 ## Quick Install
 
 ```bash
-npm install --save-dev @github-actions-workflow-ts/lib @github-actions-workflow-ts/cli
+npm install --save-dev \
+  @github-actions-workflow-ts/lib \      # types for workflows
+  @github-actions-workflow-ts/cli \      # generates the yaml
+  @github-actions-workflow-ts/actions    # types for popular gha actiions
 ```
 
 ## Quick Example
 
 ```typescript
 // workflows/ci.wac.ts
-import { Workflow, NormalJob, Step, expressions as ex, dedentString as ds } from '@github-actions-workflow-ts/lib'
-import { ActionsCheckoutV4, ActionsSetupNodeV4 } from '@github-actions-workflow-ts/actions'
+import { 
+  Workflow, 
+  NormalJob, 
+  Step, 
+  expressions as ex, 
+  dedentString as ds 
+} from '@github-actions-workflow-ts/lib'
+import { 
+  ActionsCheckoutV4, 
+  ActionsSetupNodeV4
+} from '@github-actions-workflow-ts/actions'
 
 // Typed actions give you autocomplete on `with` inputs and typed `outputs`
 const checkout = new ActionsCheckoutV4({

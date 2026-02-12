@@ -32,7 +32,7 @@ Write GitHub Actions workflows in TypeScript instead of YAML!
 npm install --save-dev \
   @github-actions-workflow-ts/lib \      # types for workflows
   @github-actions-workflow-ts/cli \      # generates the yaml
-  @github-actions-workflow-ts/actions    # types for popular gha actiions
+  @github-actions-workflow-ts/actions    # types for popular gha actions
 ```
 
 ## Quick Example

@@ -8,8 +8,16 @@ import CodeBlock from '@theme/CodeBlock'
 
 import styles from './index.module.css'
 
-const typescriptCode = `import { Workflow, NormalJob, Step, expressions as ex } from '@github-actions-workflow-ts/lib'
-import { ActionsCheckoutV4, ActionsSetupNodeV4 } from '@github-actions-workflow-ts/actions'
+const typescriptCode = `import { 
+  Workflow, 
+  NormalJob, 
+  Step, 
+  expressions as ex
+} from '@github-actions-workflow-ts/lib'
+import { 
+  ActionsCheckoutV4, 
+  ActionsSetupNodeV4 
+} from '@github-actions-workflow-ts/actions'
 
 // Typed actions: autocomplete on inputs, typed outputs
 const checkout = new ActionsCheckoutV4({ name: 'Checkout' })

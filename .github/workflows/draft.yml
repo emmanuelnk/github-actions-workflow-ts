@@ -16,11 +16,29 @@ name: Draft Release
 permissions:
   contents: read
 jobs:
+  PublishBetaRelease:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+    steps:
+      - name: Publish beta release
+        uses: release-drafter/release-drafter@v5
+        with:
+          commitish: main
+          prerelease: true
+          prerelease-identifier: beta
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   UpdateReleaseDraft:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
       contents: write
+    needs:
+      - PublishBetaRelease
     steps:
       - name: Draft next release
         uses: release-drafter/release-drafter@v5

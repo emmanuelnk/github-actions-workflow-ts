@@ -24,9 +24,6 @@ Write GitHub Actions workflows in TypeScript instead of YAML!
   <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/actions">
       <img src="https://emmanuelnk.github.io/github-actions-workflow-ts/badges/coverage.svg" alt="coverage">
   </a>
-  <a href="https://github.com/emmanuelnk/github-actions-workflow-ts/issues">
-      <img src="https://img.shields.io/github/issues/emmanuelnk/github-actions-workflow-ts.svg" alt="issues">
-  </a>
 </p>
 
 ## Quick Install
@@ -54,7 +51,6 @@ import {
   ActionsSetupNodeV4
 } from '@github-actions-workflow-ts/actions'
 
-// Typed actions give you autocomplete on `with` inputs and typed `outputs`
 const checkout = new ActionsCheckoutV4({
   name: 'Checkout',
 })
@@ -62,8 +58,9 @@ const checkout = new ActionsCheckoutV4({
 const setupNode = new ActionsSetupNodeV4({
   id: 'setup-node',
   name: 'Setup Node.js',
+  // Typed actions give you autocomplete on `with` inputs and typed `outputs`
   with: {
-    'node-version': '20.x',  // ← autocomplete for all valid inputs
+    'node-version': '20.x',
     cache: 'npm',
   },
 })
@@ -87,7 +84,8 @@ const test = new Step({
   run: 'npm test',
   env: {
     CI: 'true',
-    NODE_AUTH_TOKEN: ex.secret('NPM_TOKEN'),  // ← expression helpers -> ${{ secrets.NPM_TOKEN }}
+    // you can use expression helpers -> ${{ secrets.NPM_TOKEN }}
+    NODE_AUTH_TOKEN: ex.secret('NPM_TOKEN'),
   },
 })
 

@@ -7,7 +7,7 @@ import {
 } from '../packages/lib/src/index.js'
 
 const betaReleaseStep = new Step({
-  id: 'create_release',
+  id: 'publish_beta_release',
   name: 'Publish beta release',
   uses: 'release-drafter/release-drafter@v5',
   with: {

@@ -141,8 +141,8 @@ export const publishWorkflow = new Workflow('publish', {
     },
     workflow_call: {
       inputs: {
-        tag_name: { required: true, type: 'string' as const },
-        target_commitish: { required: true, type: 'string' as const },
+        tag_name: { required: true, type: 'string' },
+        target_commitish: { required: true, type: 'string' },
       },
       secrets: {
         NPM_TOKEN: { required: true },

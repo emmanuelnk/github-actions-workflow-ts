@@ -22,8 +22,11 @@ jobs:
     if: github.event_name == 'push'
     permissions:
       contents: write
+    outputs:
+      tag_name: ${{ steps.create_release.outputs.tag_name }}
     steps:
-      - name: Publish beta release
+      - id: create_release
+        name: Publish beta release
         uses: release-drafter/release-drafter@v5
         with:
           commitish: main
@@ -32,6 +35,18 @@ jobs:
           publish: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PublishBetaPackages:
+    uses: ./.github/workflows/publish.yml
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+    with:
+      tag_name: ${{ needs.PublishBetaRelease.outputs.tag_name }}
+      target_commitish: ${{ github.sha }}
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    needs:
+      - PublishBetaRelease
   UpdateReleaseDraft:
     runs-on: ubuntu-latest
     timeout-minutes: 20

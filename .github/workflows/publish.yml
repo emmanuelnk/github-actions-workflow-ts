@@ -8,6 +8,17 @@ name: Publish Release
   release:
     types:
       - published
+  workflow_call:
+    inputs:
+      tag_name:
+        required: true
+        type: string
+      target_commitish:
+        required: true
+        type: string
+    secrets:
+      NPM_TOKEN:
+        required: true
 jobs:
   PublishPackages:
     runs-on: ubuntu-latest
@@ -18,7 +29,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.target_commitish }}
+          ref: ${{ inputs.target_commitish || github.event.release.target_commitish }}
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -35,17 +46,17 @@ jobs:
         run: |-
           git config user.name github-actions
           git config user.email github-actions@github.com
-          echo version: ${{ github.event.release.tag_name }}
-          (cd packages/lib && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
-          (cd packages/cli && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
-          (cd packages/actions && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
+          echo version: ${{ inputs.tag_name || github.event.release.tag_name }}
+          (cd packages/lib && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
+          (cd packages/cli && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
+          (cd packages/actions && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
       - name: Setup npm auth
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish packages
         run: |-
-          TAG_NAME="${{ github.event.release.tag_name }}"
+          TAG_NAME="${{ inputs.tag_name || github.event.release.tag_name }}"
           if [[ "$TAG_NAME" == *"-alpha"* ]]; then
             echo "Publishing with alpha tag"
             pnpm -r publish --access public --tag alpha --no-git-checks
@@ -63,7 +74,7 @@ jobs:
     timeout-minutes: 20
     needs:
       - PublishPackages
-    if: '!github.event.release.prerelease'
+    if: '!contains(inputs.tag_name || github.event.release.tag_name, ''-'')'
     permissions:
       contents: write
     steps:
@@ -76,10 +87,10 @@ jobs:
         run: |-
           git config user.name github-actions
           git config user.email github-actions@github.com
-          echo version: ${{ github.event.release.tag_name }}
-          (cd packages/lib && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
-          (cd packages/cli && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
-          (cd packages/actions && npm version --no-git-tag-version ${{ github.event.release.tag_name }})
+          echo version: ${{ inputs.tag_name || github.event.release.tag_name }}
+          (cd packages/lib && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
+          (cd packages/cli && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
+          (cd packages/actions && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
           git add .
-          git commit -m "new release: ${{ github.event.release.tag_name }} [skip ci]" --no-verify
+          git commit -m "new release: ${{ inputs.tag_name || github.event.release.tag_name }} [skip ci]" --no-verify
           git push origin HEAD:main

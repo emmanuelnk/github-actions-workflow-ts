@@ -1,11 +1,13 @@
 import {
   Workflow,
   NormalJob,
+  ReusableWorkflowCallJob,
   Step,
   expressions as ex,
 } from '../packages/lib/src/index.js'
 
 const betaReleaseStep = new Step({
+  id: 'publish_beta_release',
   name: 'Publish beta release',
   uses: 'release-drafter/release-drafter@v5',
   with: {
@@ -26,7 +28,25 @@ const betaReleaseJob = new NormalJob('PublishBetaRelease', {
   permissions: {
     contents: 'write',
   },
+  outputs: {
+    tag_name: ex.expn(`steps.${betaReleaseStep.id}.outputs.tag_name`),
+  },
 }).addStep(betaReleaseStep)
+
+const publishBetaJob = new ReusableWorkflowCallJob('PublishBetaPackages', {
+  uses: './.github/workflows/publish.yml',
+  if: "github.event_name == 'push'",
+  permissions: {
+    contents: 'write',
+  },
+  with: {
+    tag_name: ex.expn(`needs.${betaReleaseJob.name}.outputs.tag_name`),
+    target_commitish: ex.expn('github.sha'),
+  },
+  secrets: {
+    NPM_TOKEN: ex.secret('NPM_TOKEN'),
+  },
+}).needs([betaReleaseJob])
 
 const draftStep = new Step({
   name: 'Draft next release',
@@ -67,4 +87,4 @@ export const draftWorkflow = new Workflow('draft', {
   permissions: {
     contents: 'read',
   },
-}).addJobs([betaReleaseJob, draftJob])
+}).addJobs([betaReleaseJob, publishBetaJob, draftJob])

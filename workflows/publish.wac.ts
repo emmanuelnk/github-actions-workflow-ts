@@ -6,8 +6,10 @@ import {
   dedentString,
 } from '../packages/lib/src/index.js'
 
-const targetCommitish = ex.expn('github.event.release.target_commitish')
-const tagName = ex.expn('github.event.release.tag_name')
+const targetCommitish = ex.expn(
+  'inputs.target_commitish || github.event.release.target_commitish',
+)
+const tagName = ex.expn('inputs.tag_name || github.event.release.tag_name')
 
 const checkout = new Step({
   name: 'Checkout',
@@ -101,7 +103,8 @@ const commitVersionBumpJob = new NormalJob('CommitVersionBump', {
   'runs-on': 'ubuntu-latest',
   'timeout-minutes': 20,
   needs: [publishJob.name],
-  if: '!github.event.release.prerelease',
+  // Skip this on prereleases (i.e. any release with a "-" in it, like 1.2.3-beta.0)
+  if: "!contains(inputs.tag_name || github.event.release.tag_name, '-')",
   permissions: {
     contents: 'write',
   },
@@ -135,6 +138,15 @@ export const publishWorkflow = new Workflow('publish', {
   on: {
     release: {
       types: ['published'],
+    },
+    workflow_call: {
+      inputs: {
+        tag_name: { required: true, type: 'string' },
+        target_commitish: { required: true, type: 'string' },
+      },
+      secrets: {
+        NPM_TOKEN: { required: true },
+      },
     },
   },
 }).addJobs([publishJob, commitVersionBumpJob])

@@ -27,9 +27,10 @@ jobs:
     steps:
       - id: publish_beta_release
         name: Publish beta release
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v6
         with:
           commitish: main
+          config-name: release-drafter.prerelease.yml
           prerelease: true
           prerelease-identifier: beta
           publish: true
@@ -52,11 +53,9 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: write
-    needs:
-      - PublishBetaRelease
     steps:
       - name: Draft next release
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v6
         with:
           commitish: main
         env:

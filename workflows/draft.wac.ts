@@ -9,9 +9,10 @@ import {
 const betaReleaseStep = new Step({
   id: 'publish_beta_release',
   name: 'Publish beta release',
-  uses: 'release-drafter/release-drafter@v5',
+  uses: 'release-drafter/release-drafter@v6',
   with: {
     commitish: 'main',
+    'config-name': 'release-drafter.prerelease.yml',
     prerelease: true,
     'prerelease-identifier': 'beta',
     publish: true,
@@ -50,7 +51,7 @@ const publishBetaJob = new ReusableWorkflowCallJob('PublishBetaPackages', {
 
 const draftStep = new Step({
   name: 'Draft next release',
-  uses: 'release-drafter/release-drafter@v5',
+  uses: 'release-drafter/release-drafter@v6',
   with: {
     commitish: 'main',
   },
@@ -65,14 +66,7 @@ const draftJob = new NormalJob('UpdateReleaseDraft', {
   permissions: {
     contents: 'write',
   },
-})
-  .needs([
-    // This job must run after the beta release because otherwise
-    // release-drafter will delete the draft release.
-    // See: https://github.com/release-drafter/release-drafter/issues/1509
-    betaReleaseJob,
-  ])
-  .addStep(draftStep)
+}).addStep(draftStep)
 
 export const draftWorkflow = new Workflow('draft', {
   name: 'Draft Release',

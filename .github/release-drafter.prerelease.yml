@@ -1,0 +1,5 @@
+_extends: emmanuelnk/github-actions-workflow-ts:.github/release-drafter.yml
+
+# This ensures that the prerelease workflow won't modify draft releases for
+# stable versions.
+include-pre-releases: true

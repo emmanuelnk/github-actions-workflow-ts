@@ -698,17 +698,31 @@ export interface Workflow {
         workflow_run?: WorkflowRunEvent
         repository_dispatch?: RepositoryDispatchEvent
         /**
-         * You can schedule a workflow to run at specific UTC times using POSIX cron syntax (https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07). Scheduled workflows run on the latest commit on the default or base branch. The shortest interval you can run scheduled workflows is once every 5 minutes.
+         * You can schedule a workflow to run at specific UTC times using POSIX cron syntax (https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07). You can optionally specify a timezone using an IANA timezone string (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for timezone-aware scheduling. Scheduled workflows run on the latest commit on the default or base branch. The shortest interval you can run scheduled workflows is once every 5 minutes.
          * Note: GitHub Actions does not support the non-standard syntax @yearly, @monthly, @weekly, @daily, @hourly, and @reboot.
-         * You can use crontab guru (https://crontab.guru/). to help generate your cron syntax and confirm what time it will run. To help you get started, there is also a list of crontab guru examples (https://crontab.guru/examples.html).
+         * You can use crontab guru (https://crontab.guru/) to help generate your cron syntax and confirm what time it will run. To help you get started, there is also a list of crontab guru examples (https://crontab.guru/examples.html).
          *
          */
         schedule?: [
           {
-            cron?: string
+            /**
+             * A cron expression that represents a schedule. A scheduled workflow will run at most once every 5 minutes.
+             */
+            cron: string
+            /**
+             * A string that represents the time zone a scheduled workflow will run relative to in IANA format (e.g. 'America/New_York' or 'Europe/London'). If omitted, the workflow will run relative to midnight UTC.
+             */
+            timezone?: string
           },
           ...{
-            cron?: string
+            /**
+             * A cron expression that represents a schedule. A scheduled workflow will run at most once every 5 minutes.
+             */
+            cron: string
+            /**
+             * A string that represents the time zone a scheduled workflow will run relative to in IANA format (e.g. 'America/New_York' or 'Europe/London'). If omitted, the workflow will run relative to midnight UTC.
+             */
+            timezone?: string
           }[],
         ]
       }
@@ -892,6 +906,10 @@ export interface Environment {
    * A deployment URL
    */
   url?: string
+  /**
+   * Whether to create a deployment for this job. Setting to false lets the job use environment secrets and variables without creating a deployment record. Wait timers and required reviewers still apply.
+   */
+  deployment?: boolean | ExpressionSyntax
 }
 /**
  * A map of default settings that will apply to all steps in the job.

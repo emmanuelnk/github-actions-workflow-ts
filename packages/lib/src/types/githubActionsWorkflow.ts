@@ -859,7 +859,7 @@ export interface NormalJob {
    * A container to run any steps in a job that don't already specify a container. If you have steps that use both script and container actions, the container actions will run as sibling containers on the same network with the same volume mounts.
    * If you do not set a container, all steps will run directly on the host specified by runs-on unless a step refers to an action configured to run in a container.
    */
-  container?: string | Container
+  container?: string | JobContainer
   /**
    * Additional containers to host services for a job in a workflow. These are useful for creating databases or cache services like redis. The runner on the virtual machine will automatically create a network and manage the life cycle of the service containers.
    * When you use a service container for a job or your step uses container actions, you don't need to set port information to access the service. Docker automatically exposes all ports between containers on the same network.
@@ -867,7 +867,7 @@ export interface NormalJob {
    * When a step does not use a container action, you must access the service using localhost and bind the ports.
    */
   services?: {
-    [k: string]: Container
+    [k: string]: ServiceContainer
   }
   /**
    * Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
@@ -920,7 +920,7 @@ export interface Defaults1 {
     'working-directory'?: WorkingDirectory
   }
 }
-export interface Container {
+export interface JobContainer {
   /**
    * The Docker image to use as the container to run the action. The value can be the Docker Hub image name or a registry name.
    */
@@ -934,7 +934,7 @@ export interface Container {
     [k: string]: unknown
   }
   /**
-   * Sets an array of environment variables in the container.
+   * Sets a map of environment variables in the container.
    */
   env?:
     | {
@@ -957,6 +957,52 @@ export interface Container {
    * Additional Docker container resource options. For a list of options, see https://docs.docker.com/engine/reference/commandline/create/#options.
    */
   options?: string
+}
+export interface ServiceContainer {
+  /**
+   * The Docker image to use as the service container to run the action. The value can be the Docker Hub image name or a registry name.
+   */
+  image: string
+  /**
+   * If the image's container registry requires authentication to pull the image, you can use credentials to set a map of the username and password. The credentials are the same values that you would provide to the `docker login` command.
+   */
+  credentials?: {
+    username?: string
+    password?: string
+    [k: string]: unknown
+  }
+  /**
+   * Sets a map of environment variables in the service container.
+   */
+  env?:
+    | {
+        [k: string]: string | number | boolean
+      }
+    | StringContainingExpressionSyntax
+  /**
+   * Sets an array of ports to expose on the service container.
+   *
+   */
+  ports?: [number | string, ...(number | string)[]]
+  /**
+   * Sets an array of volumes for the service container to use. You can use volumes to share data between services or other steps in a job. You can specify named Docker volumes, anonymous Docker volumes, or bind mounts on the host.
+   * To specify a volume, you specify the source and destination path: <source>:<destinationPath>
+   * The <source> is a volume name or an absolute path on the host machine, and <destinationPath> is an absolute path in the container.
+   *
+   */
+  volumes?: [string, ...string[]]
+  /**
+   * Additional Docker container resource options. For a list of options, see https://docs.docker.com/engine/reference/commandline/create/#options.
+   */
+  options?: string
+  /**
+   * Overrides the Docker image's default command (`CMD`). The value is passed as arguments after the image name in the `docker create` command. If you also specify `entrypoint`, `command` provides the arguments to that entrypoint.
+   */
+  command?: string
+  /**
+   * Overrides the Docker image's default `ENTRYPOINT`. The value is a single string defining the executable to run. Use this when you need to replace the image's entrypoint entirely. You can combine `entrypoint` with `command` to pass arguments to the custom entrypoint.
+   */
+  entrypoint?: string
 }
 /**
  * Each job must have an id to associate with the job. The key job_id is a string and its value is a map of the job's configuration data. You must replace <job_id> with a string that is unique to the jobs object. The <job_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.

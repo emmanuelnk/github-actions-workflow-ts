@@ -28,6 +28,22 @@ export type DiagnosticsConfig = {
    * Keys are diagnostic codes like 'action-version-unverifiable' or 'action-version-semver-violation'.
    */
   rules?: Record<string, DiagnosticRuleConfig>
+  /**
+   * Whether the CLI should exit with a non-zero status code when any diagnostic
+   * at `error` or `fatal` severity (after applying `rules`) is emitted during a build.
+   *
+   * This is useful when the CLI runs in a pre-commit hook or CI step where
+   * stdout may be hidden — a non-zero exit code ensures broken workflows are
+   * caught instead of silently committed.
+   *
+   * Set to `false` to preserve pre-2.6.0 behaviour where the CLI always exited
+   * with status 0 regardless of emitted diagnostics. Codes can also be
+   * downgraded individually via `rules`, or suppressed at call sites via
+   * `Diagnostics.suppress`.
+   *
+   * @default true
+   */
+  failOnError?: boolean
 }
 
 /**

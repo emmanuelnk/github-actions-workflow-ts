@@ -117,6 +117,22 @@ In `wac.config.json`:
 }
 ```
 
+## Build Exit Code
+
+The CLI exits with status code `1` if any diagnostic at `error` or `fatal` severity was emitted during the build (after applying configured `rules`). Lower-severity diagnostics (`trace`, `debug`, `info`, `warning`) do not affect the exit code.
+
+This is especially useful inside a pre-commit hook or CI step where stdout may be hidden — a non-zero exit code ensures broken workflows are caught instead of silently committed. To stop a specific code from failing the build, downgrade it to `warn` (or `off`) via the `rules` configuration above, or suppress it at the call site with `suppressWarnings` / `Diagnostics.suppress`.
+
+To preserve the pre-2.6.0 behaviour where the CLI always exited `0` regardless of emitted diagnostics, set `failOnError` to `false`:
+
+```json
+{
+  "diagnostics": {
+    "failOnError": false
+  }
+}
+```
+
 ## Requesting New Actions
 
 If there's an action you'd like to see added, [open an issue](https://github.com/emmanuelnk/github-actions-workflow-ts/issues/new) or see [Adding Actions](/docs/contributing/adding-actions) to contribute it yourself.

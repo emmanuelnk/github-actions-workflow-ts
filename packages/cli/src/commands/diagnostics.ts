@@ -28,7 +28,17 @@ type ConsoleDiagnosticsReporterOptions = {
 export class ConsoleDiagnosticsReporter
   implements Diagnostics.DiagnosticsReporter
 {
+  private _hasErrors = false
+
   constructor(private options: ConsoleDiagnosticsReporterOptions = {}) {}
+
+  /**
+   * Whether any diagnostic at `error` or `fatal` severity (after applying
+   * configured rules) has been emitted through this reporter.
+   */
+  get hasErrors(): boolean {
+    return this._hasErrors
+  }
 
   emit(d: Diagnostics.Diagnostic): void {
     // Get diagnostic rules from context
@@ -40,6 +50,13 @@ export class ConsoleDiagnosticsReporter
     // If suppressed, don't emit
     if (effectiveSeverity === 'off') {
       return
+    }
+
+    if (
+      effectiveSeverity === Diagnostics.DiagnosticSeverity.ERROR ||
+      effectiveSeverity === Diagnostics.DiagnosticSeverity.FATAL
+    ) {
+      this._hasErrors = true
     }
 
     // Use the effective severity (may have been upgraded/downgraded)

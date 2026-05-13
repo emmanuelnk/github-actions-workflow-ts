@@ -229,7 +229,21 @@ Configure diagnostic warnings emitted during build when using `@github-actions-w
 
 - `"off"` - Suppress the diagnostic entirely
 - `"warn"` - Emit as a warning (default)
-- `"error"` - Upgrade to an error (fails the build)
+- `"error"` - Upgrade to an error. Causes the CLI to exit with a non-zero status code at the end of the build (see [`failOnError`](#failonerror) below).
+
+#### `failOnError`
+
+```json
+{
+  "diagnostics": {
+    "failOnError": true
+  }
+}
+```
+
+When `true` (the default), the CLI exits with status code `1` after the build if any diagnostic at `error` or `fatal` severity (after applying `rules`) was emitted. When `false`, the CLI always exits `0` regardless of emitted diagnostics — matching pre-2.6.0 behaviour.
+
+The non-zero exit is useful in pre-commit hooks and CI steps where stdout may be hidden — it ensures broken workflows are caught instead of silently committed. To stop an individual diagnostic from failing the build without disabling the feature globally, downgrade it to `warn` (or `off`) via `rules`, or suppress it at the call site with `suppressWarnings` / `Diagnostics.suppress`.
 
 #### Exclude Patterns
 

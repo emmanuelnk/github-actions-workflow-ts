@@ -389,4 +389,118 @@ describe('ConsoleDiagnosticsReporter', () => {
       )
     })
   })
+
+  describe('hasErrors', () => {
+    afterEach(() => {
+      Context.__internalSetGlobalContext(undefined as never)
+    })
+
+    it('should default to false', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+      expect(reporter.hasErrors).toBe(false)
+    })
+
+    it.each([
+      Diagnostics.DiagnosticSeverity.TRACE,
+      Diagnostics.DiagnosticSeverity.DEBUG,
+      Diagnostics.DiagnosticSeverity.INFO,
+      Diagnostics.DiagnosticSeverity.WARN,
+    ])('should stay false after emitting "%s" severity', (severity) => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+
+      reporter.emit({
+        severity,
+        code: 'test-code',
+        message: 'sub-error diagnostic',
+      })
+
+      expect(reporter.hasErrors).toBe(false)
+    })
+
+    it.each([
+      Diagnostics.DiagnosticSeverity.ERROR,
+      Diagnostics.DiagnosticSeverity.FATAL,
+    ])('should flip to true after emitting "%s" severity', (severity) => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+
+      reporter.emit({
+        severity,
+        code: 'test-code',
+        message: 'error-level diagnostic',
+      })
+
+      expect(reporter.hasErrors).toBe(true)
+    })
+
+    it('should stay false when an error is downgraded to warn via rules', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+      Context.__internalSetGlobalContext({
+        diagnostics: reporter,
+        diagnosticRules: {
+          'test-code': 'warn',
+        },
+      })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.ERROR,
+        code: 'test-code',
+        message: 'downgraded to warn',
+      })
+
+      expect(reporter.hasErrors).toBe(false)
+    })
+
+    it('should flip to true when a warning is upgraded to error via rules', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+      Context.__internalSetGlobalContext({
+        diagnostics: reporter,
+        diagnosticRules: {
+          'test-code': 'error',
+        },
+      })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.WARN,
+        code: 'test-code',
+        message: 'upgraded to error',
+      })
+
+      expect(reporter.hasErrors).toBe(true)
+    })
+
+    it('should stay false when an error is suppressed via rules', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+      Context.__internalSetGlobalContext({
+        diagnostics: reporter,
+        diagnosticRules: {
+          'test-code': 'off',
+        },
+      })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.ERROR,
+        code: 'test-code',
+        message: 'suppressed',
+      })
+
+      expect(reporter.hasErrors).toBe(false)
+    })
+
+    it('should remain true once set, even after subsequent non-error diagnostics', () => {
+      const reporter = new ConsoleDiagnosticsReporter({ color: false })
+
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.ERROR,
+        code: 'first',
+        message: 'first error',
+      })
+      reporter.emit({
+        severity: Diagnostics.DiagnosticSeverity.WARN,
+        code: 'second',
+        message: 'later warning',
+      })
+
+      expect(reporter.hasErrors).toBe(true)
+    })
+  })
 })

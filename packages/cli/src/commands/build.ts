@@ -385,8 +385,9 @@ export const generateWorkflowFiles = async (
   // Track created directories to avoid duplicate creation attempts
   const createdDirectories = new Set<string>()
 
+  const diagnosticsReporter = new ConsoleDiagnosticsReporter()
   Context.__internalSetGlobalContext({
-    diagnostics: new ConsoleDiagnosticsReporter(),
+    diagnostics: diagnosticsReporter,
     diagnosticRules: config.diagnostics?.rules,
   })
 
@@ -407,4 +408,12 @@ export const generateWorkflowFiles = async (
   console.log(
     `[github-actions-workflow-ts] Successfully generated ${workflowCount} workflow file(s)`,
   )
+
+  const failOnError = config.diagnostics?.failOnError ?? true
+  if (diagnosticsReporter.hasErrors && failOnError) {
+    console.error(
+      '[github-actions-workflow-ts] Build completed with error diagnostics. Exiting with non-zero status code.',
+    )
+    process.exitCode = 1
+  }
 }

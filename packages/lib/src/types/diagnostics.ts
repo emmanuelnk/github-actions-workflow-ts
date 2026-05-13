@@ -162,7 +162,9 @@ export function generateStackTrace(
   constructorOpt?: Function | undefined,
 ): string {
   const targetObject = { name: '', stack: '' }
-  Error.captureStackTrace(targetObject, constructorOpt)
+  ;(
+    Error as unknown as { captureStackTrace: (t: object, c?: Function) => void }
+  ).captureStackTrace(targetObject, constructorOpt)
   const lines = targetObject.stack.split('\n')
   const indexOfModuleJobRun = lines.findIndex((line) =>
     line.includes('at ModuleJob.run'),

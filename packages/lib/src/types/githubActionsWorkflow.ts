@@ -738,7 +738,7 @@ export interface Workflow {
   /**
    * Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
    * You can also specify concurrency at the workflow level.
-   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. Any previously pending job or workflow in the concurrency group will be canceled. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
+   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
    */
   concurrency?: string | Concurrency
   /**
@@ -770,13 +770,17 @@ export interface Defaults {
 }
 export interface Concurrency {
   /**
-   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. Any previously pending job or workflow in the concurrency group will be canceled.
+   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`.
    */
   group: string
   /**
    * To cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
    */
   'cancel-in-progress'?: boolean | ExpressionSyntax
+  /**
+   * Controls how pending jobs or workflow runs are queued within a concurrency group. With the default `single`, at most one run can be pending — additional pending runs cancel the previous one. With `max`, up to 100 runs can be pending and are processed in FIFO order. The combination of `queue: max` and `cancel-in-progress: true` is not allowed.
+   */
+  queue?: 'single' | 'max'
 }
 /**
  * Each job must have an id to associate with the job. The key job_id is a string and its value is a map of the job's configuration data. You must replace <job_id> with a string that is unique to the jobs object. The <job_id> must start with a letter or _ and contain only alphanumeric characters, -, or _.
@@ -872,7 +876,7 @@ export interface NormalJob {
   /**
    * Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
    * You can also specify concurrency at the workflow level.
-   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. Any previously pending job or workflow in the concurrency group will be canceled. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
+   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
    */
   concurrency?: string | Concurrency
 }
@@ -1052,7 +1056,7 @@ export interface ReusableWorkflowCallJob {
   /**
    * Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
    * You can also specify concurrency at the workflow level.
-   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. Any previously pending job or workflow in the concurrency group will be canceled. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
+   * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
    */
   concurrency?: string | Concurrency
 }

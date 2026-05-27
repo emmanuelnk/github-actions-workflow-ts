@@ -885,6 +885,7 @@ export interface PermissionsEvent {
   'artifact-metadata'?: PermissionsLevel
   attestations?: PermissionsLevel
   checks?: PermissionsLevel
+  'code-quality'?: PermissionsLevel
   contents?: PermissionsLevel
   deployments?: PermissionsLevel
   discussions?: PermissionsLevel

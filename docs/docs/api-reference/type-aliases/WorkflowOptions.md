@@ -8,7 +8,7 @@
 
 > **WorkflowOptions** = `object`
 
-Defined in: [workflow/index.ts:7](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L7)
+Defined in: [workflow/index.ts:7](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L7)
 
 Options for configuring a Workflow instance.
 
@@ -18,7 +18,7 @@ Options for configuring a Workflow instance.
 
 > `optional` **outputPath?**: `string`
 
-Defined in: [workflow/index.ts:14](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L14)
+Defined in: [workflow/index.ts:14](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L14)
 
 Custom output path for this workflow.
 If specified, takes precedence over config file settings.

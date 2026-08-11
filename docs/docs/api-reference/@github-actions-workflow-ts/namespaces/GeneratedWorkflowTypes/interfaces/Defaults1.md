@@ -6,7 +6,7 @@
 
 # Interface: Defaults1
 
-Defined in: [types/githubActionsWorkflow.ts:1290](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1290)
+Defined in: [types/githubActionsWorkflow.ts:1288](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1288)
 
 A map of default settings that will apply to all steps in the job.
 
@@ -16,7 +16,7 @@ A map of default settings that will apply to all steps in the job.
 
 > `optional` **run?**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:1291](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1291)
+Defined in: [types/githubActionsWorkflow.ts:1289](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1289)
 
 #### shell?
 

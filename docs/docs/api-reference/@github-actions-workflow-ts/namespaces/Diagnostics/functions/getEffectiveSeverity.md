@@ -8,7 +8,7 @@
 
 > **getEffectiveSeverity**(`diagnostic`, `rules`): [`DiagnosticSeverity`](../type-aliases/DiagnosticSeverity.md) \| `"off"`
 
-Defined in: [types/diagnostics.ts:119](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L119)
+Defined in: [types/diagnostics.ts:119](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L119)
 
 Determines the effective severity for a diagnostic based on configured rules.
 Returns the severity to use, or 'off' if the diagnostic should be suppressed.

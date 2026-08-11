@@ -141,6 +141,24 @@ function addTitlesToEventSchemas(schema: JSONSchema): JSONSchema {
   return schema
 }
 
+/**
+ * workflowDispatchInput.default is constrained per input `type` via if/then
+ * conditionals, which json-schema-to-typescript cannot express — it compiles
+ * to { [k: string]: unknown }. Pin the union of values the conditionals allow
+ * (string | number | boolean), mirroring how workflow_call inputs declare it.
+ */
+function constrainWorkflowDispatchInputDefault(schema: JSONSchema): void {
+  const defaultProp =
+    schema.definitions?.workflowDispatchInput?.properties?.default
+  if (
+    typeof defaultProp === 'object' &&
+    defaultProp !== null &&
+    defaultProp.type === undefined
+  ) {
+    defaultProp.type = ['string', 'number', 'boolean']
+  }
+}
+
 ;(async () => {
   const jsonSchema = await fetch(GITHUB_ACTIONS_WORKFLOW_JSON_SCHEMA_URL).then(
     (response) => response.json(),
@@ -148,6 +166,7 @@ function addTitlesToEventSchemas(schema: JSONSchema): JSONSchema {
 
   // Add titles to inline event schemas for better type names
   const processedSchema = addTitlesToEventSchemas(jsonSchema as JSONSchema)
+  constrainWorkflowDispatchInputDefault(processedSchema)
 
   const outputPath = path.join(
     process.cwd(),

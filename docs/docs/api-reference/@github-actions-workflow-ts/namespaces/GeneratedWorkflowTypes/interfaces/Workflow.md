@@ -6,7 +6,7 @@
 
 # Interface: Workflow
 
-Defined in: [types/githubActionsWorkflow.ts:887](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L887)
+Defined in: [types/githubActionsWorkflow.ts:885](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L885)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/githubActionsWorkflow.ts:887](https://github.com/emmanuelnk/g
 
 > `optional` **concurrency?**: `string` \| [`Concurrency`](Concurrency.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1111](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1111)
+Defined in: [types/githubActionsWorkflow.ts:1109](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1109)
 
 Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
 You can also specify concurrency at the workflow level.
@@ -26,7 +26,7 @@ When a concurrent job or workflow is queued, if another job or workflow using th
 
 > `optional` **defaults?**: [`Defaults`](Defaults.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1105](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1105)
+Defined in: [types/githubActionsWorkflow.ts:1103](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1103)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [types/githubActionsWorkflow.ts:1105](https://github.com/emmanuelnk/
 
 > `optional` **env?**: `string` \| \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \}
 
-Defined in: [types/githubActionsWorkflow.ts:1100](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1100)
+Defined in: [types/githubActionsWorkflow.ts:1098](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1098)
 
 To set custom environment variables, you need to specify the variables in the workflow file. You can define environment variables for a step, job, or entire workflow using the jobs.\<job_id\>.steps[*].env, jobs.\<job_id\>.env, and env keywords. For more information, see https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepsenv
 
@@ -44,7 +44,7 @@ To set custom environment variables, you need to specify the variables in the wo
 
 > **jobs**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:1117](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1117)
+Defined in: [types/githubActionsWorkflow.ts:1115](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1115)
 
 A workflow run is made up of one or more jobs. Jobs run in parallel by default. To run jobs sequentially, you can define dependencies on other jobs using the jobs.\<job_id\>.needs keyword.
 Each job runs in a fresh instance of the virtual environment specified by runs-on.
@@ -63,7 +63,7 @@ via the `patternProperty` "^[_a-zA-Z][a-zA-Z0-9_-]*$".
 
 > `optional` **name?**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:891](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L891)
+Defined in: [types/githubActionsWorkflow.ts:889](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L889)
 
 The name of your workflow. GitHub displays the names of your workflows on your repository's actions page. If you omit this field, GitHub sets the name to the workflow's filename.
 
@@ -73,7 +73,7 @@ The name of your workflow. GitHub displays the names of your workflows on your r
 
 > **on**: [`Event`](../type-aliases/Event.md) \| \[[`Event`](../type-aliases/Event.md), `...Event[]`\] \| \{ `branch_protection_rule?`: BranchProtectionRuleEvent \| undefined; `check_run?`: CheckRunEvent \| undefined; `check_suite?`: CheckSuiteEvent \| undefined; `create?`: CreateEvent \| undefined; `delete?`: DeleteEvent \| undefined; `deployment?`: DeploymentEvent \| undefined; `deployment_status?`: DeploymentStatusEvent \| undefined; `discussion?`: DiscussionEvent \| undefined; `discussion_comment?`: DiscussionCommentEvent \| undefined; `fork?`: ForkEvent \| undefined; `gollum?`: GollumEvent \| undefined; `issue_comment?`: IssueCommentEvent \| undefined; `issues?`: IssuesEvent \| undefined; `label?`: LabelEvent \| undefined; `merge_group?`: MergeGroupEvent \| undefined; `milestone?`: MilestoneEvent \| undefined; `page_build?`: PageBuildEvent \| undefined; `project?`: ProjectEvent \| undefined; `project_card?`: ProjectCardEvent \| undefined; `project_column?`: ProjectColumnEvent \| undefined; `public?`: PublicEvent \| undefined; `pull_request?`: `object` & `object` \| `null`; `pull_request_review?`: PullRequestReviewEvent \| undefined; `pull_request_review_comment?`: PullRequestReviewCommentEvent \| undefined; `pull_request_target?`: `object` & `object` \| `null`; `push?`: `object` & `object` \| `null`; `registry_package?`: RegistryPackageEvent \| undefined; `release?`: ReleaseEvent \| undefined; `repository_dispatch?`: RepositoryDispatchEvent \| undefined; `schedule?`: \[\{ `cron`: `string`; `timezone?`: `string`; \}, `...{ cron: string; timezone?: string }[]`\]; `status?`: StatusEvent \| undefined; `watch?`: WatchEvent \| undefined; `workflow_call?`: \{\[`k`: `string`\]: `unknown`; `inputs?`: \{\[`k`: `string`\]: `object`; \}; `outputs?`: \{\[`k`: `string`\]: `object`; \}; `secrets?`: \{\[`k`: `string`\]: `object`; \}; \}; `workflow_dispatch?`: \{ `inputs?`: \{\[`k`: `string`\]: [`WorkflowDispatchInput`](../type-aliases/WorkflowDispatchInput.md); \}; \}; `workflow_run?`: WorkflowRunEvent \| undefined; \}
 
-Defined in: [types/githubActionsWorkflow.ts:895](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L895)
+Defined in: [types/githubActionsWorkflow.ts:893](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L893)
 
 The name of the GitHub event that triggers the workflow. You can provide a single event string, array of events, array of event types, or an event configuration map that schedules a workflow or restricts the execution of a workflow to specific files, tags, or branch changes. For a list of available events, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows.
 
@@ -315,7 +315,7 @@ Input parameters allow you to specify data that the action expects to use during
 
 > `optional` **permissions?**: [`Permissions`](../type-aliases/Permissions.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1128](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1128)
+Defined in: [types/githubActionsWorkflow.ts:1126](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1126)
 
 ***
 
@@ -323,6 +323,6 @@ Defined in: [types/githubActionsWorkflow.ts:1128](https://github.com/emmanuelnk/
 
 > `optional` **run-name?**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:1127](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1127)
+Defined in: [types/githubActionsWorkflow.ts:1125](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1125)
 
 The name for workflow runs generated from the workflow. GitHub displays the workflow run name in the list of workflow runs on your repository's 'Actions' tab.

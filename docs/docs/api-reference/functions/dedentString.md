@@ -8,7 +8,7 @@
 
 > **dedentString**(`str`): `string`
 
-Defined in: [utils/index.ts:178](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/utils/index.ts#L178)
+Defined in: [utils/index.ts:178](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/utils/index.ts#L178)
 
 Strips leading whitespace from a template literal string while preserving relative indentation.
 Useful for writing inline multi-line strings (like scripts) that render cleanly in YAML.

@@ -8,7 +8,7 @@
 
 > **Step** = `object` & [`Step1`](Step1.md) & `object` & [`Step1`](Step1.md) & `object` & [`Step1`](Step1.md) & `object` & [`Step1`](Step1.md)
 
-Defined in: [types/githubActionsWorkflow.ts:547](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L547)
+Defined in: [types/githubActionsWorkflow.ts:545](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L545)
 
 ## Type Declaration
 

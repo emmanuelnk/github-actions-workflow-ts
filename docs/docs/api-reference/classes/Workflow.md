@@ -6,7 +6,7 @@
 
 # Class: Workflow
 
-Defined in: [workflow/index.ts:41](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L41)
+Defined in: [workflow/index.ts:41](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L41)
 
 Represents a GitHub Actions workflow.
 
@@ -37,7 +37,7 @@ const workflow = new Workflow('deploy', {
 
 > **new Workflow**(`filename`, `workflowProps`, `options?`): `Workflow`
 
-Defined in: [workflow/index.ts:86](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L86)
+Defined in: [workflow/index.ts:86](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L86)
 
 #### Parameters
 
@@ -63,7 +63,7 @@ Defined in: [workflow/index.ts:86](https://github.com/emmanuelnk/github-actions-
 
 > `optional` **filename?**: `string`
 
-Defined in: [workflow/index.ts:47](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L47)
+Defined in: [workflow/index.ts:47](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L47)
 
 The filename of the workflow e.g. `main.yml`
 
@@ -73,7 +73,7 @@ The filename of the workflow e.g. `main.yml`
 
 > `optional` **outputPath?**: `string`
 
-Defined in: [workflow/index.ts:53](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L53)
+Defined in: [workflow/index.ts:53](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L53)
 
 Custom output path for this workflow.
 If set, overrides any config file settings.
@@ -84,7 +84,7 @@ If set, overrides any config file settings.
 
 > **workflow**: `Partial`&lt;[`Workflow`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/interfaces/Workflow.md)&gt;
 
-Defined in: [workflow/index.ts:42](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L42)
+Defined in: [workflow/index.ts:42](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L42)
 
 ## Methods
 
@@ -92,7 +92,7 @@ Defined in: [workflow/index.ts:42](https://github.com/emmanuelnk/github-actions-
 
 > **addEnvs**(`envs`): `this`
 
-Defined in: [workflow/index.ts:55](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L55)
+Defined in: [workflow/index.ts:55](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L55)
 
 #### Parameters
 
@@ -110,7 +110,7 @@ Defined in: [workflow/index.ts:55](https://github.com/emmanuelnk/github-actions-
 
 > **addJob**(`job`): `this`
 
-Defined in: [workflow/index.ts:77](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L77)
+Defined in: [workflow/index.ts:77](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L77)
 
 #### Parameters
 
@@ -128,7 +128,7 @@ Defined in: [workflow/index.ts:77](https://github.com/emmanuelnk/github-actions-
 
 > **addJobs**(`jobs`): `this`
 
-Defined in: [workflow/index.ts:68](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L68)
+Defined in: [workflow/index.ts:68](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/workflow/index.ts#L68)
 
 #### Parameters
 

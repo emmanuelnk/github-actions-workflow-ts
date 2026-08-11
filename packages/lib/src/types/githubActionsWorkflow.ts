@@ -472,9 +472,7 @@ export type WorkflowDispatchInput = {
   /**
    * A string representing the default value. The default value is used when an input parameter isn't specified in a workflow file.
    */
-  default?: {
-    [k: string]: unknown
-  }
+  default?: string | number | boolean
   /**
    * A string representing the type of the input.
    */

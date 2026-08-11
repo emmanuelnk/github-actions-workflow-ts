@@ -8,7 +8,7 @@
 
 > **PullRequestTargetEventTypes** = \[`unknown`, `...unknown[]`\] \| `string` & (`"assigned"` \| `"unassigned"` \| `"labeled"` \| `"unlabeled"` \| `"opened"` \| `"edited"` \| `"closed"` \| `"reopened"` \| `"synchronize"` \| `"converted_to_draft"` \| `"ready_for_review"` \| `"locked"` \| `"unlocked"` \| `"review_requested"` \| `"review_request_removed"` \| `"auto_merge_enabled"` \| `"auto_merge_disabled"`)[]
 
-Defined in: [types/githubActionsWorkflow.ts:387](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L387)
+Defined in: [types/githubActionsWorkflow.ts:387](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L387)
 
 Selects the types of activity that will trigger a workflow run. Most GitHub events are triggered by more than one type of activity. For example, the event for the release resource is triggered when a release is published, unpublished, created, edited, deleted, or prereleased. The types keyword enables you to narrow down activity that causes the workflow to run. When only one activity type triggers a webhook event, the types keyword is unnecessary.
 You can use an array of event types. For more information about each event and their activity types, see https://help.github.com/en/articles/events-that-trigger-workflows#webhook-events.

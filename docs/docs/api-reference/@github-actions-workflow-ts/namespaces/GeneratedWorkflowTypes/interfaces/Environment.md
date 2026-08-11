@@ -6,7 +6,7 @@
 
 # Interface: Environment
 
-Defined in: [types/githubActionsWorkflow.ts:1273](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1273)
+Defined in: [types/githubActionsWorkflow.ts:1271](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1271)
 
 The environment that the job references
 
@@ -16,7 +16,7 @@ The environment that the job references
 
 > `optional` **deployment?**: `string` \| `boolean`
 
-Defined in: [types/githubActionsWorkflow.ts:1285](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1285)
+Defined in: [types/githubActionsWorkflow.ts:1283](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1283)
 
 Whether to create a deployment for this job. Setting to false lets the job use environment secrets and variables without creating a deployment record. Wait timers and required reviewers still apply.
 
@@ -26,7 +26,7 @@ Whether to create a deployment for this job. Setting to false lets the job use e
 
 > **name**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:1277](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1277)
+Defined in: [types/githubActionsWorkflow.ts:1275](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1275)
 
 The name of the environment configured in the repo.
 
@@ -36,6 +36,6 @@ The name of the environment configured in the repo.
 
 > `optional` **url?**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:1281](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1281)
+Defined in: [types/githubActionsWorkflow.ts:1279](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1279)
 
 A deployment URL

@@ -6,7 +6,7 @@
 
 # Class: ReusableWorkflowCallJob
 
-Defined in: [job/index.ts:83](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/job/index.ts#L83)
+Defined in: [job/index.ts:83](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/job/index.ts#L83)
 
 Represents a job that calls a reusable workflow.
 
@@ -28,7 +28,7 @@ const deployJob = new ReusableWorkflowCallJob('deploy', {
 
 > **new ReusableWorkflowCallJob**(`name`, `jobProps`): `ReusableWorkflowCallJob`
 
-Defined in: [job/index.ts:101](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/job/index.ts#L101)
+Defined in: [job/index.ts:101](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/job/index.ts#L101)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Defined in: [job/index.ts:101](https://github.com/emmanuelnk/github-actions-work
 
 > **job**: [`ReusableWorkflowCallJob`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/interfaces/ReusableWorkflowCallJob.md)
 
-Defined in: [job/index.ts:85](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/job/index.ts#L85)
+Defined in: [job/index.ts:85](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/job/index.ts#L85)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [job/index.ts:85](https://github.com/emmanuelnk/github-actions-workf
 
 > **name**: `string`
 
-Defined in: [job/index.ts:84](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/job/index.ts#L84)
+Defined in: [job/index.ts:84](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/job/index.ts#L84)
 
 ## Methods
 
@@ -66,7 +66,7 @@ Defined in: [job/index.ts:84](https://github.com/emmanuelnk/github-actions-workf
 
 > **needs**(`jobs`): `this`
 
-Defined in: [job/index.ts:87](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/job/index.ts#L87)
+Defined in: [job/index.ts:87](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/job/index.ts#L87)
 
 #### Parameters
 

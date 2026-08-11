@@ -6,7 +6,7 @@
 
 # Interface: Diagnostic
 
-Defined in: [types/diagnostics.ts:39](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L39)
+Defined in: [types/diagnostics.ts:39](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L39)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types/diagnostics.ts:39](https://github.com/emmanuelnk/github-actio
 
 > `optional` **action?**: `string`
 
-Defined in: [types/diagnostics.ts:92](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L92)
+Defined in: [types/diagnostics.ts:92](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L92)
 
 Optional action identifier for pattern matching (e.g., "actions/checkout@v4").
 
@@ -31,7 +31,7 @@ action. Otherwise, it can be omitted.
 
 > `optional` **cause?**: `Error`
 
-Defined in: [types/diagnostics.ts:81](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L81)
+Defined in: [types/diagnostics.ts:81](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L81)
 
 An optional cause for the diagnostic event. If provided, the default
 diagnostics reporter implementation will log this below the diagnostic
@@ -43,7 +43,7 @@ message.
 
 > **code**: `string`
 
-Defined in: [types/diagnostics.ts:52](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L52)
+Defined in: [types/diagnostics.ts:52](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L52)
 
 The unique code for the diagnostic rule. This should be a unique kebab-case
 string. It will be displayed to the user alongside the diagnostic message,
@@ -62,7 +62,7 @@ event.
 
 > **message**: `string`
 
-Defined in: [types/diagnostics.ts:56](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L56)
+Defined in: [types/diagnostics.ts:56](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L56)
 
 A short message explaining the error.
 
@@ -72,7 +72,7 @@ A short message explaining the error.
 
 > **severity**: [`DiagnosticSeverity`](../type-aliases/DiagnosticSeverity.md)
 
-Defined in: [types/diagnostics.ts:43](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L43)
+Defined in: [types/diagnostics.ts:43](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L43)
 
 The severity of the diagnostic event.
 
@@ -82,7 +82,7 @@ The severity of the diagnostic event.
 
 > `optional` **stack?**: `string`
 
-Defined in: [types/diagnostics.ts:75](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L75)
+Defined in: [types/diagnostics.ts:75](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/diagnostics.ts#L75)
 
 The stack trace for the diagnostic event. This can be produced using the
 `Diagnostics.generateStackTrace` helper:

@@ -8,7 +8,7 @@
 
 > **Snapshot** = `string` \| \{ `image-name`: `string`; `version?`: `string`; \}
 
-Defined in: [types/githubActionsWorkflow.ts:536](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L536)
+Defined in: [types/githubActionsWorkflow.ts:534](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L534)
 
 You can use `jobs.&lt;job_id&gt;.snapshot` to generate a custom image.
 Add the snapshot keyword to the job, using either the string syntax or mapping syntax as shown in https://docs.github.com/en/actions/how-tos/manage-runners/larger-runners/use-custom-images#generating-a-custom-image.

@@ -6,7 +6,7 @@
 
 # Interface: NormalJob
 
-Defined in: [types/githubActionsWorkflow.ts:1156](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1156)
+Defined in: [types/githubActionsWorkflow.ts:1154](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1154)
 
 Each job must have an id to associate with the job. The key job_id is a string and its value is a map of the job's configuration data. You must replace \<job_id\> with a string that is unique to the jobs object. The \<job_id\> must start with a letter or _ and contain only alphanumeric characters, -, or _.
 
@@ -16,7 +16,7 @@ Each job must have an id to associate with the job. The key job_id is a string a
 
 > `optional` **concurrency?**: `string` \| [`Concurrency`](Concurrency.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1249](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1249)
+Defined in: [types/githubActionsWorkflow.ts:1247](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1247)
 
 Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
 You can also specify concurrency at the workflow level.
@@ -28,7 +28,7 @@ When a concurrent job or workflow is queued, if another job or workflow using th
 
 > `optional` **container?**: `string` \| [`JobContainer`](JobContainer.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1234](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1234)
+Defined in: [types/githubActionsWorkflow.ts:1232](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1232)
 
 A container to run any steps in a job that don't already specify a container. If you have steps that use both script and container actions, the container actions will run as sibling containers on the same network with the same volume mounts.
 If you do not set a container, all steps will run directly on the host specified by runs-on unless a step refers to an action configured to run in a container.
@@ -39,7 +39,7 @@ If you do not set a container, all steps will run directly on the host specified
 
 > `optional` **continue-on-error?**: `string` \| `boolean`
 
-Defined in: [types/githubActionsWorkflow.ts:1229](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1229)
+Defined in: [types/githubActionsWorkflow.ts:1227](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1227)
 
 Prevents a workflow run from failing when a job fails. Set to true to allow a workflow run to pass when this job fails.
 
@@ -49,7 +49,7 @@ Prevents a workflow run from failing when a job fails. Set to true to allow a wo
 
 > `optional` **defaults?**: [`Defaults1`](Defaults1.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1195](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1195)
+Defined in: [types/githubActionsWorkflow.ts:1193](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1193)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [types/githubActionsWorkflow.ts:1195](https://github.com/emmanuelnk/
 
 > `optional` **env?**: `string` \| \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \}
 
-Defined in: [types/githubActionsWorkflow.ts:1190](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1190)
+Defined in: [types/githubActionsWorkflow.ts:1188](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1188)
 
 To set custom environment variables, you need to specify the variables in the workflow file. You can define environment variables for a step, job, or entire workflow using the jobs.\<job_id\>.steps[*].env, jobs.\<job_id\>.env, and env keywords. For more information, see https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepsenv
 
@@ -67,7 +67,7 @@ To set custom environment variables, you need to specify the variables in the wo
 
 > `optional` **environment?**: `string` \| [`Environment`](Environment.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1180](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1180)
+Defined in: [types/githubActionsWorkflow.ts:1178](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1178)
 
 The environment that the job references.
 
@@ -77,7 +77,7 @@ The environment that the job references.
 
 > `optional` **if?**: `string` \| `number` \| `boolean`
 
-Defined in: [types/githubActionsWorkflow.ts:1200](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1200)
+Defined in: [types/githubActionsWorkflow.ts:1198](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1198)
 
 You can use the if conditional to prevent a job from running unless a condition is met. You can use any supported context and expression to create a conditional.
 Expressions in an if conditional do not require the $\{\{ \}\} syntax. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.
@@ -88,7 +88,7 @@ Expressions in an if conditional do not require the $\{\{ \}\} syntax. For more 
 
 > `optional` **name?**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:1160](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1160)
+Defined in: [types/githubActionsWorkflow.ts:1158](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1158)
 
 The name of the job displayed on GitHub.
 
@@ -98,7 +98,7 @@ The name of the job displayed on GitHub.
 
 > `optional` **needs?**: [`JobNeeds`](../type-aliases/JobNeeds.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1161](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1161)
+Defined in: [types/githubActionsWorkflow.ts:1159](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1159)
 
 ***
 
@@ -106,7 +106,7 @@ Defined in: [types/githubActionsWorkflow.ts:1161](https://github.com/emmanuelnk/
 
 > `optional` **outputs?**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:1184](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1184)
+Defined in: [types/githubActionsWorkflow.ts:1182](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1182)
 
 A map of outputs for a job. Job outputs are available to all downstream jobs that depend on this job.
 
@@ -120,7 +120,7 @@ A map of outputs for a job. Job outputs are available to all downstream jobs tha
 
 > `optional` **permissions?**: [`Permissions`](../type-aliases/Permissions.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1163](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1163)
+Defined in: [types/githubActionsWorkflow.ts:1161](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1161)
 
 ***
 
@@ -128,7 +128,7 @@ Defined in: [types/githubActionsWorkflow.ts:1163](https://github.com/emmanuelnk/
 
 > **runs-on**: `string` \| \[`string`, `...string[]`\] & `unknown`[] \| \{\[`k`: `string`\]: `unknown`; `group?`: `string`; `labels?`: `string` \| `string`[]; \}
 
-Defined in: [types/githubActionsWorkflow.ts:1167](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1167)
+Defined in: [types/githubActionsWorkflow.ts:1165](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1165)
 
 The type of machine to run the job on. The machine can be either a GitHub-hosted runner, or a self-hosted runner.
 
@@ -138,7 +138,7 @@ The type of machine to run the job on. The machine can be either a GitHub-hosted
 
 > `optional` **services?**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:1241](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1241)
+Defined in: [types/githubActionsWorkflow.ts:1239](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1239)
 
 Additional containers to host services for a job in a workflow. These are useful for creating databases or cache services like redis. The runner on the virtual machine will automatically create a network and manage the life cycle of the service containers.
 When you use a service container for a job or your step uses container actions, you don't need to set port information to access the service. Docker automatically exposes all ports between containers on the same network.
@@ -155,7 +155,7 @@ When a step does not use a container action, you must access the service using l
 
 > `optional` **snapshot?**: [`Snapshot`](../type-aliases/Snapshot.md)
 
-Defined in: [types/githubActionsWorkflow.ts:1162](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1162)
+Defined in: [types/githubActionsWorkflow.ts:1160](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1160)
 
 ***
 
@@ -163,7 +163,7 @@ Defined in: [types/githubActionsWorkflow.ts:1162](https://github.com/emmanuelnk/
 
 > `optional` **steps?**: \[[`Step`](../type-aliases/Step.md), `...Step[]`\]
 
-Defined in: [types/githubActionsWorkflow.ts:1207](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1207)
+Defined in: [types/githubActionsWorkflow.ts:1205](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1205)
 
 A job contains a sequence of tasks called steps. Steps can run commands, run setup tasks, or run an action in your repository, a public repository, or an action published in a Docker registry. Not all steps run actions, but all actions run as a step. Each step runs in its own process in the virtual environment and has access to the workspace and filesystem. Because steps run in their own process, changes to environment variables are not preserved between steps. GitHub provides built-in steps to set up and complete a job.
 Must contain either `uses` or `run`
@@ -174,7 +174,7 @@ Must contain either `uses` or `run`
 
 > `optional` **strategy?**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:1215](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1215)
+Defined in: [types/githubActionsWorkflow.ts:1213](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1213)
 
 A strategy creates a build matrix for your jobs. You can define different variations of an environment to run each job in.
 
@@ -200,6 +200,6 @@ The maximum number of jobs that can run simultaneously when using a matrix job s
 
 > `optional` **timeout-minutes?**: `string` \| `number`
 
-Defined in: [types/githubActionsWorkflow.ts:1211](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1211)
+Defined in: [types/githubActionsWorkflow.ts:1209](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/dae6ba994b1de98d71184ab9e4086983970f9157/packages/lib/src/types/githubActionsWorkflow.ts#L1209)
 
 The maximum number of minutes to let a workflow run before GitHub automatically cancels it. Default: 360

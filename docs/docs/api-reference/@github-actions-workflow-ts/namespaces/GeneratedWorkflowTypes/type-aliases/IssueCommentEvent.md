@@ -6,8 +6,8 @@
 
 # Type Alias: IssueCommentEvent
 
-> **IssueCommentEvent** = \{\[`k`: `string`\]: `unknown`; \} \| `null`
+> **IssueCommentEvent** = \{\[`k`: `string`\]: `unknown`; `types?`: [`IssueCommentEventTypes`](IssueCommentEventTypes.md); \} \| `null`
 
-Defined in: [types/githubActionsWorkflow.ts:114](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L114)
+Defined in: [types/githubActionsWorkflow.ts:166](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L166)
 
 Runs your workflow anytime the issue_comment event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/issues/comments/.

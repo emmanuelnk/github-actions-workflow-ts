@@ -8,7 +8,7 @@
 
 > **matchesActionPattern**(`action`, `pattern`): `boolean`
 
-Defined in: [types/diagnostics.ts:61](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L61)
+Defined in: [types/diagnostics.ts:107](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L107)
 
 Checks if an action string matches a pattern.
 Supports wildcard (*) at the end of patterns.

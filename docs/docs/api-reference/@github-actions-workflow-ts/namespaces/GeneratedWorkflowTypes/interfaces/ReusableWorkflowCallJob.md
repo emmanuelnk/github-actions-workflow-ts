@@ -6,7 +6,7 @@
 
 # Interface: ReusableWorkflowCallJob
 
-Defined in: [types/githubActionsWorkflow.ts:945](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L945)
+Defined in: [types/githubActionsWorkflow.ts:1383](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1383)
 
 Each job must have an id to associate with the job. The key job_id is a string and its value is a map of the job's configuration data. You must replace \<job_id\> with a string that is unique to the jobs object. The \<job_id\> must start with a letter or _ and contain only alphanumeric characters, -, or _.
 
@@ -14,21 +14,21 @@ Each job must have an id to associate with the job. The key job_id is a string a
 
 ### concurrency?
 
-> `optional` **concurrency**: `string` \| [`Concurrency`](Concurrency.md)
+> `optional` **concurrency?**: `string` \| [`Concurrency`](Concurrency.md)
 
-Defined in: [types/githubActionsWorkflow.ts:992](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L992)
+Defined in: [types/githubActionsWorkflow.ts:1430](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1430)
 
 Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
 You can also specify concurrency at the workflow level.
-When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. Any previously pending job or workflow in the concurrency group will be canceled. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
+When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
 
 ***
 
 ### if?
 
-> `optional` **if**: `string` \| `number` \| `boolean`
+> `optional` **if?**: `string` \| `number` \| `boolean`
 
-Defined in: [types/githubActionsWorkflow.ts:956](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L956)
+Defined in: [types/githubActionsWorkflow.ts:1394](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1394)
 
 You can use the if conditional to prevent a job from running unless a condition is met. You can use any supported context and expression to create a conditional.
 Expressions in an if conditional do not require the $\{\{ \}\} syntax. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.
@@ -37,9 +37,9 @@ Expressions in an if conditional do not require the $\{\{ \}\} syntax. For more 
 
 ### name?
 
-> `optional` **name**: `string`
+> `optional` **name?**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:949](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L949)
+Defined in: [types/githubActionsWorkflow.ts:1387](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1387)
 
 The name of the job displayed on GitHub.
 
@@ -47,25 +47,25 @@ The name of the job displayed on GitHub.
 
 ### needs?
 
-> `optional` **needs**: [`JobNeeds`](../type-aliases/JobNeeds.md)
+> `optional` **needs?**: [`JobNeeds`](../type-aliases/JobNeeds.md)
 
-Defined in: [types/githubActionsWorkflow.ts:950](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L950)
+Defined in: [types/githubActionsWorkflow.ts:1388](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1388)
 
 ***
 
 ### permissions?
 
-> `optional` **permissions**: [`Permissions`](../type-aliases/Permissions.md)
+> `optional` **permissions?**: [`Permissions`](../type-aliases/Permissions.md)
 
-Defined in: [types/githubActionsWorkflow.ts:951](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L951)
+Defined in: [types/githubActionsWorkflow.ts:1389](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1389)
 
 ***
 
 ### secrets?
 
-> `optional` **secrets**: [`Env1`](../type-aliases/Env1.md)
+> `optional` **secrets?**: [`Env1`](../type-aliases/Env1.md)
 
-Defined in: [types/githubActionsWorkflow.ts:972](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L972)
+Defined in: [types/githubActionsWorkflow.ts:1410](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1410)
 
 When a job is used to call a reusable workflow, you can use 'secrets' to provide a map of secrets that are passed to the called workflow. Any secrets that you pass must match the names defined in the called workflow.
 
@@ -73,15 +73,15 @@ When a job is used to call a reusable workflow, you can use 'secrets' to provide
 
 ### strategy?
 
-> `optional` **strategy**: `object`
+> `optional` **strategy?**: `object`
 
-Defined in: [types/githubActionsWorkflow.ts:976](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L976)
+Defined in: [types/githubActionsWorkflow.ts:1414](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1414)
 
 A strategy creates a build matrix for your jobs. You can define different variations of an environment to run each job in.
 
 #### fail-fast?
 
-> `optional` **fail-fast**: `string` \| `boolean`
+> `optional` **fail-fast?**: `string` \| `boolean`
 
 When set to true, GitHub cancels all in-progress jobs if any matrix job fails. Default: true
 
@@ -91,7 +91,7 @@ When set to true, GitHub cancels all in-progress jobs if any matrix job fails. D
 
 #### max-parallel?
 
-> `optional` **max-parallel**: `string` \| `number`
+> `optional` **max-parallel?**: `string` \| `number`
 
 The maximum number of jobs that can run simultaneously when using a matrix job strategy. By default, GitHub will maximize the number of jobs run in parallel depending on the available runners on GitHub-hosted virtual machines.
 
@@ -101,7 +101,7 @@ The maximum number of jobs that can run simultaneously when using a matrix job s
 
 > **uses**: `string`
 
-Defined in: [types/githubActionsWorkflow.ts:960](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L960)
+Defined in: [types/githubActionsWorkflow.ts:1398](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1398)
 
 The location and version of a reusable workflow file to run as a job, of the form './\{path/to\}/\{localfile\}.yml' or '\{owner\}/\{repo\}/\{path\}/\{filename\}@\{ref\}'. \{ref\} can be a SHA, a release tag, or a branch name. Using the commit SHA is the safest for stability and security.
 
@@ -109,8 +109,8 @@ The location and version of a reusable workflow file to run as a job, of the for
 
 ### with?
 
-> `optional` **with**: `string` \| \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \}
+> `optional` **with?**: `string` \| \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \}
 
-Defined in: [types/githubActionsWorkflow.ts:964](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L964)
+Defined in: [types/githubActionsWorkflow.ts:1402](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L1402)
 
 A map of inputs that are passed to the called workflow. Any inputs that you pass must match the input specifications defined in the called workflow. Unlike 'jobs.\<job_id\>.steps[*].with', the inputs you pass with 'jobs.\<job_id\>.with' are not be available as environment variables in the called workflow. Instead, you can reference the inputs by using the inputs context.

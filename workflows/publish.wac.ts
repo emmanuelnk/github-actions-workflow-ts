@@ -22,13 +22,15 @@ const checkout = new Step({
 const installNode = new Step({
   name: 'Install Node',
   uses: 'actions/setup-node@v4',
-  with: { 'node-version': 20 },
+  // npm trusted publishing (OIDC) requires Node >= 22.14
+  with: { 'node-version': 24 },
 })
 
 const installPnpm = new Step({
   name: 'Install pnpm',
   uses: 'pnpm/action-setup@v4',
-  with: { version: 9 },
+  // pnpm 10 supports OIDC trusted publishing; reads the same v9 lockfile
+  with: { version: 10 },
 })
 
 const installDependencies = new Step({
@@ -54,14 +56,10 @@ const bumpVersions = new Step({
   `),
 })
 
-const setupNpmAuth = new Step({
-  name: 'Setup npm auth',
-  run: 'echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc',
-  env: {
-    NPM_TOKEN: ex.secret('NPM_TOKEN'),
-  },
-})
-
+// Auth is handled by npm trusted publishing (OIDC): the job's id-token
+// permission lets pnpm mint a short-lived token from the runner's OIDC
+// identity. The trusted publisher configured on npmjs.com must reference
+// this workflow file (publish.yml).
 const publishPackages = new Step({
   name: 'Publish packages',
   run: dedentString(`
@@ -77,9 +75,6 @@ const publishPackages = new Step({
       pnpm -r publish --access public --no-git-checks
     fi
   `),
-  env: {
-    NPM_TOKEN: ex.secret('NPM_TOKEN'),
-  },
 })
 
 const publishJob = new NormalJob('PublishPackages', {
@@ -87,6 +82,7 @@ const publishJob = new NormalJob('PublishPackages', {
   'timeout-minutes': 20,
   permissions: {
     contents: 'write',
+    'id-token': 'write',
   },
 }).addSteps([
   checkout,
@@ -95,7 +91,6 @@ const publishJob = new NormalJob('PublishPackages', {
   installDependencies,
   build,
   bumpVersions,
-  setupNpmAuth,
   publishPackages,
 ])
 
@@ -139,13 +134,14 @@ export const publishWorkflow = new Workflow('publish', {
     release: {
       types: ['published'],
     },
-    workflow_call: {
+    // Dispatched (not workflow_call) by draft.yml for beta releases: npm
+    // trusted publishing validates the top-level workflow's filename, and a
+    // package can only have one trusted publisher — so every publish must
+    // run with publish.yml as the top-level workflow.
+    workflow_dispatch: {
       inputs: {
         tag_name: { required: true, type: 'string' },
         target_commitish: { required: true, type: 'string' },
-      },
-      secrets: {
-        NPM_TOKEN: { required: true },
       },
     },
   },

@@ -8,7 +8,7 @@ name: Publish Release
   release:
     types:
       - published
-  workflow_call:
+  workflow_dispatch:
     inputs:
       tag_name:
         required: true
@@ -16,15 +16,13 @@ name: Publish Release
       target_commitish:
         required: true
         type: string
-    secrets:
-      NPM_TOKEN:
-        required: true
 jobs:
   PublishPackages:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
       contents: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,11 +31,11 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
       - name: Run Build
@@ -50,10 +48,6 @@ jobs:
           (cd packages/lib && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
           (cd packages/cli && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
           (cd packages/actions && npm version --no-git-tag-version ${{ inputs.tag_name || github.event.release.tag_name }})
-      - name: Setup npm auth
-        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish packages
         run: |-
           TAG_NAME="${{ inputs.tag_name || github.event.release.tag_name }}"
@@ -67,8 +61,6 @@ jobs:
             echo "Publishing with latest tag"
             pnpm -r publish --access public --no-git-checks
           fi
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   CommitVersionBump:
     runs-on: ubuntu-latest
     timeout-minutes: 20

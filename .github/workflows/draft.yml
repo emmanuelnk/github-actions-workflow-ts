@@ -37,15 +37,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   PublishBetaPackages:
-    uses: ./.github/workflows/publish.yml
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: github.event_name == 'push'
     permissions:
-      contents: write
-    with:
-      tag_name: ${{ needs.PublishBetaRelease.outputs.tag_name }}
-      target_commitish: ${{ github.sha }}
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      actions: write
+    steps:
+      - name: Dispatch publish workflow
+        run: |-
+          gh workflow run publish.yml --repo ${{ github.repository }} \
+            -f tag_name="${{ needs.PublishBetaRelease.outputs.tag_name }}" \
+            -f target_commitish="${{ github.sha }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     needs:
       - PublishBetaRelease
   UpdateReleaseDraft:

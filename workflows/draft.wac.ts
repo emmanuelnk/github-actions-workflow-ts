@@ -1,9 +1,9 @@
 import {
   Workflow,
   NormalJob,
-  ReusableWorkflowCallJob,
   Step,
   expressions as ex,
+  dedentString,
 } from '../packages/lib/src/index.js'
 
 const betaReleaseStep = new Step({
@@ -34,20 +34,33 @@ const betaReleaseJob = new NormalJob('PublishBetaRelease', {
   },
 }).addStep(betaReleaseStep)
 
-const publishBetaJob = new ReusableWorkflowCallJob('PublishBetaPackages', {
-  uses: './.github/workflows/publish.yml',
+// Dispatches publish.yml instead of calling it as a reusable workflow: npm
+// trusted publishing (OIDC) validates the top-level workflow's filename
+// against the package's single trusted publisher, which is publish.yml.
+// GITHUB_TOKEN-triggered events don't start workflows, but workflow_dispatch
+// is exempt from that rule.
+const publishBetaJob = new NormalJob('PublishBetaPackages', {
+  'runs-on': 'ubuntu-latest',
+  'timeout-minutes': 5,
   if: "github.event_name == 'push'",
   permissions: {
-    contents: 'write',
+    actions: 'write',
   },
-  with: {
-    tag_name: ex.expn(`needs.${betaReleaseJob.name}.outputs.tag_name`),
-    target_commitish: ex.expn('github.sha'),
-  },
-  secrets: {
-    NPM_TOKEN: ex.secret('NPM_TOKEN'),
-  },
-}).needs([betaReleaseJob])
+})
+  .addStep(
+    new Step({
+      name: 'Dispatch publish workflow',
+      run: dedentString(`
+        gh workflow run publish.yml --repo ${ex.expn('github.repository')} \\
+          -f tag_name="${ex.expn(`needs.${betaReleaseJob.name}.outputs.tag_name`)}" \\
+          -f target_commitish="${ex.expn('github.sha')}"
+      `),
+      env: {
+        GH_TOKEN: ex.secret('GITHUB_TOKEN'),
+      },
+    }),
+  )
+  .needs([betaReleaseJob])
 
 const draftStep = new Step({
   name: 'Draft next release',

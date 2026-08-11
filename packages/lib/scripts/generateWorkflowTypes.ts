@@ -18,6 +18,54 @@ function toPascalCase(str: string): string {
 }
 
 /**
+ * True if the node is a lone single-element allOf wrapper around the given $ref,
+ * i.e. { allOf: [{ $ref }] } (the schema moved refs into allOf wrappers).
+ */
+function hasSingleAllOfRef(node: JSONSchema, ref: string): boolean {
+  return (
+    Array.isArray(node.allOf) &&
+    node.allOf.length === 1 &&
+    node.allOf[0]?.$ref === ref &&
+    Object.keys(node.allOf[0]).length === 1
+  )
+}
+
+/**
+ * json-schema-to-typescript drops sibling keywords next to allOf, so unwrap
+ * { allOf: [{ $ref }], ...siblings } back to { $ref, ...siblings } which it
+ * compiles as an intersection.
+ */
+function unwrapAllOfRef(node: JSONSchema, ref: string): void {
+  if (hasSingleAllOfRef(node, ref)) {
+    node.$ref = ref
+    delete node.allOf
+  }
+}
+
+/**
+ * Names a `types` activity-types node (direct or allOf-wrapped ref to
+ * #/definitions/types) so it compiles as `<Pascal>EventTypes`.
+ */
+function addTitleToTypesNode(
+  typesNode: JSONSchema | undefined,
+  pascalEventName: string,
+): void {
+  if (
+    typeof typesNode !== 'object' ||
+    typesNode === null ||
+    Array.isArray(typesNode)
+  ) {
+    return
+  }
+
+  unwrapAllOfRef(typesNode, '#/definitions/types')
+
+  if (typesNode.$ref === '#/definitions/types') {
+    typesNode.title = `${pascalEventName}EventTypes`
+  }
+}
+
+/**
  * Pre-processes the JSON schema to add title properties to inline event schemas.
  * This gives json-schema-to-typescript meaningful names instead of EventObject1, Types2, etc.
  */
@@ -46,25 +94,44 @@ function addTitlesToEventSchemas(schema: JSONSchema): JSONSchema {
 
     const pascalEventName = toPascalCase(eventName)
 
-    // Add title to the event object schema if it references eventObject
-    if (eventSchema.$ref === '#/definitions/eventObject') {
-      eventSchema.title = `${pascalEventName}Event`
+    // Events referencing eventObject, either directly or via an allOf wrapper
+    if (
+      eventSchema.$ref === '#/definitions/eventObject' ||
+      hasSingleAllOfRef(eventSchema, '#/definitions/eventObject')
+    ) {
+      if (eventSchema.properties?.types) {
+        // The event carries its own activity-types enum alongside the
+        // eventObject ref. json-schema-to-typescript drops sibling properties
+        // next to allOf, so inline eventObject (object | null) as a oneOf
+        // carrying the event's own properties.
+        addTitleToTypesNode(eventSchema.properties.types, pascalEventName)
+        eventSchema.title = `${pascalEventName}Event`
+        eventSchema.oneOf = [
+          {
+            type: 'object',
+            properties: eventSchema.properties,
+            additionalProperties: true,
+          },
+          { type: 'null' },
+        ]
+        delete eventSchema.allOf
+        delete eventSchema.$ref
+        delete eventSchema.properties
+      } else {
+        unwrapAllOfRef(eventSchema, '#/definitions/eventObject')
+        eventSchema.title = `${pascalEventName}Event`
+      }
     }
 
-    // Add title to the types property if it exists and references types
-    // Direct property access (most events)
-    if (eventSchema.properties?.types?.$ref === '#/definitions/types') {
-      eventSchema.properties.types.title = `${pascalEventName}EventTypes`
-    }
+    // Direct types property (events not referencing eventObject)
+    addTitleToTypesNode(eventSchema.properties?.types, pascalEventName)
 
     // Handle oneOf > allOf structure (pull_request, pull_request_target, push)
     if (Array.isArray(eventSchema.oneOf)) {
       for (const oneOfItem of eventSchema.oneOf) {
         if (Array.isArray(oneOfItem?.allOf)) {
           for (const allOfItem of oneOfItem.allOf) {
-            if (allOfItem?.properties?.types?.$ref === '#/definitions/types') {
-              allOfItem.properties.types.title = `${pascalEventName}EventTypes`
-            }
+            addTitleToTypesNode(allOfItem?.properties?.types, pascalEventName)
           }
         }
       }

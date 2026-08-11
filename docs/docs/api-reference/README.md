@@ -22,6 +22,12 @@
 | [Step](classes/Step.md) | Represents a single step within a GitHub Actions job. |
 | [Workflow](classes/Workflow.md) | Represents a GitHub Actions workflow. |
 
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [WorkflowOptions](type-aliases/WorkflowOptions.md) | Options for configuring a Workflow instance. |
+
 ## Variables
 
 | Variable | Description |

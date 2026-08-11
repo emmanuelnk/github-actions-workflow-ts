@@ -6,7 +6,7 @@
 
 # Interface: SuppressedValue&lt;T&gt;
 
-Defined in: [types/diagnostics.ts:136](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L136)
+Defined in: [types/diagnostics.ts:184](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L184)
 
 A value wrapped with diagnostic suppression metadata.
 Created by the `suppress()` function.
@@ -23,7 +23,7 @@ Created by the `suppress()` function.
 
 > **\[SUPPRESSED\_VALUE\_SYMBOL\]**: `true`
 
-Defined in: [types/diagnostics.ts:137](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L137)
+Defined in: [types/diagnostics.ts:185](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L185)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [types/diagnostics.ts:137](https://github.com/emmanuelnk/github-acti
 
 > **suppressions**: `object`[]
 
-Defined in: [types/diagnostics.ts:139](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L139)
+Defined in: [types/diagnostics.ts:187](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L187)
 
 #### code
 
@@ -39,7 +39,7 @@ Defined in: [types/diagnostics.ts:139](https://github.com/emmanuelnk/github-acti
 
 #### reason?
 
-> `optional` **reason**: `string`
+> `optional` **reason?**: `string`
 
 ***
 
@@ -47,4 +47,4 @@ Defined in: [types/diagnostics.ts:139](https://github.com/emmanuelnk/github-acti
 
 > **value**: `T`
 
-Defined in: [types/diagnostics.ts:138](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/diagnostics.ts#L138)
+Defined in: [types/diagnostics.ts:186](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/diagnostics.ts#L186)

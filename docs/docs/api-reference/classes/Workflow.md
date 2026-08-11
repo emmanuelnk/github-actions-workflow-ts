@@ -6,14 +6,14 @@
 
 # Class: Workflow
 
-Defined in: [workflow/index.ts:19](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L19)
+Defined in: [workflow/index.ts:41](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L41)
 
 Represents a GitHub Actions workflow.
 
 The Workflow class is the top-level container for defining a GitHub Actions workflow.
 It allows you to configure workflow triggers, add jobs, and set environment variables.
 
-## Example
+## Examples
 
 ```typescript
 const workflow = new Workflow('ci', {
@@ -23,13 +23,21 @@ const workflow = new Workflow('ci', {
 workflow.addJob(testJob)
 ```
 
+```typescript
+// With custom output path
+const workflow = new Workflow('deploy', {
+  name: 'Deploy',
+  on: { push: { branches: ['main'] } },
+}, { outputPath: 'packages/app-a/.github/workflows' })
+```
+
 ## Constructors
 
 ### Constructor
 
-> **new Workflow**(`filename`, `workflowProps`): `Workflow`
+> **new Workflow**(`filename`, `workflowProps`, `options?`): `Workflow`
 
-Defined in: [workflow/index.ts:58](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L58)
+Defined in: [workflow/index.ts:86](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L86)
 
 #### Parameters
 
@@ -41,6 +49,10 @@ Defined in: [workflow/index.ts:58](https://github.com/emmanuelnk/github-actions-
 
 `Partial`&lt;[`Workflow`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/interfaces/Workflow.md)&gt;
 
+##### options?
+
+[`WorkflowOptions`](../type-aliases/WorkflowOptions.md)
+
 #### Returns
 
 `Workflow`
@@ -49,11 +61,22 @@ Defined in: [workflow/index.ts:58](https://github.com/emmanuelnk/github-actions-
 
 ### filename?
 
-> `optional` **filename**: `string`
+> `optional` **filename?**: `string`
 
-Defined in: [workflow/index.ts:25](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L25)
+Defined in: [workflow/index.ts:47](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L47)
 
 The filename of the workflow e.g. `main.yml`
+
+***
+
+### outputPath?
+
+> `optional` **outputPath?**: `string`
+
+Defined in: [workflow/index.ts:53](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L53)
+
+Custom output path for this workflow.
+If set, overrides any config file settings.
 
 ***
 
@@ -61,7 +84,7 @@ The filename of the workflow e.g. `main.yml`
 
 > **workflow**: `Partial`&lt;[`Workflow`](../@github-actions-workflow-ts/namespaces/GeneratedWorkflowTypes/interfaces/Workflow.md)&gt;
 
-Defined in: [workflow/index.ts:20](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L20)
+Defined in: [workflow/index.ts:42](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L42)
 
 ## Methods
 
@@ -69,13 +92,13 @@ Defined in: [workflow/index.ts:20](https://github.com/emmanuelnk/github-actions-
 
 > **addEnvs**(`envs`): `this`
 
-Defined in: [workflow/index.ts:27](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L27)
+Defined in: [workflow/index.ts:55](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L55)
 
 #### Parameters
 
 ##### envs
 
-`string` | \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \} | `undefined`
+`string` \| \{\[`k`: `string`\]: `string` \| `number` \| `boolean`; \} \| `undefined`
 
 #### Returns
 
@@ -87,13 +110,13 @@ Defined in: [workflow/index.ts:27](https://github.com/emmanuelnk/github-actions-
 
 > **addJob**(`job`): `this`
 
-Defined in: [workflow/index.ts:49](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L49)
+Defined in: [workflow/index.ts:77](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L77)
 
 #### Parameters
 
 ##### job
 
-[`NormalJob`](NormalJob.md) | [`ReusableWorkflowCallJob`](ReusableWorkflowCallJob.md)
+[`NormalJob`](NormalJob.md) \| [`ReusableWorkflowCallJob`](ReusableWorkflowCallJob.md)
 
 #### Returns
 
@@ -105,7 +128,7 @@ Defined in: [workflow/index.ts:49](https://github.com/emmanuelnk/github-actions-
 
 > **addJobs**(`jobs`): `this`
 
-Defined in: [workflow/index.ts:40](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/workflow/index.ts#L40)
+Defined in: [workflow/index.ts:68](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/workflow/index.ts#L68)
 
 #### Parameters
 

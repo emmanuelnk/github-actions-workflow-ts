@@ -8,6 +8,6 @@
 
 > **WorkingDirectory** = `string`
 
-Defined in: [types/githubActionsWorkflow.ts:349](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/eb791f98a5c7871cf5c52fc4e1567bf9fe1afcd1/packages/lib/src/types/githubActionsWorkflow.ts#L349)
+Defined in: [types/githubActionsWorkflow.ts:523](https://github.com/emmanuelnk/github-actions-workflow-ts/blob/204cfff36f251549b6101484013006e38b3d20bf/packages/lib/src/types/githubActionsWorkflow.ts#L523)
 
 Using the working-directory keyword, you can specify the working directory of where to run the command.

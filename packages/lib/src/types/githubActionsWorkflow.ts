@@ -54,7 +54,8 @@ export type BranchProtectionRuleEvent = {
  * You can use an array of event types. For more information about each event and their activity types, see https://help.github.com/en/articles/events-that-trigger-workflows#webhook-events.
  */
 export type BranchProtectionRuleEventTypes = (
-  [unknown, ...unknown[]] | string
+  | [unknown, ...unknown[]]
+  | string
 ) &
   ('created' | 'edited' | 'deleted')[]
 /**
@@ -375,7 +376,8 @@ export type PullRequestReviewCommentEvent = {
  * You can use an array of event types. For more information about each event and their activity types, see https://help.github.com/en/articles/events-that-trigger-workflows#webhook-events.
  */
 export type PullRequestReviewCommentEventTypes = (
-  [unknown, ...unknown[]] | string
+  | [unknown, ...unknown[]]
+  | string
 ) &
   ('created' | 'edited' | 'deleted')[]
 /**
@@ -511,7 +513,8 @@ export type StringContainingExpressionSyntax = string
  * You can override the default shell settings in the runner's operating system using the shell keyword. You can use built-in shell keywords, or you can define a custom set of shell options.
  */
 export type Shell =
-  string | ('bash' | 'pwsh' | 'python' | 'sh' | 'cmd' | 'powershell')
+  | string
+  | ('bash' | 'pwsh' | 'python' | 'sh' | 'cmd' | 'powershell')
 /**
  * Using the working-directory keyword, you can specify the working directory of where to run the command.
  */

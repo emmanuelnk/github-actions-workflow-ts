@@ -50,7 +50,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "pnpm dlx prettier --config .prettierrc.json --write"
+      "prettier --config .prettierrc.json --write"
     ]
   },
   "pnpm": {

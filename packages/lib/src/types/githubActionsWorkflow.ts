@@ -202,6 +202,10 @@ export type IssuesEventTypes = ([unknown, ...unknown[]] | string) &
     | 'unlocked'
     | 'milestoned'
     | 'demilestoned'
+    | 'typed'
+    | 'untyped'
+    | 'field_added'
+    | 'field_removed'
   )[]
 /**
  * Runs your workflow anytime the label event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/issues/labels/.

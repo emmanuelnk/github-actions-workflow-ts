@@ -1268,6 +1268,7 @@ export interface PermissionsEvent {
   'repository-projects'?: PermissionsLevel
   'security-events'?: PermissionsLevel
   statuses?: PermissionsLevel
+  'copilot-requests'?: 'write'
 }
 /**
  * The environment that the job references

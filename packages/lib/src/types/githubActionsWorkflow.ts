@@ -1268,6 +1268,8 @@ export interface PermissionsEvent {
   'repository-projects'?: PermissionsLevel
   'security-events'?: PermissionsLevel
   statuses?: PermissionsLevel
+  'vulnerability-alerts'?: 'read' | 'none'
+  'copilot-requests'?: 'write'
 }
 /**
  * The environment that the job references

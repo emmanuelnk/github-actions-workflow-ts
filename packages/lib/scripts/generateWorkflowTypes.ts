@@ -126,9 +126,12 @@ function addTitlesToEventSchemas(schema: JSONSchema): JSONSchema {
     // Direct types property (events not referencing eventObject)
     addTitleToTypesNode(eventSchema.properties?.types, pascalEventName)
 
-    // Handle oneOf > allOf structure (pull_request, pull_request_target, push)
+    // `types` may live inside a oneOf branch, either directly
+    // (eventObject events: oneOf [null, { properties: { types } }]) or under
+    // oneOf > allOf (pull_request, pull_request_target, push)
     if (Array.isArray(eventSchema.oneOf)) {
       for (const oneOfItem of eventSchema.oneOf) {
+        addTitleToTypesNode(oneOfItem?.properties?.types, pascalEventName)
         if (Array.isArray(oneOfItem?.allOf)) {
           for (const allOfItem of oneOfItem.allOf) {
             addTitleToTypesNode(allOfItem?.properties?.types, pascalEventName)

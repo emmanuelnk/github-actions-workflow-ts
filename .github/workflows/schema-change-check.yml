@@ -79,13 +79,14 @@ jobs:
         with:
           script: |-
             const { repo, owner } = context.repo;
-            const pulls = await github.rest.pulls.list({
+            // The `head` filter of pulls.list only matches an exact branch name, so list all open PRs and filter by prefix.
+            const pulls = await github.paginate(github.rest.pulls.list, {
               owner,
               repo,
               state: 'open',
-              head: `${owner}:chore/schema-update-`
+              per_page: 100,
             });
-            const schemaUpdatePRs = pulls.data.filter(pr => pr.head.ref.startsWith('chore/schema-update-'));
+            const schemaUpdatePRs = pulls.filter(pr => pr.head.ref.startsWith('chore/schema-update-'));
             if (schemaUpdatePRs.length > 0) {
               console.log(`Found existing schema update PR: ${schemaUpdatePRs[0].html_url}`);
               core.setOutput('exists', 'true');

@@ -39,3 +39,10 @@ to correctly update action types.
    b. Tests will run when the PR is created.
 
 5. Once everything is okay I will merge the PR after review.
+
+### Dependabot Alerts
+Nearly all alerts are transitive dependencies of Docusaurus (`docs`), Jest, or ESLint.
+Fix them with `pnpm.overrides` in the root `package.json`, scoped to the vulnerable range and
+capped at the next major (for example `"joi@<17.13.4": ">=17.13.4 <18"`), so an override cannot
+silently pull in a breaking major. After changing overrides run `pnpm install`, `pnpm test`, and
+`pnpm --filter docs build` to make sure Docusaurus still bundles.

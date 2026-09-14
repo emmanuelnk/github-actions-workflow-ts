@@ -565,6 +565,10 @@ export type Shell =
 export type WorkingDirectory = string
 export type ExpressionSyntax = string
 /**
+ * Controls the level of GitHub Actions cache access granted to a workflow or job.
+ */
+export type CacheMode = 'read' | 'write' | 'write-only' | 'none'
+/**
  * Identifies any jobs that must complete successfully before this job will run. It can be a string or array of strings. If a job fails, all jobs that need it are skipped unless the jobs use a conditional statement that causes the job to continue.
  */
 export type JobNeeds = [Name, ...Name[]] | Name
@@ -1198,6 +1202,7 @@ export interface Workflow {
    * When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.
    */
   concurrency?: string | Concurrency
+  'cache-mode'?: CacheMode
   /**
    * A workflow run is made up of one or more jobs. Jobs run in parallel by default. To run jobs sequentially, you can define dependencies on other jobs using the jobs.<job_id>.needs keyword.
    * Each job runs in a fresh instance of the virtual environment specified by runs-on.
@@ -1250,6 +1255,7 @@ export interface NormalJob {
   needs?: JobNeeds
   snapshot?: Snapshot
   permissions?: Permissions
+  'cache-mode'?: CacheMode
   /**
    * The type of machine to run the job on. The machine can be either a GitHub-hosted runner, or a self-hosted runner.
    */
@@ -1478,6 +1484,7 @@ export interface ReusableWorkflowCallJob {
   name?: string
   needs?: JobNeeds
   permissions?: Permissions
+  'cache-mode'?: CacheMode
   /**
    * You can use the if conditional to prevent a job from running unless a condition is met. You can use any supported context and expression to create a conditional.
    * Expressions in an if conditional do not require the ${{ }} syntax. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.

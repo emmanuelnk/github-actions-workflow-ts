@@ -1352,7 +1352,7 @@ export interface PermissionsEvent {
   contents?: PermissionsLevel
   deployments?: PermissionsLevel
   discussions?: PermissionsLevel
-  'id-token'?: PermissionsLevel
+  'id-token'?: 'write' | 'none'
   issues?: PermissionsLevel
   models?: 'read' | 'none'
   packages?: PermissionsLevel

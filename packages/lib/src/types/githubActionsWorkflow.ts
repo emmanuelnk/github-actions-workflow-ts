@@ -1333,9 +1333,11 @@ export interface NormalJob {
    * When both the job and the action run in a container, you can directly reference the container by its hostname. The hostname is automatically mapped to the service name.
    * When a step does not use a container action, you must access the service using localhost and bind the ports.
    */
-  services?: {
-    [k: string]: ServiceContainer
-  }
+  services?:
+    | {
+        [k: string]: ServiceContainer
+      }
+    | StringContainingExpressionSyntax
   /**
    * Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context.
    * You can also specify concurrency at the workflow level.
